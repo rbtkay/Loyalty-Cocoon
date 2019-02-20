@@ -7,29 +7,59 @@ contract Loyalty {
         uint value;
         uint id;
         string vendor;
+        address vendorAddress;
     }
 
     struct Purchase {
-        string buyer;
+        address buyerAddress;
         string vendor;
-        Product product;
+        uint productId;
+        bool isFinalized;
     }
 
     Purchase [] public purchaseList;
     address public manager;
-    mapping(uint => Product) productMapping;
-    Product [] public productList;
+    mapping(uint => Product) public productMapping;
+    Product[] public productList;
 
-    function createProduct(string name, uint value, uint id, string vendor) public {
-        // require(msg.sender == manager);
+    function Loyalty() public {
+        manager = msg.sender;
+    }
+
+    function createProduct(string name, uint value, uint id, string vendor, address vendorAddress) public {
+        require(msg.sender == manager);
         Product memory newProduct = Product({
             name: name,
             value: value,
             id: id,
-            vendor: vendor
+            vendor: vendor,
+            vendorAddress: vendorAddress
         });
 
         productMapping[newProduct.id] = newProduct;
         productList.push(newProduct);
+    }
+
+    function purchaseProduct(uint id) public payable {
+        require(msg.value > productMapping[id].value);
+        productMapping[id].vendorAddress.transfer(msg.value);
+
+        Purchase memory newPurchase = Purchase({
+            buyerAddress: msg.sender,
+            vendor: productMapping[id].vendor,
+            productId: productMapping[id].id,
+            isFinalized: false
+        });
+
+        purchaseList.push(newPurchase);
+    }
+
+    function grantPoints(address customerAddress) public payable{
+        customerAddress.transfer(msg.value);
+    }
+
+    function finalizePurchase(uint index) public {
+        require(!purchaseList[index].isFinalized);
+        purchaseList[index].isFinalized = true;
     }
 }
