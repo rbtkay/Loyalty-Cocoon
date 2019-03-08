@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const userRoutes = require('./user');
 
-const User = require('../objects/user');
-
-router.get('/userAll', User.getUser); 
-router.get('/getUserByEmail', User.getUserByEmail);
-router.get('/auth', User.authUser);
+router.use('/user', userRoutes);
 
 module.exports = router;

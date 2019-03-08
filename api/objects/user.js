@@ -11,7 +11,7 @@ exports.getUser = (req, res, next) => {
 
 exports.getUserByEmail = (req, res, next) => {
 
-    var email = req.query.user_email;
+    var email = req.query.email;
 
     mysqlConnection.query('select * from User_T where user_email = ?', [email], (err, result, fields) => {
         if (err) throw err;
@@ -29,7 +29,6 @@ exports.authUser = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_email = ? and user_password = ?', [email, password], (err, result, fields) => {
             if (err) throw err;
             if(result.length > 0){
-                
                 res.send(result);
             }else{
                 res.redirect("/api");
