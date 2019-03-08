@@ -37,6 +37,6 @@ exports.authUser = (req, res, next) => {
         });
     }
     else{
-        res.send("Wrong Input");
+        res.send("Some input are missing...");
     }
 }
