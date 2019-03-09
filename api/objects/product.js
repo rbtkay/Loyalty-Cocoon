@@ -1,0 +1,7 @@
+exports.getAllProducts = (req, res, next) => {
+    mysqlConnection.query('select * from Product_T', (err, result, fields) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+}
