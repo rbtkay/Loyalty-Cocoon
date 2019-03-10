@@ -10,7 +10,7 @@ class Loyalty extends Component {
         super(props);
 
         this.state = {
-            productData: []
+            products: []
         };
     }
 
@@ -28,13 +28,20 @@ class Loyalty extends Component {
 
     async componentDidMount() {
         const response = await fetch(`http://localhost:8000/api/product/all`);
-        const productData = await response.json();
-        this.setState({ productData });
+        const products = await response.json();
+        console.log("working");
+        this.setState({ products });
+    }
+
+    search = async () => {
+        const response = await fetch(`http://localhost:8000/api/product/search`);
+        const products = await response.json();
+        this.setState({ products });
     }
 
     renderProducts() {
-        if (this.state.productData.length > 0) {
-            return <ProductRow products={this.state.productData} />
+        if (this.state.products.length > 0) {
+            return <ProductRow products={this.state.products} />
         }
     }
 }

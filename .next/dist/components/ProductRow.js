@@ -66,7 +66,7 @@ var ProductRow = function (_Component) {
                         fileName: _jsxFileName,
                         lineNumber: 16
                     }
-                }, 'Loading Products');
+                }, 'Loading Products...');
             }
         }
     }, {

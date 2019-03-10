@@ -7,3 +7,13 @@ exports.getAllProducts = (req, res, next) => {
         res.send(result);
     });
 }
+
+exports.getProductSearch = (req, res, next) => {
+    const searchResult = req.query.search;
+
+    mysqlConnection.query('select * from Product_T where vendor_username = ?', [searchResult], (err, result, fields) => {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    });
+}

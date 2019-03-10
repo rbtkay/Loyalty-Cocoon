@@ -13,7 +13,7 @@ class ProductRow extends Component {
                 </Card.Group>
             );
         } else {
-            return <div>Loading Products</div>
+            return <div>Loading Products...</div>
         }
     }
 
