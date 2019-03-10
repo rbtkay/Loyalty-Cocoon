@@ -3,6 +3,7 @@ import { Card, Button } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
+import NavigationBar from '../components/NavigationBar';
 
 class Loyalty extends Component {
     constructor(props) {
@@ -16,9 +17,9 @@ class Loyalty extends Component {
     render() {
         return (
             <div>
-  
-                <Layout />
 
+                <Layout />
+                <NavigationBar />
                 {this.renderProducts()}
 
             </div>
