@@ -21,16 +21,27 @@ exports.getUserByEmail = (req, res, next) => {
 }
 
 exports.authUser = (req, res, next) => {
-    var email = req.query.email;
+    var username = req.query.username;
     var password = req.query.password;
 
-    if (email && password) {
-        mysqlConnection.query('select * from User_T where user_email = ? and user_password = ?', [email, password], (err, result, fields) => {
+    // req.checkBody('username', 'Name is required').notEmpty();
+    // req.checkBody('password', 'Email is required').notEmpty();
+
+    // const errors = req.validationErrors();
+
+    if (username && password) {
+        mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if(result.length > 0){
+                req.session.username = username;
+                console.log(req.session.username);
                 res.send(result);
-            }else{
-                res.redirect("/");
+                // console.log(result);
+            } else {
+                const errorObj = {
+                    "message": "Invalid Username/Password"
+                }
+                res.send(errorObj);
             }
         });
     }

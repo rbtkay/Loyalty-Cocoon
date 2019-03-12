@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import session from 'express-session';
+
 
 class Loyalty extends Component {
 
@@ -11,7 +13,7 @@ class Loyalty extends Component {
     }
 
     async componentDidMount() {
-        var response = await fetch(`http://localhost:8000/api/userAll`);
+        var response = await fetch(`http://localhost:8000/api/user/all`);
         var data = await response.json();
         this.setState({ data });
     }
@@ -27,7 +29,7 @@ class Loyalty extends Component {
                     <a>go to About Us</a>
                 </Link> */}
 
-                <form method="get" action="http://localhost:8000/api/getUserByEmail">
+                <form method="get" action="http://localhost:8000/api/user/ByEmail">
                     <input type="text" id="txt" name="userEmail" />
                     <br/>
                     <input type="password" name="userPassword" />
