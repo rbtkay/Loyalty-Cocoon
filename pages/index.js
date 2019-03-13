@@ -1,40 +1,48 @@
 import React, { Component } from 'react';
+import { Card, Button } from 'semantic-ui-react';
+import Layout from '../components/Layout';
+import ProductCard from '../components/ProductCard';
+import ProductRow from '../components/ProductRow';
+import NavigationBar from '../components/NavigationBar';
 
 class Loyalty extends Component {
-
     constructor(props) {
         super(props);
 
         this.state = {
-            data: [{}]
+            products: []
         };
     }
-
-    async componentDidMount() {
-        var response = await fetch(`http://localhost:8000/api/userAll`);
-        var data = await response.json();
-        this.setState({ data });
-    }
-
 
     render() {
         return (
             <div>
-                <h1>Hello, {this.state.data[0]["user_name"]}</h1>
-                <h3>World this is a loyalty program based on blockchain!</h3>
-                <span>Trust Us...</span>
-                {/* <Link href={`/about`}>
-                    <a>go to About Us</a>
-                </Link> */}
 
-                <form method="get" action="http://localhost:8000/api/getUserByEmail">
-                    <input type="text" id="txt" name="userEmail" />
-                    <br/>
-                    <input type="password" name="userPassword" />
-                    <input type="submit" value="submit" />
-                </form>
+                <Layout />
+                <NavigationBar />
+                {this.renderProducts()}
+
             </div>
         );
+    }
+
+    async componentDidMount() {
+        const response = await fetch(`http://localhost:8000/api/product/all`);
+        const products = await response.json();
+        console.log("working");
+        this.setState({ products });
+    }
+
+    search = async () => {
+        const response = await fetch(`http://localhost:8000/api/product/search`);
+        const products = await response.json();
+        this.setState({ products });
+    }
+
+    renderProducts() {
+        if (this.state.products.length > 0) {
+            return <ProductRow products={this.state.products} />
+        }
     }
 }
 
