@@ -4,8 +4,7 @@ const compiledFactory = require('./build/Loco.json');
 
 const provider = new HDWalletProvider(
     'dance corn property ritual never mesh distance canvas weekend enemy neck pact',
-    'https://rinkeby.infura.io/v3/af133582ff384aa99f64946e33b16a05',
-    network_id='3'
+    'https://rinkeby.infura.io/v3/af133582ff384aa99f64946e33b16a05'
 );
 
 const web3 = new Web3(provider);

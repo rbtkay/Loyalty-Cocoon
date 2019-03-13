@@ -10,15 +10,11 @@ contract Loco {
     uint8 public decimals;
     string public symbol;
 
-    function Loco(
-        string _tokenName,
-        uint8 _decimalUnits,
-        string _tokenSymbol
-    ) public {
+    function Loco() public {
         manager = msg.sender;
-        name = _tokenName;              // "Loyalty Cocoon"
-        decimals = _decimalUnits;       // 0
-        symbol = _tokenSymbol;          // "LOCO"
+        name = "Loyalty Cocoon";              // "Loyalty Cocoon"
+        decimals = 0;       // 0
+        symbol = "LOCO";          // "LOCO"
     }
 
     function transferFrom(address _from, uint256 _value, address _to) public returns (bool success) {
