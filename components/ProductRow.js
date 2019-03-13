@@ -19,7 +19,6 @@ class ProductRow extends Component {
 
     renderProducts(products) {
         if (products) {
-            console.log(products);
             return products.map((object) => {
                 return (
                     <ProductCard
