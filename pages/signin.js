@@ -23,9 +23,13 @@ class SignIn extends Component {
         try {
             var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${password}`);
             var data = await response.json();
-            if (data.length > 0 && data[0]["user_username"] == username)
+            if (/* data.length > 0 && data[0]["user_username"] == username */ data.token)
             {
+                console.log(data.username);
+                req['authorization'] = data.token;
+                localStorage.setItem('authorization', data.token);
                 Router.pushRoute("/");
+                // console.log(req['authorization']);
             } else {
                 this.setState({ errorMessage: data });
                 console.log(this.state.errorMessage);

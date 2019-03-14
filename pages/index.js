@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
 import NavigationBar from '../components/NavigationBar';
+import { Router } from '../routes';
 
 class Loyalty extends Component {
     constructor(props) {
@@ -13,6 +14,12 @@ class Loyalty extends Component {
             products: []
         };
     }
+
+    // static getInitialProps({req}){
+    //     // console.log(req['headers']);
+
+    //     return {};
+    // }
 
     render() {
         return (
@@ -27,10 +34,24 @@ class Loyalty extends Component {
     }
 
     async componentDidMount() {
-        const response = await fetch(`http://localhost:8000/api/product/all`);
-        const products = await response.json();
-        console.log("working");
-        this.setState({ products });
+        // console.log(req);
+        console.log("on react" + localStorage.getItem('authorization'));
+        const auth = localStorage.getItem('authorization');
+        
+        if (auth === null) {
+            Router.pushRoute("/signin");
+        } else {
+
+            const response = await fetch(`http://localhost:8000/api/product/all`, {
+                headers: new Headers({
+                    'authorization': auth
+                })
+            });
+            const products = await response.json();
+
+            console.log("working" + products);
+            this.setState({ products });
+        }
     }
 
     search = async () => {

@@ -12,7 +12,7 @@ const handle = app.getRequestHandler(app);
 app.prepare().then(() => {
 
     const apiRoutes = require('./api/routes/index');
-    const verify = require('./verify');
+    // const verify = require('./verify');
 
     server.use(session({secret: 'un truc bizarre', saveUninitialized: true, resave: true}));
     server.use("/api", apiRoutes);
