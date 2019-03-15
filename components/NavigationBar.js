@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Menu, MenuItem, Dropdown, DropdownItem } from 'semantic-ui-react';
+import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form } from 'semantic-ui-react';
 import indexPage from '../pages/index';
 
 class NavigationBar extends Component {
@@ -24,7 +24,13 @@ class NavigationBar extends Component {
                 <Menu.Menu position="right">
 
                     <MenuItem>
-                        <Input icon='search' placeholder='Search...' />
+                        <Form>
+                            <Form.Input
+                                icon='search'
+                                placeholder='Search...'
+                                onChange={event => this.search(event.target.value)}
+                            />
+                        </Form>
                     </MenuItem>
 
                     <MenuItem name='Logout' />
@@ -32,6 +38,16 @@ class NavigationBar extends Component {
                 </Menu.Menu>
             </Menu>
         );
+    }
+
+    search = async (event) => {
+        if (event.keyPress === 'enter') {
+            console.log('enter clicked');
+        }
+        this.props.propsNavigation(event);
+        // const response = await fetch(`http://localhost:8000/api/product/search`);
+        // const products = await response.json();
+        // this.setState({ products });
     }
 }
 

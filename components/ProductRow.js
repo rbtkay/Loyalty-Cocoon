@@ -8,7 +8,7 @@ class ProductRow extends Component {
     // const { filter } = this.props;
     // }
     state = {
-        products: []
+        products: [],
     }
 
     render() {
@@ -16,6 +16,7 @@ class ProductRow extends Component {
         // const { filter } = this.props;
 
         // if (this.state.products.length > 0) {
+        this.test();
         console.log(this.props.filter);
         if (this.state.products.length > 0) {
             return (
@@ -30,6 +31,10 @@ class ProductRow extends Component {
             return <div>Loading Products...</div>
         }
     }
+
+    // test() {
+
+    // }
 
     renderProducts(products) {
         if (this.state.products) {
@@ -46,13 +51,13 @@ class ProductRow extends Component {
         }
     }
 
-    async componentDidMount() {
+    async test() {
         // console.log(req);
         // console.log("on react" + localStorage.getItem('authorization'));
         const auth = localStorage.getItem('authorization');
 
         const { filter } = this.props;
-        console.log(filter);
+        console.log("filter in component did mount" + filter);
 
         if (auth === null) {
             Router.pushRoute("/signin");
@@ -65,6 +70,7 @@ class ProductRow extends Component {
             });
             const products = await response.json();
 
+            //FIXME: component rerendered each time because setState is called everytime.
             console.log("working" + products);
             this.setState({ products });
             console.log(this.state.products);

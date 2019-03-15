@@ -15,6 +15,13 @@ class Loyalty extends Component {
         };
     }
 
+    propsNavigation = (filter) => {
+        // this.setState(filter);
+        console.log(this.state.filter);
+        this.setState({ filter });
+        console.log(this.state.filter);
+    }
+
     // static getInitialProps({req}){
     //     // console.log(req['headers']);
 
@@ -26,9 +33,9 @@ class Loyalty extends Component {
             <div>
 
                 <Layout />
-                <NavigationBar />
+                <NavigationBar propsNavigation={this.propsNavigation} />
                 {/* {this.renderProducts()} */}
-                <ProductRow filter={this.state.filter}/>
+                <ProductRow filter={this.state.filter} />
 
             </div>
         );
@@ -38,7 +45,7 @@ class Loyalty extends Component {
     //     // console.log(req);
     //     console.log("on react" + localStorage.getItem('authorization'));
     //     const auth = localStorage.getItem('authorization');
-        
+
     //     if (auth === null) {
     //         Router.pushRoute("/signin");
     //     } else {
@@ -55,15 +62,15 @@ class Loyalty extends Component {
     //     }
     // }
 
-    search = async () => {
-        const response = await fetch(`http://localhost:8000/api/product/search`);
-        const products = await response.json();
-        this.setState({ products });
-    }
+    // search = async () => {
+    //     const response = await fetch(`http://localhost:8000/api/product/search`);
+    //     const products = await response.json();
+    //     this.setState({ products });
+    // }
 
     renderProducts() {
         // if (this.state.products.length > 0) {
-            return <ProductRow filter={this.state.filter} />
+        return <ProductRow filter={this.state.filter} />
         // }
     }
 }
