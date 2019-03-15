@@ -41,9 +41,9 @@ class NavigationBar extends Component {
     }
 
     search = async (event) => {
-        if (event.keyPress === 'enter') {
-            console.log('enter clicked');
-        }
+        // if (event.keyPress === 'enter') {
+        //     console.log('enter clicked');
+        // }
         this.props.propsNavigation(event);
         // const response = await fetch(`http://localhost:8000/api/product/search`);
         // const products = await response.json();
