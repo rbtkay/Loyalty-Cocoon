@@ -4,14 +4,14 @@ import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
 import NavigationBar from '../components/NavigationBar';
-import { Router } from '../routes';
 
 class Loyalty extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            products: []
+            products: [],
+            filter: "all"
         };
     }
 
@@ -27,32 +27,33 @@ class Loyalty extends Component {
 
                 <Layout />
                 <NavigationBar />
-                {this.renderProducts()}
+                {/* {this.renderProducts()} */}
+                <ProductRow filter={this.state.filter}/>
 
             </div>
         );
     }
 
-    async componentDidMount() {
-        // console.log(req);
-        console.log("on react" + localStorage.getItem('authorization'));
-        const auth = localStorage.getItem('authorization');
+    // async componentDidMount() {
+    //     // console.log(req);
+    //     console.log("on react" + localStorage.getItem('authorization'));
+    //     const auth = localStorage.getItem('authorization');
         
-        if (auth === null) {
-            Router.pushRoute("/signin");
-        } else {
+    //     if (auth === null) {
+    //         Router.pushRoute("/signin");
+    //     } else {
 
-            const response = await fetch(`http://localhost:8000/api/product/all`, {
-                headers: new Headers({
-                    'authorization': auth
-                })
-            });
-            const products = await response.json();
+    //         const response = await fetch(`http://localhost:8000/api/product/all`, {
+    //             headers: new Headers({
+    //                 'authorization': auth
+    //             })
+    //         });
+    //         const products = await response.json();
 
-            console.log("working" + products);
-            this.setState({ products });
-        }
-    }
+    //         console.log("working" + products);
+    //         this.setState({ products });
+    //     }
+    // }
 
     search = async () => {
         const response = await fetch(`http://localhost:8000/api/product/search`);
@@ -61,9 +62,9 @@ class Loyalty extends Component {
     }
 
     renderProducts() {
-        if (this.state.products.length > 0) {
-            return <ProductRow products={this.state.products} />
-        }
+        // if (this.state.products.length > 0) {
+            return <ProductRow filter={this.state.filter} />
+        // }
     }
 }
 
