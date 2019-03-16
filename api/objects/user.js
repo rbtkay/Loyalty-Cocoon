@@ -29,9 +29,6 @@ exports.authUser = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                // req.session.username = username;
-                // console.log(req.session.username);
-                // res.send(result);
                 jwt.sign({ result }, 'secreKey', (err, token) => {
                     res.json({
                         token,
@@ -48,5 +45,58 @@ exports.authUser = (req, res, next) => {
     }
     else {
         res.send("Some input are missing...");
+    }
+}
+
+exports.signUp = (req, res) => {
+    var username = req.query.username;
+    var email = req.query.email;
+    var password = req.query.password;
+    var name = req.query.name;
+    var dob = req.query.dob;
+    var gender = req.query.gender;
+    var phone = req.query.phone;
+    var prefs = req.query.prefs;
+    var address = req.query.address;
+    var country = req.query.country;
+    var profession = req.query.profession;
+    var organization = req.query.organization;
+
+    if (username && password && email && dob && gender && phone && address && country) {
+
+        //TODO: verufy that the user exist.
+        mysqlConnection.query('select user_username from user_t where user_username = ?', [username], (err, result) => {
+            if (err) throw err;
+            else {
+                if (result) {
+                    console.log('checked');
+                    res.send('already exist');
+                } else {
+                    mysqlConnection.query('insert into user_t values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                        username,
+                        email,
+                        password,
+                        name,
+                        dob,
+                        gender,
+                        phone,
+                        prefs,
+                        address,
+                        country,
+                        profession,
+                        organization
+                    ], (err, result) => {
+                        if (err) throw err;
+                        else {
+                            res.send("user created");
+                        }
+                    })
+                }
+            }
+        })
+
+
+    } else {
+        res.send("Some Fields are Empty");
     }
 }
