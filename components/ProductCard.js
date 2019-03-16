@@ -16,7 +16,7 @@ class ProductCard extends Component {
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui two buttons'>
-                        <Button basic color="green">Buy</Button>
+                        <Button inverted color="violet" >Buy</Button>
                     </div>
                 </Card.Content>
             </Card>

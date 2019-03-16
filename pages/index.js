@@ -29,6 +29,7 @@ class Loyalty extends Component {
     // }
 
     render() {
+      {console.log(this.state.products)}
         return (
             <div>
 
