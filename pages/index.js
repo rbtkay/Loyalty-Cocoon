@@ -21,12 +21,6 @@ class Loyalty extends Component {
         };
     }
 
-    async componentDidMount() {
-        const account = localStorage.getItem('address');
-        const balance = await loco.methods.balances(account).call();
-        this.setState({ account, balance });
-    }
-
     propsNavigation = (filter) => {
         // this.setState(filter);
         // console.log(this.state.filter);
@@ -86,11 +80,15 @@ class Loyalty extends Component {
         );
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const auth = localStorage.getItem('authorization');
 
         if (auth === null) {
             Router.pushRoute("/signin");
+        } else {
+            const account = localStorage.getItem('address');
+            const balance = await loco.methods.balances(account).call();
+            this.setState({ account, balance });
         }
     }
 
