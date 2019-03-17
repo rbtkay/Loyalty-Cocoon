@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Grid } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
 import NavigationBar from '../components/NavigationBar';
 import loco from '../ethereum/loco';
 import web3 from '../ethereum/web3';
+import {Router} from '../routes';
 
 class Loyalty extends Component {
     constructor(props) {
@@ -33,11 +34,11 @@ class Loyalty extends Component {
         // console.log(this.state.filter);
     }
 
-    // static getInitialProps({req}){
-    //     // console.log(req['headers']);
+    static getInitialProps() {
+        // console.log(req['headers']);
 
-    //     return {};
-    // }
+        return {};
+    }
 
     onClick = async event => {
         const newAccount = web3.eth.accounts.create();
@@ -57,6 +58,7 @@ class Loyalty extends Component {
     }
 
     render() {
+        { console.log(this.state.products) }
         return (
             <div>
                 <Layout />
@@ -65,11 +67,31 @@ class Loyalty extends Component {
                 Main Account Balance: {this.state.balance}
                 <Button loading={this.state.loading} onClick={this.onClick} color="violet">Send Me Points!</Button>
                 <NavigationBar propsNavigation={this.propsNavigation} />
+                <ProductRow />
                 {/* {this.renderProducts()} */}
-                <ProductRow filter={this.state.filter} />
+                {/* <Grid>
+                    <Grid.Row columns={3}>
+
+                        <ProductRow />
+                    </Grid.Row> */}
+                {/* <Grid.Row columns={4}>
+                        <ProductRow filter='recomended' />
+                    </Grid.Row>
+                    <Grid.Row columns={5}>
+                        <ProductRow filter='bestSeller' />
+                    </Grid.Row> */}
+                {/* </Grid> */}
 
             </div>
         );
+    }
+
+    componentDidMount() {
+        const auth = localStorage.getItem('authorization');
+
+        if (auth === null) {
+            Router.pushRoute("/signin");
+        }
     }
 
     // async componentDidMount() {
