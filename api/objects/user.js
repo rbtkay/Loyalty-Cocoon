@@ -29,10 +29,10 @@ exports.authUser = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                jwt.sign({ result }, 'secreKey', (err, token) => {
+                jwt.sign({ result }, 'secretKey', (err, token) => {
                     res.json({
                         token,
-                        username
+                        result
                     })
                 })
             } else {

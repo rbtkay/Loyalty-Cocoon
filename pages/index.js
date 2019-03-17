@@ -4,6 +4,8 @@ import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
 import NavigationBar from '../components/NavigationBar';
+import loco from '../ethereum/loco';
+import web3 from '../ethereum/web3';
 import {Router} from '../routes';
 
 class Loyalty extends Component {
@@ -13,14 +15,23 @@ class Loyalty extends Component {
         this.state = {
             products: [],
             filter: "all",
+            account: '',
+            balance: 0,
+            loading: false
         };
+    }
+
+    async componentDidMount() {
+        const account = localStorage.getItem('address');
+        const balance = await loco.methods.balances(account).call();
+        this.setState({ account, balance });
     }
 
     propsNavigation = (filter) => {
         // this.setState(filter);
-        console.log(this.state.filter);
+        // console.log(this.state.filter);
         this.setState({ filter });
-        console.log(this.state.filter);
+        // console.log(this.state.filter);
     }
 
     static getInitialProps() {
@@ -29,13 +40,32 @@ class Loyalty extends Component {
         return {};
     }
 
-    render() {
+    onClick = async event => {
+        const newAccount = web3.eth.accounts.create();
+        // const myAccount = await web3.eth.personal.newAccount('mypass');
+        console.log('new account: ' + newAccount["address"]);
+        // console.log('my account: ' + myAccount);
+        const allAccounts = await web3.eth.getAccounts();
+        console.log('all accounts: ' + allAccounts);
+        // this.setState({ loading: true });
+        // try {
+        //     await loco.methods.grantPoints(this.state.account, 5000).send({ from: this.state.account });
+        // } catch (err) {
+        //     throw err;
+        // }
+        // const balance = await loco.methods.balances(accounts[0]).call();
+        // this.setState({ loading: false, balance });
+    }
 
+    render() {
         { console.log(this.state.products) }
         return (
-
             <div>
                 <Layout />
+                Main Account Address: {this.state.account}
+                <br />
+                Main Account Balance: {this.state.balance}
+                <Button loading={this.state.loading} onClick={this.onClick} color="violet">Send Me Points!</Button>
                 <NavigationBar propsNavigation={this.propsNavigation} />
                 <ProductRow />
                 {/* {this.renderProducts()} */}

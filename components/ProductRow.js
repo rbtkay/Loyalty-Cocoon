@@ -94,7 +94,7 @@ class ProductRow extends Component {
         });
         const products = await response.json();
 
-        console.log("working" + products);
+        // console.log("working" + products);
         this.setState({ products });
         console.log(this.state.products);
     }
