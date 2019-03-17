@@ -4,6 +4,7 @@ import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
 import NavigationBar from '../components/NavigationBar';
+import {Router} from '../routes';
 
 class Loyalty extends Component {
     constructor(props) {
@@ -22,11 +23,11 @@ class Loyalty extends Component {
         console.log(this.state.filter);
     }
 
-    // static getInitialProps({req}){
-    //     // console.log(req['headers']);
+    static getInitialProps() {
+        // console.log(req['headers']);
 
-    //     return {};
-    // }
+        return {};
+    }
 
     render() {
 
@@ -53,6 +54,14 @@ class Loyalty extends Component {
 
             </div>
         );
+    }
+
+    componentDidMount() {
+        const auth = localStorage.getItem('authorization');
+
+        if (auth === null) {
+            Router.pushRoute("/signin");
+        }
     }
 
     // async componentDidMount() {
