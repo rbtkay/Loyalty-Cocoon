@@ -1,21 +1,35 @@
 import React, { Component } from 'react';
 import ProductCard from './ProductCard';
-import { Card, CardGroup } from 'semantic-ui-react';
+import { Card, CardGroup, Grid, GridColumn } from 'semantic-ui-react';
 import { Router } from '../routes';
 
 class ProductRow extends Component {
-        state = {
-            products: [],
-            filter: "all"
-        }
+    state = {
+        products: [],
+        topDeals: [],
+        recomended: [],
+        bestSeller: [],
+        filter: "all"
+    }
 
     render() {
         console.log(this.props.filter);
         if (this.state.products.length > 0) {
             return (
-                <CardGroup>
-                    {this.renderProducts(this.state.products)}
-                </CardGroup>
+                <Grid>
+                    <h1>Top Deals</h1>
+                    <Grid.Row columns={this.state.topDeals.length}>
+                        {this.renderProducts(this.state.topDeals)}
+                    </Grid.Row>
+                    <h1>Recomended for You</h1>
+                    <Grid.Row columns={this.state.recomended.length}>
+                        {this.renderProducts(this.state.recomended)}
+                    </Grid.Row>
+                    <h1>Best Seller</h1>
+                    <Grid.Row columns={this.state.bestSeller.length}>
+                        {this.renderProducts(this.state.bestSeller)}
+                    </Grid.Row>
+                </Grid>
             );
         }
         else {
@@ -27,13 +41,15 @@ class ProductRow extends Component {
         if (this.state.products) {
             return products.map((object) => {
                 return (
-                    <ProductCard
-                        key={object["product_id"]}
-                        name={object["product_name"]}
-                        description={object["vendor_username"]}
-                        price={object["product_price"] + " Loco"}
-                        category={object["product_category"]}
-                    />
+                    <Grid.Column key={object["product_id"]}>
+                        <ProductCard
+                            key={object["product_id"] + object["product_name"]}
+                            name={object["product_name"]}
+                            description={object["vendor_username"]}
+                            price={object["product_price"] + " Loco"}
+                            category={object["product_category"]}
+                        />
+                    </Grid.Column>
                 );
             })
         }
@@ -49,7 +65,20 @@ class ProductRow extends Component {
             })
         });
         const products = await response.json();
-        this.setState({ products });
+
+        const responseTopDeals = await fetch(`http://localhost:8000/api/product/${filter}`, {
+            headers: new Headers({
+                'authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOlt7InVzZXJfdXNlcm5hbWUiOiJyYnRrYXkiLCJ1c2VyX2VtYWlsIjoicm9iZXJ0QGdtYWlsLmNvbSIsInVzZXJfcGFzc3dvcmQiOiJoYWhhaGEiLCJ1c2VyX25hbWUiOiJyb2JlcnQiLCJ1c2VyX2RvYiI6IjIwMTktMDMtMDFUMjI6MDA6MDAuMDAwWiIsInVzZXJfZ2VuZGVyIjoiTSIsInVzZXJfcGhvbmUiOiI3MDY1NzMwMCIsInVzZXJfcHJlZnMiOiJuZXNjYWZlIiwidXNlcl9hZGRyZXNzIjoiMHhhZXJic2VyYnNiIiwidXNlcl9jb3VudHJ5IjoiTGViYW5vbiIsInVzZXJfcHJvZmVzc2lvbiI6IkRvY3RvciIsInVzZXJfb3JnYW5pemF0aW9uIjoiSG90ZWwgRGlldSJ9XSwiaWF0IjoxNTUyNjQxNDA3fQ.Ao-ZJ9yifCnnjInOWC6gRwleSYCHmJ9Ob1L6-jQsKF0"
+            })
+        });
+        const topDealsArray = await responseTopDeals.json();
+        
+        //TODO: Make create the following arrays from api calls.
+        const topDeals = topDealsArray.slice(0, 3);
+        const recomended = products.slice(3, 7);
+        const bestSeller = products.slice(7, 12);
+        this.setState({ products, topDeals, recomended, bestSeller });
+        console.log(products);
     }
 
     async componentWillReceiveProps() {
