@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, Message, Input } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import { Router } from '../routes';
+import { sha256 } from 'js-sha256';
 
 class SignIn extends Component {
     state = {
@@ -13,15 +14,15 @@ class SignIn extends Component {
     };
 
     onSubmit = async (req, res, event) => {
-        // event.preventDefault();
         this.setState({ loading: true, errorMessage: {message: ''} });
 
         console.log(this.state.errorMessage);
 
         const { username, password } = this.state;
+        const hashedPassword = sha256(password);
 
         try {
-            var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${password}`);
+            var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
             var data = await response.json();
             if (/* data.length > 0 && data[0]["user_username"] == username */ data.token)
             {

@@ -11,7 +11,7 @@ class Loyalty extends Component {
 
         this.state = {
             products: [],
-            filter: "all"
+            filter: "all",
         };
     }
 
@@ -29,10 +29,11 @@ class Loyalty extends Component {
     // }
 
     render() {
+
       {console.log(this.state.products)}
         return (
-            <div>
 
+            <div>
                 <Layout />
                 <NavigationBar propsNavigation={this.propsNavigation} />
                 {/* {this.renderProducts()} */}
