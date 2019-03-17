@@ -6,13 +6,13 @@ class NavigationBar extends Component {
     render() {
         const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
         return (
-            <Menu>
-                <MenuItem name='Loyalty Cocoon' />
+            <Menu inverted color="violet">
+                <MenuItem name='Loyalty Cocoon'  />
 
-                <MenuItem name='Purchases' />
+                <MenuItem name='Purchases' style={{color: "white"}}/>
 
-                <Dropdown text='Categories' pointing className='link item'>
-                    <Dropdown.Menu>
+                <Dropdown text='Categories' pointing className='link item' color="violet">
+                    <Dropdown.Menu style={{color: "white"}}>
                         <Dropdown.Item>{categories[0]}</Dropdown.Item>
                         <Dropdown.Item>{categories[1]}</Dropdown.Item>
                         <Dropdown.Item>{categories[2]}</Dropdown.Item>

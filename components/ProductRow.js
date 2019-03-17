@@ -10,7 +10,6 @@ class ProductRow extends Component {
         }
 
     render() {
-       
         console.log(this.props.filter);
         if (this.state.products.length > 0) {
             return (

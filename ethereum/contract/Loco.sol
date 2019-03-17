@@ -12,9 +12,9 @@ contract Loco {
 
     function Loco() public {
         manager = msg.sender;
-        name = "Loyalty Cocoon";              // "Loyalty Cocoon"
-        decimals = 0;       // 0
-        symbol = "LOCO";          // "LOCO"
+        name = "Loyalty Cocoon";
+        decimals = 0;
+        symbol = "LOCO";
     }
 
     function transferFrom(address _from, uint256 _value, address _to) public returns (bool success) {
