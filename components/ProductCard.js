@@ -5,7 +5,7 @@ import Layout from './Layout';
 class ProductCard extends Component {
 
     state = { isOpen: false };
-    
+
     show = () => {
         this.setState({ isOpen: true });
     }
@@ -18,7 +18,7 @@ class ProductCard extends Component {
     render() {
         const { name, description, price, category } = this.props;
 
-        return (
+        return (//TODO: add image link and small description to product.
             <div>
                 <Card>
                     <Card.Content onClick={this.show}>
