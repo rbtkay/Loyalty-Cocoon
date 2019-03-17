@@ -32,6 +32,7 @@ class ProductRow extends Component {
                         name={object["product_name"]}
                         description={object["vendor_username"]}
                         price={object["product_price"] + " Loco"}
+                        category={object["product_category"]}
                     />
                 );
             })
