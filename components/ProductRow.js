@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import ProductCard from './ProductCard';
-import { Card, CardGroup } from 'semantic-ui-react';
+import { Card, CardGroup, Grid, GridColumn } from 'semantic-ui-react';
 import { Router } from '../routes';
 
 class ProductRow extends Component {
-        state = {
-            products: [],
-            filter: "all"
-        }
+    state = {
+        products: [],
+        topDeals: [],
+        recomended: [],
+        bestSeller: [],
+        filter: "all"
+    }
 
     render() {
         console.log(this.props.filter);
         if (this.state.products.length > 0) {
             return (
-                <CardGroup>
-                    {this.renderProducts(this.state.products)}
-                </CardGroup>
+                <Grid>
+                    <Grid.Row columns={this.state.topDeals.length}>
+                        {this.renderProducts(this.state.topDeals)}
+                    </Grid.Row>
+                    <Grid.Row columns={this.state.recomended.length}>
+                        {this.renderProducts(this.state.recomended)}
+                    </Grid.Row>
+                    <Grid.Row columns={this.state.bestSeller.length}>
+                        {this.renderProducts(this.state.bestSeller)}
+                    </Grid.Row>
+                </Grid>
             );
         }
         else {
@@ -27,17 +38,52 @@ class ProductRow extends Component {
         if (this.state.products) {
             return products.map((object) => {
                 return (
-                    <ProductCard
-                        key={object["product_id"]}
-                        name={object["product_name"]}
-                        description={object["vendor_username"]}
-                        price={object["product_price"] + " Loco"}
-                        category={object["product_category"]}
-                    />
+                    <Grid.Column>
+                        <ProductCard
+                            key={object["product_id"]}
+                            name={object["product_name"]}
+                            description={object["vendor_username"]}
+                            price={object["product_price"] + " Loco"}
+                            category={object["product_category"]}
+                        />
+                    </Grid.Column>
                 );
             })
         }
     }
+
+    // renderTopDeals(products) {
+    //     return (
+    //         <Grid>
+    //             <Grid.Row columns={3}>
+    //                 <Grid.Column>
+    //                     <ProductCard
+    //                         key={products[0]["product_id"]}
+    //                         name={products[0]["product_name"]}
+    //                         description={products[0]["vendor_username"]}
+    //                         price={products[0]["product_price"] + " Loco"}
+    //                         category={products[0]["product_category"]} />
+    //                 </Grid.Column>
+    //                 <Grid.Column>
+    //                     <ProductCard
+    //                         key={products[1]["product_id"]}
+    //                         name={products[1]["product_name"]}
+    //                         description={products[1]["vendor_username"]}
+    //                         price={products[1]["product_price"] + " Loco"}
+    //                         category={products[1]["product_category"]} />
+    //                 </Grid.Column>
+    //                 <Grid.Column>
+    //                     <ProductCard
+    //                         key={products[2]["product_id"]}
+    //                         name={products[2]["product_name"]}
+    //                         description={products[2]["vendor_username"]}
+    //                         price={products[2]["product_price"] + " Loco"}
+    //                         category={products[2]["product_category"]} />
+    //                 </Grid.Column>
+    //             </Grid.Row>
+    //         </Grid>
+    //     )
+    // }
 
     async componentDidMount() {
         const filter = this.state.filter;
@@ -49,7 +95,13 @@ class ProductRow extends Component {
             })
         });
         const products = await response.json();
-        this.setState({ products });
+
+        //TODO: Make create the following arrays from api calls.
+        const topDeals = products.slice(0, 3);
+        const recomended = products.slice(3, 7);
+        const bestSeller = products.slice(7, 12);
+        this.setState({ products, topDeals, recomended, bestSeller });
+        console.log(products);
     }
 
     async componentWillReceiveProps() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Grid } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import ProductRow from '../components/ProductRow';
@@ -30,14 +30,26 @@ class Loyalty extends Component {
 
     render() {
 
-      {console.log(this.state.products)}
+        { console.log(this.state.products) }
         return (
 
             <div>
                 <Layout />
                 <NavigationBar propsNavigation={this.propsNavigation} />
+                <ProductRow />
                 {/* {this.renderProducts()} */}
-                <ProductRow filter={this.state.filter} />
+                {/* <Grid>
+                    <Grid.Row columns={3}>
+
+                        <ProductRow />
+                    </Grid.Row> */}
+                {/* <Grid.Row columns={4}>
+                        <ProductRow filter='recomended' />
+                    </Grid.Row>
+                    <Grid.Row columns={5}>
+                        <ProductRow filter='bestSeller' />
+                    </Grid.Row> */}
+                {/* </Grid> */}
 
             </div>
         );
