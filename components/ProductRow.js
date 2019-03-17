@@ -55,39 +55,6 @@ class ProductRow extends Component {
         }
     }
 
-    // renderTopDeals(products) {
-    //     return (
-    //         <Grid>
-    //             <Grid.Row columns={3}>
-    //                 <Grid.Column>
-    //                     <ProductCard
-    //                         key={products[0]["product_id"]}
-    //                         name={products[0]["product_name"]}
-    //                         description={products[0]["vendor_username"]}
-    //                         price={products[0]["product_price"] + " Loco"}
-    //                         category={products[0]["product_category"]} />
-    //                 </Grid.Column>
-    //                 <Grid.Column>
-    //                     <ProductCard
-    //                         key={products[1]["product_id"]}
-    //                         name={products[1]["product_name"]}
-    //                         description={products[1]["vendor_username"]}
-    //                         price={products[1]["product_price"] + " Loco"}
-    //                         category={products[1]["product_category"]} />
-    //                 </Grid.Column>
-    //                 <Grid.Column>
-    //                     <ProductCard
-    //                         key={products[2]["product_id"]}
-    //                         name={products[2]["product_name"]}
-    //                         description={products[2]["vendor_username"]}
-    //                         price={products[2]["product_price"] + " Loco"}
-    //                         category={products[2]["product_category"]} />
-    //                 </Grid.Column>
-    //             </Grid.Row>
-    //         </Grid>
-    //     )
-    // }
-
     async componentDidMount() {
         const filter = this.state.filter;
         console.log("filter in component did mount" + filter);
@@ -105,6 +72,7 @@ class ProductRow extends Component {
             })
         });
         const topDealsArray = await responseTopDeals.json();
+        
         //TODO: Make create the following arrays from api calls.
         const topDeals = topDealsArray.slice(0, 3);
         const recomended = products.slice(3, 7);
