@@ -26,10 +26,12 @@ exports.getProductCategory = (req, res) => {
 }
 
 exports.getTopDeals = (req, res) => {
-    const topDealsMargin = 20;
+    const topDealsMargin = 100;
 
-    mysqlConnection.query('select * from Product_T where product_price < ?', [topDealsMargin], (err, result) => {
+    mysqlConnection.query('select * from Product_T where product_loco < ?', [topDealsMargin], (err, result) => {
         if (err) throw err;
+
+        console.log(result);
         res.send(result);
     })
 }

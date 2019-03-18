@@ -45,8 +45,9 @@ class ProductRow extends Component {
                         <ProductCard
                             key={object["product_id"] + object["product_name"]}
                             name={object["product_name"]}
-                            description={object["vendor_username"]}
-                            price={object["product_price"] + " Loco"}
+                            description={object["product_description"]}
+                            vendor={object["vendor_username"]}
+                            priceLoco={object["product_loco"] + " Loco"}
                             category={object["product_category"]}
                         />
                     </Grid.Column>
@@ -59,20 +60,20 @@ class ProductRow extends Component {
         const filter = this.state.filter;
         console.log("filter in component did mount" + filter);
 
-        const response = await fetch(`http://localhost:8000/api/product/${filter}`, {
+        const response = await fetch(`http://localhost:8000/api/product/all`, {
             headers: new Headers({
                 'authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOlt7InVzZXJfdXNlcm5hbWUiOiJyYnRrYXkiLCJ1c2VyX2VtYWlsIjoicm9iZXJ0QGdtYWlsLmNvbSIsInVzZXJfcGFzc3dvcmQiOiJoYWhhaGEiLCJ1c2VyX25hbWUiOiJyb2JlcnQiLCJ1c2VyX2RvYiI6IjIwMTktMDMtMDFUMjI6MDA6MDAuMDAwWiIsInVzZXJfZ2VuZGVyIjoiTSIsInVzZXJfcGhvbmUiOiI3MDY1NzMwMCIsInVzZXJfcHJlZnMiOiJuZXNjYWZlIiwidXNlcl9hZGRyZXNzIjoiMHhhZXJic2VyYnNiIiwidXNlcl9jb3VudHJ5IjoiTGViYW5vbiIsInVzZXJfcHJvZmVzc2lvbiI6IkRvY3RvciIsInVzZXJfb3JnYW5pemF0aW9uIjoiSG90ZWwgRGlldSJ9XSwiaWF0IjoxNTUyNjQxNDA3fQ.Ao-ZJ9yifCnnjInOWC6gRwleSYCHmJ9Ob1L6-jQsKF0"
             })
         });
         const products = await response.json();
 
-        const responseTopDeals = await fetch(`http://localhost:8000/api/product/${filter}`, {
+        const responseTopDeals = await fetch(`http://localhost:8000/api/product/topDeals`, {
             headers: new Headers({
                 'authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOlt7InVzZXJfdXNlcm5hbWUiOiJyYnRrYXkiLCJ1c2VyX2VtYWlsIjoicm9iZXJ0QGdtYWlsLmNvbSIsInVzZXJfcGFzc3dvcmQiOiJoYWhhaGEiLCJ1c2VyX25hbWUiOiJyb2JlcnQiLCJ1c2VyX2RvYiI6IjIwMTktMDMtMDFUMjI6MDA6MDAuMDAwWiIsInVzZXJfZ2VuZGVyIjoiTSIsInVzZXJfcGhvbmUiOiI3MDY1NzMwMCIsInVzZXJfcHJlZnMiOiJuZXNjYWZlIiwidXNlcl9hZGRyZXNzIjoiMHhhZXJic2VyYnNiIiwidXNlcl9jb3VudHJ5IjoiTGViYW5vbiIsInVzZXJfcHJvZmVzc2lvbiI6IkRvY3RvciIsInVzZXJfb3JnYW5pemF0aW9uIjoiSG90ZWwgRGlldSJ9XSwiaWF0IjoxNTUyNjQxNDA3fQ.Ao-ZJ9yifCnnjInOWC6gRwleSYCHmJ9Ob1L6-jQsKF0"
             })
         });
         const topDealsArray = await responseTopDeals.json();
-        
+
         //TODO: Make create the following arrays from api calls.
         const topDeals = topDealsArray.slice(0, 3);
         const recomended = products.slice(3, 7);
