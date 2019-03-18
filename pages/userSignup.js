@@ -7,6 +7,8 @@ import Layout from '../components/Layout';
 import NavigationBar from '../components/NavigationBar';
 import { Router } from '../routes';
 import { sha256 } from 'js-sha256';
+import web3 from '../ethereum/web3';
+
 
 const countryOptions = _.map(faker.definitions.address.country, country => ({
     key: country,
@@ -20,19 +22,41 @@ class SignUp extends Component {
         email: '',
         password: '',
         name: '',
-        date: '',
+        dob: '',
         gender: '',
         phone: '',
         preferences: '',
         country: '',
         profession: '',
         organization: '',
-        errorMessage: '',
+        errorMessage: {message: ''},
         loading: false
     };
 
     onSubmit = async (req, res, event) => {
+        this.setState({ loading: true, errorMessage: {message: ''} });
 
+
+        const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
+        const hashedPassword = sha256(password);
+        try {
+            const newAccount = web3.eth.accounts.create();
+            var response = await fetch(`http://localhost:8000/api/user/signUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+            var data = await response.json();
+            if (data.token)
+            {
+                localStorage.setItem('authorization', data.token);
+                localStorage.setItem('username', username);
+                localStorage.setItem('address', newAccount["address"]);
+                Router.pushRoute("/");
+            } else {
+                this.setState({ errorMessage: data });
+                console.log(this.state.data);
+            }
+        } catch (err) {
+            throw err;
+        }
+        this.setState({ loading: false });
     }
 
     handleDate = (event, {name, value}) => {
@@ -55,7 +79,7 @@ class SignUp extends Component {
                 <div style={{marginLeft: 20, marginTop: 50}}>
                     <h1>Sign Up</h1>
 
-                    <Form error={!!this.state.errorMessage["message"]}>
+                    <Form error={!!this.state.errorMessage["message"]} autoComplete="off">
                         <Form.Group widths='5'>
                             <Form.Field>
                                 <Input
@@ -103,11 +127,12 @@ class SignUp extends Component {
                         <Form.Group widths="5">
                             <Form.Field>
                                 <DateInput
-                                    name="date"
+                                    name="dob"
                                     placeholder="Date"
-                                    value={this.state.date}
+                                    value={this.state.dob}
                                     iconPosition="left"
                                     onChange={this.handleDate}
+                                    dateFormat="YYYY-MM-DD"
                                 />
                             </Form.Field>
 
@@ -124,11 +149,13 @@ class SignUp extends Component {
                         <Form.Field width="6">
                             <Dropdown
                                 name="country"
+                                value={this.state.country}
                                 fluid
                                 search
                                 selection
                                 options={countryOptions}
                                 placeholder='Select Country'
+                                onChange={(event, data) => this.setState({ country: data.value })}
                             />
                         </Form.Field>
 
@@ -162,7 +189,7 @@ class SignUp extends Component {
                                 />
 
                                 <Form.Radio
-                                    label='Medium'
+                                    label='Female'
                                     value='F'
                                     checked={this.state.gender === 'F'}
                                     onChange={event => this.setState({ gender: 'F' })}
@@ -177,7 +204,7 @@ class SignUp extends Component {
                                 placeholder="Preferences"
                             />
                         </Form.Field>
-
+                        <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
                         <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                     </Form>
                 </div>

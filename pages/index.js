@@ -56,12 +56,13 @@ class Loyalty extends Component {
         return (
             <div>
                 <Layout />
-                Main Account Address: {this.state.account}
-                <br />
-                Main Account Balance: {this.state.balance}
-                <Button loading={this.state.loading} onClick={this.onClick} color="violet">Send Me Points!</Button>
                 <NavigationBar propsNavigation={this.propsNavigation} />
+                <br /><br /><br /><br /><br />
                 <ProductRow />
+                    Main Account Address: {this.state.account}
+                    <br />
+                    Main Account Balance: {this.state.balance}
+                    <Button loading={this.state.loading} onClick={this.onClick} color="violet">Send Me Points!</Button>
                 {/* {this.renderProducts()} */}
                 {/* <Grid>
                     <Grid.Row columns={3}>

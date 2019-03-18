@@ -34,7 +34,6 @@ class NavigationBar extends Component {
                     </MenuItem>
 
                     <MenuItem name='Logout' />
-
                 </Menu.Menu>
             </Menu>
         );
