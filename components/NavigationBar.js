@@ -6,7 +6,7 @@ class NavigationBar extends Component {
     render() {
         const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
         return (
-            <Menu inverted color="violet">
+            <Menu fixed="top" inverted color="violet">
                 <MenuItem name='Loyalty Cocoon'  />
 
                 <MenuItem name='Purchases' style={{color: "white"}}/>
