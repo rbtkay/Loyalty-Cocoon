@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button, Modal, Image, Header } from 'semantic-ui-react';
 import Layout from './Layout';
-// import image from '/public/default_product_image.jpg';
+// import image from '../static/default_product_image.jpg';
 
 class ProductCard extends Component {
 
@@ -38,10 +38,16 @@ class ProductCard extends Component {
                 <Modal open={this.state.isOpen} onClose={this.close}>
                     <Modal.Header>{name}</Modal.Header>
                     <Modal.Content image>
-                        <Image wrapped size='medium' src="" />
+                        <Image wrapped size='medium' src='../static/default_product_image.jpg' />
                         <Modal.Description>
-                            <Header>{priceLoco}</Header>
+                            <b>Price </b>{priceLoco}
+                            <br />
+                            <br />
+                            <b>Description </b>
                             <p>{description}</p>
+                            <br />
+                            <b>by </b>{vendor}
+
                         </Modal.Description>
                     </Modal.Content>
                 </Modal>
