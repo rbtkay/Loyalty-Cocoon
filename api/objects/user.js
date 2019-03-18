@@ -62,15 +62,15 @@ exports.signUp = (req, res) => {
     var profession = req.query.profession;
     var organization = req.query.organization;
 
-    if (username && password && email && dob && gender && phone && address && country) {
+    if (username && password && email && dob && gender && phone && country) {
 
-        //TODO: verufy that the user exist.
+        //TODO: verify that the user exist.
         mysqlConnection.query('select user_username from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
-                if (result) {
+                if (result.length > 0) {
                     console.log('checked');
-                    res.send('already exist');
+                    res.send('already exists');
                 } else {
                     mysqlConnection.query('insert into user_t values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                         username,
@@ -88,14 +88,17 @@ exports.signUp = (req, res) => {
                     ], (err, result) => {
                         if (err) throw err;
                         else {
-                            res.send("user created");
+                            jwt.sign({ result }, 'secretKey', (err, token) => {
+                                res.json({
+                                    token,
+                                    result
+                                })
+                            })
                         }
                     })
                 }
             }
         })
-
-
     } else {
         res.send("Some Fields are Empty");
     }

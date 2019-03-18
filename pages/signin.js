@@ -27,7 +27,6 @@ class SignIn extends Component {
             var data = await response.json();
             if (/* data.length > 0 && data[0]["user_username"] == username */ data.token)
             {
-                console.log("data from signin: " + JSON.stringify(data));
                 req['authorization'] = data.token;
                 localStorage.setItem('authorization', data.token);
                 localStorage.setItem('username', data.result[0]["user_username"]);
