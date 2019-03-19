@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form } from 'semantic-ui-react';
-import indexPage from '../pages/index';
+import indexPage from '../pages/user';
 
 class NavigationBar extends Component {
     render() {

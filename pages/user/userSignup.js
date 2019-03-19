@@ -3,11 +3,11 @@ import { Form, Button, Message, Input, TextArea, Dropdown } from 'semantic-ui-re
 import faker from 'faker';
 import _ from 'lodash';
 import { DateInput } from 'semantic-ui-calendar-react';
-import Layout from '../components/Layout';
-import NavigationBar from '../components/NavigationBar';
-import { Router } from '../routes';
+import Layout from '../../components/Layout';
+import NavigationBar from '../../components/NavigationBar';
+import { Router } from '../../routes';
 import { sha256 } from 'js-sha256';
-import web3 from '../ethereum/web3';
+import web3 from '../../ethereum/web3';
 
 
 const countryOptions = _.map(faker.definitions.address.country, country => ({
