@@ -30,8 +30,6 @@ exports.getTopDeals = (req, res) => {
 
     mysqlConnection.query('select * from Product_T where product_loco < ?', [topDealsMargin], (err, result) => {
         if (err) throw err;
-
-        console.log(result);
         res.send(result);
     })
 }
