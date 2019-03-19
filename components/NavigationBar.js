@@ -3,6 +3,7 @@ import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form } from 'sem
 import indexPage from '../pages/user';
 
 class NavigationBar extends Component {
+
     render() {
         const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
         return (
@@ -38,6 +39,10 @@ class NavigationBar extends Component {
             </Menu>
         );
     }
+
+    // componentDidMount(){
+    //     console.log(localStorage.getItem("username"));
+    // }
 
     search = async (event) => {
         // if (event.keyPress === 'enter') {
