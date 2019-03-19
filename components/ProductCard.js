@@ -19,7 +19,7 @@ class ProductCard extends Component {
     render() {
         const { name, description, priceLoco, category, vendor } = this.props;
 
-        return (//TODO: add image link and small description to product.
+        return (
             <div>
                 <Card>
                     <Card.Content onClick={this.show}>
