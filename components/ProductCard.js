@@ -21,7 +21,7 @@ class ProductCard extends Component {
 
         return (//TODO: add image link and small description to product.
             <div>
-                <Card>
+                <Card color="violet">
                     <Card.Content onClick={this.show}>
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{priceLoco}</Card.Meta>
