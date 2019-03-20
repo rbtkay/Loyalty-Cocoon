@@ -7,6 +7,16 @@ exports.getAllProducts = (req, res, next) => {
     });
 }
 
+
+exports.getOfferedProducts = (req, res, next) => {
+    const isOffered = 1;
+
+    mysqlConnection.query('select * from Product_T where product_offered = ?',[isOffered], (err, result, fields) => {
+        if (err) throw err;
+        res.send(result);
+    });
+}
+
 exports.getProductSearch = (req, res, next) => {
     const searchRequest = req.query.search.toLowerCase();
     const isOffered = 1;
@@ -40,8 +50,9 @@ exports.getProductByCategory = (req, res) => {
 
 exports.getTopDeals = (req, res) => {
     const topDealsMargin = 100;
+    const isOffered = 1;
 
-    mysqlConnection.query('select * from Product_T where product_loco < ?', [topDealsMargin], (err, result) => {
+    mysqlConnection.query('select * from Product_T where product_loco < ? and product_offered = ?', [topDealsMargin, isOffered], (err, result) => {
         if (err) throw err;
         res.send(result);
     })

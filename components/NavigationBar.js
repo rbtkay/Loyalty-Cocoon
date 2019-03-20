@@ -4,6 +4,7 @@ import indexPage from '../pages/user';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { throws } from 'assert';
+import { Link } from '../routes';
 
 class NavigationBar extends Component {
     state = {
@@ -19,14 +20,16 @@ class NavigationBar extends Component {
         return (
             <Menu fixed="top" inverted color="violet">
 
-                <MenuItem
-                    name='Loyalty Cocoon'
-                    onClick={event => Router.pushRoute(`/user/${this.state.username}`)}
-                />
+                <MenuItem>
+                    {/* <a></a> */}
+                    <Link href={`/user/`}>
+                        <a>Loyalty Cocoon</a>
+                    </Link>
+                </MenuItem>
 
                 <MenuItem
                     name='Purchases'
-                    onClick={event => Router.pushRoute('/user/:id/purchases')}
+                // onClick={event => Router.pushRoute('/user/:id/purchases')}
                 />
 
                 <Dropdown text='Categories' pointing className='item'>
@@ -86,6 +89,12 @@ class NavigationBar extends Component {
     //     this.setState({ [name]: value });
     //     console.log(this.state.value);
     // }
+    redirect = () => {
+        console.log('in the redirection ');
+        console.log(this.state.username);
+        const { username } = this.state;
+        Router.pushRoute(`/user/${username}`);
+    }
 
     handleSubmit = (e) => {
         console.log("form submitted with:");
