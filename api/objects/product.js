@@ -33,3 +33,12 @@ exports.getTopDeals = (req, res) => {
         res.send(result);
     })
 }
+
+exports.getProductsByVendor = (req, res) => {
+    const vendor = req.query.username;
+
+    mysqlConnection.query('select * from product_t where vendor_username = ?', [vendor], (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+}
