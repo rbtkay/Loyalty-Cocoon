@@ -20,9 +20,7 @@ exports.getProductSearch = (req, res, next) => {
                 filteredResult.push(object);
             }
         })
-        
-        console.log(filteredResult);
-        console.log(filteredResult.length);
+
         if (filteredResult.length > 0) {
             res.send(filteredResult);
         } else {

@@ -64,7 +64,6 @@ exports.signUp = (req, res) => {
 
     if (username && password && email && dob && gender && phone && country) {
 
-        //TODO: verify that the user exist.
         mysqlConnection.query('select user_username from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
