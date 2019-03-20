@@ -12,7 +12,9 @@ class Manage extends Component {
         price: '',
         loco: '',
         description: '',
-        isOpen: false
+        isOpen: false,
+        username: '',
+        auth: ''
     };
 
     render() {
@@ -40,8 +42,8 @@ class Manage extends Component {
             {
                 key: 'Toys',
                 text: 'Toys',
-                value: 'Groceries'
-            },
+                value: 'Toys'
+            }
         ]
         return (
             <div>
@@ -140,6 +142,10 @@ class Manage extends Component {
                             value={this.state.description}
                             onChange={event => this.setState({ description: event.target.value })}
                         />
+
+                        <Button
+                            color='violet'
+                            onClick={this.onClick}>Button>Add Item</Button>
                     </Modal.Content>
                 </Modal>
             </div>
@@ -171,17 +177,28 @@ class Manage extends Component {
         }
     }
 
+    onClick = async () => {
+        const { username, name, category, price, loco, description } = this.state;
+        console.log(username);
+        const response = await fetch(`http://localhost:8000/api/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
+            headers: new Headers({
+                'authorization':
+                localStorage.getItem('authorization')
+            })
+        });
+    }
+
     async componentDidMount() {
         const username = localStorage.getItem('username');
         const response = await fetch(`http://localhost:8000/api/product/vendor?username=${username}`, {
             headers: new Headers({
                 'authorization':
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOlt7InVzZXJfdXNlcm5hbWUiOiJrYm9nIiwidXNlcl9lbWFpbCI6ImtldmluLmJvZ2hvc3NpYW5AZ21haWwuY29tIiwidXNlcl9wYXNzd29yZCI6ImE2NjVhNDU5MjA0MjJmOWQ0MTdlNDg2N2VmZGM0ZmI4YTA0YTFmM2ZmZjFmYTA3ZTk5OGU4NmY3ZjdhMjdhZTMiLCJ1c2VyX25hbWUiOiJLZXZpbiBCb2dob3NzaWFuIiwidXNlcl9kb2IiOiIxOTkzLTA5LTI4VDIyOjAwOjAwLjAwMFoiLCJ1c2VyX2dlbmRlciI6Ik0iLCJ1c2VyX3Bob25lIjoiNzAtMTQwMjk2IiwidXNlcl9wcmVmcyI6IlwiU3R1ZHllblwiIDopIiwidXNlcl9hZGRyZXNzIjoiMHg0ZkM5MUIxZDc5MDFFMjk4MWRDN0U2MjQ4NjdkYzg1ODE1RUZGN2IzIiwidXNlcl9jb3VudHJ5IjoiTGViYW5vbiIsInVzZXJfcHJvZmVzc2lvbiI6IlN0dWRlbnQiLCJ1c2VyX29yZ2FuaXphdGlvbiI6IkxPQ08ifV0sImlhdCI6MTU1MzA5NzMzOX0.f7H4aA5RKz5BlLO5_G4a-95xP4XQ9IESQJuQx58A4rs'
+                localStorage.getItem('authorization')
             })
         });
 
         const products = await response.json();
-        this.setState({ products });
+        this.setState({ products, username });
     }
 }
 

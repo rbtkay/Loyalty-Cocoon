@@ -6,5 +6,6 @@ router.get('/search', Product.getProductSearch);
 router.get('/category', Product.getProductCategory);
 router.get('/topDeals', Product.getTopDeals);
 router.get('/vendor', Product.getProductsByVendor);
+router.get('/add', Product.insertProduct);
 
 module.exports = router;
