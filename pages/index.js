@@ -41,18 +41,22 @@ class SignIn extends Component {
                                 {/* <Segment inverted color='violet'> */}
                                     <Form error={!!this.state.errorMessage["message"]}>
                                         <h1>Sign In</h1>
+                                        <br/>
                                         {/* <Form.Group inline widths='5'> */}
                                         <Form.Field >
-                                            <label style={{ color: 'white' }}>Username</label>
+                                            {/* <label style={{ color: 'white' }}>Username</label> */}
                                             <Input
+                                                placeholder="Username"
                                                 name="username"
                                                 value={this.state.username}
                                                 onChange={event => this.setState({ username: event.target.value })}
                                             />
                                         </Form.Field>
+                                        <br/>
                                         <Form.Field>
-                                            <label style={{ color: 'white' }}>Password</label>
+                                            {/* <label style={{ color: 'white' }}>Password</label> */}
                                             <Input
+                                                placeholder="Password"
                                                 name="password"
                                                 value={this.state.password}
                                                 onChange={event => this.setState({ password: event.target.value })}

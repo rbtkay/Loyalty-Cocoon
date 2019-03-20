@@ -8,19 +8,32 @@ exports.getAllProducts = (req, res, next) => {
 }
 
 exports.getProductSearch = (req, res, next) => {
-    const searchResult = req.query.search;
+    const searchRequest = req.query.search.toLowerCase();
+    const isOffered = 1;
+    let filteredResult = [];
 
-    mysqlConnection.query('select * from Product_T where vendor_username = ?', [searchResult], (err, result, fields) => {
+    mysqlConnection.query('select * from Product_T where product_offered = ?', [isOffered], (err, result, fields) => {
         if (err) throw err;
-        res.send(result);
+        result.map((object) => {
+            const name = object['product_name'].toLowerCase();
+            if (name.includes(searchRequest)) {
+                filteredResult.push(object);
+            }
+        })
+
+        if (filteredResult.length > 0) {
+            res.send(filteredResult);
+        } else {
+            res.send('404');
+        }
     });
 }
 
-exports.getProductCategory = (req, res) => {
+exports.getProductByCategory = (req, res) => {
     const category = req.query.category;
 
-    mysqlConnection.query('select * from Product_T where product_category = ?', [category], (err, result, fields) =>{
-        if(err) throw err;
+    mysqlConnection.query('select * from Product_T where product_category = ?', [category], (err, result, fields) => {
+        if (err) throw err;
         res.send(result);
     })
 }
