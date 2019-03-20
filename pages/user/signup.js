@@ -47,10 +47,9 @@ class SignUp extends Component {
                 localStorage.setItem('authorization', data.token);
                 localStorage.setItem('username', username);
                 localStorage.setItem('address', newAccount["address"]);
-                Router.pushRoute("/");
+                Router.pushRoute('/user');
             } else {
                 this.setState({ errorMessage: data });
-                console.log(this.state.data);
             }
         } catch (err) {
             throw err;
@@ -85,13 +84,25 @@ class SignUp extends Component {
                                 <Form.Field>
                                     <Input
                                         fluid
+                                        name="name"
+                                        value={this.state.name}
+                                        onChange={event => this.setState({ name: event.target.value })}
+                                        placeholder="Full Name"
+                                    />
+                                </Form.Field>
+
+                                <Form.Field>
+                                    <Input
+                                        fluid
                                         name="username"
                                         value={this.state.username}
                                         onChange={event => this.setState({ username: event.target.value })}
                                         placeholder="Username"
                                     />
                                 </Form.Field>
+                            </Form.Group>
 
+                            <Form.Group widths="2">
                                 <Form.Field>
                                     <Input
                                         fluid
@@ -101,9 +112,7 @@ class SignUp extends Component {
                                         placeholder="Email"
                                     />
                                 </Form.Field>
-                            </Form.Group>
 
-                            <Form.Group widths="2">
                                 <Form.Field>
                                     <Input
                                         fluid
@@ -111,16 +120,7 @@ class SignUp extends Component {
                                         value={this.state.password}
                                         onChange={event => this.setState({ password: event.target.value })}
                                         placeholder="Password"
-                                    />
-                                </Form.Field>
-
-                                <Form.Field>
-                                    <Input
-                                        fluid
-                                        name="name"
-                                        value={this.state.name}
-                                        onChange={event => this.setState({ name: event.target.value })}
-                                        placeholder="Full Name"
+                                        type='password'
                                     />
                                 </Form.Field>
                             </Form.Group>
