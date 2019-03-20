@@ -13,7 +13,7 @@ class ProductRow extends Component {
     }
 
     render() {
-        console.log(this.props.filter);
+        // console.log(this.props.filter);
         if (this.state.products.length > 0) {
             return (
                 <Grid>
@@ -79,12 +79,12 @@ class ProductRow extends Component {
         const recomended = products.slice(3, 7);
         const bestSeller = products.slice(7, 12);
         this.setState({ products, topDeals, recomended, bestSeller });
-        console.log(products);
+        // console.log(products);
     }
 
     async componentWillReceiveProps() {
 
-        const { filter } = this.props;
+        const filter = this.state.filter;
         console.log("filter in componentWillReceiveProps" + filter);
 
 
@@ -97,7 +97,7 @@ class ProductRow extends Component {
 
         // console.log("working" + products);
         this.setState({ products });
-        console.log(this.state.products);
+        // console.log(this.state.products);
     }
 }
 

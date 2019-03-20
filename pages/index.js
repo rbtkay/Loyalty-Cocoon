@@ -26,12 +26,12 @@ class SignIn extends Component {
         try {
             var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
             var data = await response.json();
-            if (/* data.length > 0 && data[0]["user_username"] == username */ data.token) {
+            if (data.token) {
                 req['authorization'] = data.token;
                 localStorage.setItem('authorization', data.token);
                 localStorage.setItem('username', data.result[0]["user_username"]);
                 localStorage.setItem('address', data.result[0]["user_address"]);
-                Router.pushRoute("/");
+                Router.pushRoute("/user/");
                 // console.log(req['authorization']);
             } else {
                 this.setState({ errorMessage: data });
@@ -69,18 +69,22 @@ class SignIn extends Component {
                                 {/* <Segment inverted color='violet'> */}
                                     <Form error={!!this.state.errorMessage["message"]}>
                                         <h1>Sign In</h1>
+                                        <br/>
                                         {/* <Form.Group inline widths='5'> */}
                                         <Form.Field >
-                                            <label style={{ color: 'white' }}>Username</label>
+                                            {/* <label style={{ color: 'white' }}>Username</label> */}
                                             <Input
+                                                placeholder="Username"
                                                 name="username"
                                                 value={this.state.username}
                                                 onChange={event => this.setState({ username: event.target.value })}
                                             />
                                         </Form.Field>
+                                        <br/>
                                         <Form.Field>
-                                            <label style={{ color: 'white' }}>Password</label>
+                                            {/* <label style={{ color: 'white' }}>Password</label> */}
                                             <Input
+                                                placeholder="Password"
                                                 name="password"
                                                 value={this.state.password}
                                                 onChange={event => this.setState({ password: event.target.value })}
