@@ -15,42 +15,14 @@ class SignIn extends Component {
         data: {}
     };
 
-    onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
-
-        console.log(this.state.errorMessage);
-
-        const { username, password } = this.state;
-        const hashedPassword = sha256(password);
-
-        try {
-            var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
-            var data = await response.json();
-            if (data.token) {
-                req['authorization'] = data.token;
-                localStorage.setItem('authorization', data.token);
-                localStorage.setItem('username', data.result[0]["user_username"]);
-                localStorage.setItem('address', data.result[0]["user_address"]);
-                Router.pushRoute("/user/");
-                // console.log(req['authorization']);
-            } else {
-                this.setState({ errorMessage: data });
-                console.log(this.state.errorMessage);
-            }
-        } catch (err) {
-            throw err;
-        }
-
-        this.setState({ loading: false });
-    }
-
     render() {
         return (
             <div  >
                 <Layout />
                 <div >
                     {/* <div style={{ backgroundColor: "#7539e5", height: '600px' }}> */}
-                    <Segment inverted color='violet'>
+
+                    <Segment color='violet' inverted>
                         <br />
                         <br />
                         <br />
@@ -143,7 +115,7 @@ class SignIn extends Component {
                     <Segment inverted color='violet'>
                         <Grid columns={2} >
                             <Grid.Column>
-                                <Image src='../static/default_product_image.jpg' centered rounded size='large' />
+                                <Image src='https://lh3.googleusercontent.com/h90_vjGvmqCHw8yAFiRkDJOf5z68ROM85TeFqcWE84Jd62mbNKGHvgAkwGLPGKR0fMj3ZHzPakL_XtEkpXdewg=rw' centered rounded size='large' />
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
                                 <h3>
@@ -169,6 +141,36 @@ class SignIn extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    onSubmit = async (req, res, event) => {
+        this.setState({ loading: true, errorMessage: { message: '' } });
+
+        console.log(this.state.errorMessage);
+
+        const { username, password } = this.state;
+        const hashedPassword = sha256(password);
+
+        try {
+            var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
+            var data = await response.json();
+            if (/* data.length > 0 && data[0]["user_username"] == username */ data.token) {
+                req['authorization'] = data.token;
+                localStorage.setItem('authorization', data.token);
+                localStorage.setItem('username', data.result[0]["user_username"]);
+                localStorage.setItem('address', data.result[0]["user_address"]);
+                Router.pushRoute("/user");
+                // console.log(req['authorization']);
+            } else {
+                this.setState({ errorMessage: data });
+                console.log(this.state.errorMessage);
+            }
+        } catch (err) {
+            throw err;
+        }
+
+        this.setState({ loading: false });
     }
 }
 

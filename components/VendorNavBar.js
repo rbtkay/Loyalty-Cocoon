@@ -11,7 +11,6 @@ class VendorNavBar extends Component {
         modalPassword: ''
     };
 
-
     render() {
 
         return (
@@ -54,7 +53,7 @@ class VendorNavBar extends Component {
                             name="modalUsername"
                             placeholder="Username"
                             value={this.state.modalUsername}
-                            onChange={event => this.setState({ modalUsername })}
+                            onChange={event => this.setState({ modalUsername: event.target.value })}
                         />
 
                         <br />
@@ -63,7 +62,7 @@ class VendorNavBar extends Component {
                             name="modalPassword"
                             placeholder="Password"
                             value={this.state.modalPassword}
-                            onChange={event => this.setState({ modalPassword })}
+                            onChange={event => this.setState({ modalPassword: event.target.value })}
                         />
 
                     </Modal.Content>

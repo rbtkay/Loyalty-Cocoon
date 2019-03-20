@@ -7,15 +7,6 @@ class ProductCard extends Component {
 
     state = { isOpen: false };
 
-    show = () => {
-        this.setState({ isOpen: true });
-    }
-
-    close = () => {
-        this.setState({ isOpen: false });
-    }
-
-
     render() {
         const { name, description, priceLoco, category, vendor } = this.props;
 
@@ -53,6 +44,14 @@ class ProductCard extends Component {
                 </Modal>
             </div>
         );
+    }
+
+    show = () => {
+        this.setState({ isOpen: true });
+    }
+
+    close = () => {
+        this.setState({ isOpen: false });
     }
 }
 
