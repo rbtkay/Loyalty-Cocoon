@@ -18,7 +18,7 @@ class SignIn extends Component {
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: { message: '' } });
 
-        console.log(this.state.errorMessage);
+        // console.log(this.state.errorMessage);
 
         const { username, password } = this.state;
         const hashedPassword = sha256(password);
