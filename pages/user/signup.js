@@ -33,35 +33,7 @@ class SignUp extends Component {
         loading: false
     };
 
-    onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
 
-
-        const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
-        const hashedPassword = sha256(password);
-        try {
-            const newAccount = web3.eth.accounts.create();
-            var response = await fetch(`http://localhost:8000/api/user/signUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
-            var data = await response.json();
-            if (data.token) {
-                localStorage.setItem('authorization', data.token);
-                localStorage.setItem('username', username);
-                localStorage.setItem('address', newAccount["address"]);
-                Router.pushRoute('/user');
-            } else {
-                this.setState({ errorMessage: data });
-            }
-        } catch (err) {
-            throw err;
-        }
-        this.setState({ loading: false });
-    }
-
-    handleDate = (event, { name, value }) => {
-        if (this.state.hasOwnProperty(name)) {
-            this.setState({ [name]: value });
-        }
-    }
 
     // handleRadio = (e, { value }) => {
     //     console.log(value);
@@ -217,6 +189,36 @@ class SignUp extends Component {
                 </Segment>
             </div>
         );
+    }
+
+    onSubmit = async (req, res, event) => {
+        this.setState({ loading: true, errorMessage: { message: '' } });
+
+
+        const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
+        const hashedPassword = sha256(password);
+        try {
+            const newAccount = web3.eth.accounts.create();
+            var response = await fetch(`http://localhost:8000/api/user/signUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+            var data = await response.json();
+            if (data.token) {
+                localStorage.setItem('authorization', data.token);
+                localStorage.setItem('username', username);
+                localStorage.setItem('address', newAccount["address"]);
+                Router.pushRoute('/user');
+            } else {
+                this.setState({ errorMessage: data });
+            }
+        } catch (err) {
+            throw err;
+        }
+        this.setState({ loading: false });
+    }
+
+    handleDate = (event, { name, value }) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+        }
     }
 }
 
