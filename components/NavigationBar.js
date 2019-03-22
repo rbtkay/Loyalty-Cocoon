@@ -32,10 +32,11 @@ class NavigationBar extends Component {
                     name='Purchases'
                 // onClick={event => Router.pushRoute('/user/:id/purchases')}
                 /> */}
-                <MenuItem>
-                    <Link href={`/user/purchases/${username}`}>
+                <MenuItem  onClick={this.redirect}>
+                    {/* <Link href={`/user/purchases/${username}`}>
                         <a>Purchases</a>
-                    </Link>
+                    </Link> */}
+                    Purchases
                 </MenuItem>
 
                 <Dropdown text='Categories' pointing className='item'>
@@ -65,8 +66,8 @@ class NavigationBar extends Component {
                     <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
                         <Dropdown.Menu>
                             <Dropdown.Header style={{ textAlign: "right" }}>{this.state.balance} LOCO</Dropdown.Header>
-                            <Dropdown.Item onClick={event => Router.pushRoute('/user/:id/settings')}>Settings</Dropdown.Item>
-                            <Dropdown.Item onClick={event => Router.pushRoute('/logout')}>Logout</Dropdown.Item>
+                            <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
+                            <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
 
@@ -95,17 +96,26 @@ class NavigationBar extends Component {
     //     this.setState({ [name]: value });
     //     console.log(this.state.value);
     // }
-    // redirect = () => {
-    //     console.log('in the redirection ');
-    //     console.log(this.state.username);
-    //     const { username } = this.state;
-    //     Router.pushRoute(`/user/${username}`);
-    // }
+    redirect = () => {
+        console.log('in the redirection ');
+        console.log(this.state.username);
+        const { username } = this.state;
+        Router.pushRoute(`/user/purchases/${username}`);
+    }
 
     handleSubmit = (e) => {
         console.log("form submitted with:");
         console.log(this.state.search);
         Router.pushRoute(`/user/${this.state.search}`);
+    }
+
+    logout = () =>{
+        localStorage.clear();
+        Router.pushRoute(`/`);
+    }
+
+    settings = () =>{
+        Router.pushRoute(`/user/settings/${this.state.username}`);
     }
 
     search = async (event) => {
