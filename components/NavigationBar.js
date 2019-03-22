@@ -16,6 +16,7 @@ class NavigationBar extends Component {
 
     render() {
         const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
+        const username = this.state.username;
 
         return (
             <Menu fixed="top" inverted color="violet">
@@ -27,10 +28,15 @@ class NavigationBar extends Component {
                     </Link>
                 </MenuItem>
 
-                <MenuItem
+                {/* <MenuItem
                     name='Purchases'
                 // onClick={event => Router.pushRoute('/user/:id/purchases')}
-                />
+                /> */}
+                <MenuItem>
+                    <Link href={`/user/purchases/${username}`}>
+                        <a>Purchases</a>
+                    </Link>
+                </MenuItem>
 
                 <Dropdown text='Categories' pointing className='item'>
                     <Dropdown.Menu>
@@ -89,12 +95,12 @@ class NavigationBar extends Component {
     //     this.setState({ [name]: value });
     //     console.log(this.state.value);
     // }
-    redirect = () => {
-        console.log('in the redirection ');
-        console.log(this.state.username);
-        const { username } = this.state;
-        Router.pushRoute(`/user/${username}`);
-    }
+    // redirect = () => {
+    //     console.log('in the redirection ');
+    //     console.log(this.state.username);
+    //     const { username } = this.state;
+    //     Router.pushRoute(`/user/${username}`);
+    // }
 
     handleSubmit = (e) => {
         console.log("form submitted with:");
