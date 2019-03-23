@@ -3,6 +3,7 @@ import { Menu, MenuItem, Dropdown, DropdownItem, Modal, Input, Button, Message }
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
+import {Link} from '../routes';
 
 class VendorNavBar extends Component {
     state = {
@@ -19,15 +20,17 @@ class VendorNavBar extends Component {
             <div>
                 <Menu fixed="top" inverted color="violet" style={{ height: "65px" }}>
 
-                    <MenuItem
-                        name='Loyalty Cocoon'
-                        onClick={event => Router.pushRoute(`/vendor/`)}
-                    />
+                    <MenuItem>
+                        <Link href={`/vendor/`}>
+                            <a>Loyalty Cocoon</a>
+                        </Link>
+                    </MenuItem>
 
-                    <MenuItem
+
+                    {/* <MenuItem
                         name='Transactions'
                         onClick={event => Router.pushRoute('/vendor/:id/transactions')}
-                    />
+                    /> */}
 
                     <MenuItem
                         name='Manage Products'
@@ -80,9 +83,7 @@ class VendorNavBar extends Component {
             const response = await fetch(`http://localhost:8000/api/vendor/auth?username=${modalUsername}&password=${hashedPassword}`);
 
             if (response.status === 200) {
-                const data = await response.json();
-                this.createLocalStorage(data, "vendor");
-                Router.pushRoute("/vendor/manage");
+                Router.pushRoute(`/vendor/manage/` + {modalUsername});
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }

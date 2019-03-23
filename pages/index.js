@@ -20,8 +20,6 @@ class SignIn extends Component {
             <div  >
                 <Layout />
                 <div >
-                    {/* <div style={{ backgroundColor: "#7539e5", height: '600px' }}> */}
-
                     <Segment color='violet' inverted>
                         <br />
                         <br />
@@ -35,16 +33,11 @@ class SignIn extends Component {
 
                                 <br />
                                 <br />
-                                {/* <Container textAlign=""> */}
-                                {/* <Container className="ui raised very text segment" textAlign='center'> */}
-                                {/* <Container> */}
-                                {/* <Segment inverted color='violet'> */}
+
                                 <Form error={!!this.state.errorMessage["message"]}>
                                     <h1>Sign In</h1>
                                     <br />
-                                    {/* <Form.Group inline widths='5'> */}
                                     <Form.Field >
-                                        {/* <label style={{ color: 'white' }}>Username</label> */}
                                         <Input
                                             placeholder="Username"
                                             name="username"
@@ -54,7 +47,6 @@ class SignIn extends Component {
                                     </Form.Field>
                                     <br />
                                     <Form.Field>
-                                        {/* <label style={{ color: 'white' }}>Password</label> */}
                                         <Input
                                             placeholder="Password"
                                             name="password"
@@ -62,14 +54,11 @@ class SignIn extends Component {
                                             onChange={event => this.setState({ password: event.target.value })}
                                         />
                                     </Form.Field>
-                                    {/* </Form.Group> */}
                                     <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
                                     <br />
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
                                 </Form>
-                                {/* </Segment> */}
-                                {/* </Container> */}
                             </Grid.Column>
                             <Grid.Column width='2'></Grid.Column>
 
@@ -79,7 +68,6 @@ class SignIn extends Component {
                         <br />
                     </Segment>
 
-                    {/* <Divider /> */}
                     <Segment>
                         <Grid columns={2} >
                             <Grid.Column verticalAlign='middle' textAlign='center'>
@@ -151,7 +139,7 @@ class SignIn extends Component {
 
         const { username, password } = this.state;
         const hashedPassword = sha256(password);
-        // console.log(hashedPassword);
+
         try {
             let response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
 
@@ -181,7 +169,6 @@ class SignIn extends Component {
     }
 
     createLocalStorage(data, type) {
-        // req['authorization'] = data.token;
         localStorage.setItem('authorization', data.token);
         localStorage.setItem('username', data.result[0][type + "_username"]);
         localStorage.setItem('address', data.result[0][type + "_address"]);

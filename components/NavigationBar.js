@@ -22,20 +22,12 @@ class NavigationBar extends Component {
             <Menu fixed="top" inverted color="violet">
 
                 <MenuItem>
-                    {/* <a></a> */}
                     <Link href={`/user/`}>
                         <a>Loyalty Cocoon</a>
                     </Link>
                 </MenuItem>
 
-                {/* <MenuItem
-                    name='Purchases'
-                // onClick={event => Router.pushRoute('/user/:id/purchases')}
-                /> */}
                 <MenuItem  onClick={this.redirect}>
-                    {/* <Link href={`/user/purchases/${username}`}>
-                        <a>Purchases</a>
-                    </Link> */}
                     Purchases
                 </MenuItem>
 
@@ -59,7 +51,6 @@ class NavigationBar extends Component {
                                 onChange={event => this.setState({ search: event.target.value })}
                                 icon='search'
                                 placeholder='Search...'
-                            // onChange={event => this.search(event.target.value)}
                             />
                         </Form>
                     </MenuItem>
@@ -76,8 +67,6 @@ class NavigationBar extends Component {
         );
     }
 
-    // style={{ marginRight: 300 }}
-
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
 
@@ -92,10 +81,6 @@ class NavigationBar extends Component {
         }
     }
 
-    // handleChange = (e, { name, value }) => {
-    //     this.setState({ [name]: value });
-    //     console.log(this.state.value);
-    // }
     redirect = () => {
         console.log('in the redirection ');
         console.log(this.state.username);
@@ -119,13 +104,7 @@ class NavigationBar extends Component {
     }
 
     search = async (event) => {
-        // if (event.keyPress === 'enter') {
-        //     console.log('enter clicked');
-        // }
         this.props.propsNavigation(event);
-        // const response = await fetch(`http://localhost:8000/api/product/search`);
-        // const products = await response.json();
-        // this.setState({ products });
     }
 }
 

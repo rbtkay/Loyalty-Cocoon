@@ -29,12 +29,17 @@ exports.authUser = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                jwt.sign({ result }, 'secretKey', (err, token) => {
-                    res.status(200).json({
-                        token,
-                        result
-                    });
-                })
+                const token = jwt.sign(
+                    {
+                        username: result['user_username'],
+                        email: result['user_email']
+                    },
+                    'jwtPrivateKey');
+
+                res.status(200).json({
+                    token,
+                    result
+                });
             } else {
                 const errorObj = {
                     "message": "Invalid Username/Password"
