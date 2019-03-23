@@ -15,7 +15,8 @@ class Manage extends Component {
         isOpen: false,
         username: '',
         auth: '',
-        active: []
+        active: [],
+        activeOffered: []
     };
 
     render() {
@@ -52,24 +53,15 @@ class Manage extends Component {
                 <VendorNavBar />
                 <div>
                     {console.log('hello')}
-                    <Segment>
+                    <Segment color='violet' inverted>
                         <br />
                         <br />
                         <br />
                         <Grid columns={2}>
-                            <Grid.Column width='7' verticalAlign='middle' textAlign='center' color='violet'>
+                            <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
                                 <h1>Manage Your Products</h1>
                                 <Table selectable>
-                                    <Table.Header>
-                                        <Table.Row>
-                                            <Table.HeaderCell>ID</Table.HeaderCell>
-                                            <Table.HeaderCell>Name</Table.HeaderCell>
-                                            <Table.HeaderCell>Category</Table.HeaderCell>
-                                            <Table.HeaderCell>Price</Table.HeaderCell>
-                                            <Table.HeaderCell>Offered?</Table.HeaderCell>
-                                            <Table.HeaderCell>Image (link?)</Table.HeaderCell>
-                                        </Table.Row>
-                                    </Table.Header>
+                                    {this.renderHeader()}
 
                                     <Table.Body>
                                         {this.renderRow(this.state.products)}
@@ -80,6 +72,24 @@ class Manage extends Component {
                                     positive
                                     floated='right'
                                     onClick={this.show}>Add New Item</Button>
+                            </Grid.Column>
+
+                            <Grid.Column width='2' verticalAlign='middle' textAlign='center'>
+                                <Button positive icon='angle double right' size='massive'></Button>
+                                <br />
+                                <br />
+                                <Button negative icon='angle double left' size='massive'></Button>
+                            </Grid.Column>
+
+                            <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
+                                <h1>Products Offered</h1>
+                                <Table selectable>
+                                    {this.renderHeader()}
+
+                                    <Table.Body>
+                                        {this.renderOfferedRow(this.state.products)}
+                                    </Table.Body>
+                                </Table>
                             </Grid.Column>
                         </Grid>
                     </Segment>
@@ -162,31 +172,81 @@ class Manage extends Component {
         this.setState({ isOpen: false });
     }
 
+    renderHeader = () => {
+        return (
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell>ID</Table.HeaderCell>
+                    <Table.HeaderCell>Name</Table.HeaderCell>
+                    <Table.HeaderCell>Category</Table.HeaderCell>
+                    <Table.HeaderCell>Price</Table.HeaderCell>
+                    <Table.HeaderCell>Image (link?)</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
+        );
+    }
+
     renderRow(products) {
         if (this.state.products) {
             return this.state.products.map((product, index) => {
-                if (!this.state.active.includes(index.toString())) {
-                    return (
-                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
-                            <Table.Cell>{product['product_id']}</Table.Cell>
-                            <Table.Cell>{product['product_name']}</Table.Cell>
-                            <Table.Cell>{product['product_category']}</Table.Cell>
-                            <Table.Cell>{product['product_price']}</Table.Cell>
-                            <Table.Cell>{product['product_offered'].data[0]}</Table.Cell>
-                        </Table.Row>
-                    );
+                if (product.product_offered.data[0] == 0) {
+                    if (!this.state.active.includes(index.toString())) {
+                        return (
+                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
+                                <Table.Cell>{product['product_id']}</Table.Cell>
+                                <Table.Cell>{product['product_name']}</Table.Cell>
+                                <Table.Cell>{product['product_category']}</Table.Cell>
+                                <Table.Cell>{product['product_price']}</Table.Cell>
+                            </Table.Row>
+                        );
+                    } else {
+                        return (
+                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
+                                <Table.Cell>{product['product_id']}</Table.Cell>
+                                <Table.Cell>{product['product_name']}</Table.Cell>
+                                <Table.Cell>{product['product_category']}</Table.Cell>
+                                <Table.Cell>{product['product_price']}</Table.Cell>
+                            </Table.Row>
+                        );
+                    }
                 } else {
                     return (
-                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
+                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} disabled>
                             <Table.Cell>{product['product_id']}</Table.Cell>
                             <Table.Cell>{product['product_name']}</Table.Cell>
                             <Table.Cell>{product['product_category']}</Table.Cell>
                             <Table.Cell>{product['product_price']}</Table.Cell>
-                            <Table.Cell>{product['product_offered'].data[0]}</Table.Cell>
                         </Table.Row>
                     );
                 }
+            });
+        }
+    }
 
+    renderOfferedRow(products) {
+        if (this.state.products) {
+            return this.state.products.map((product, index) => {
+                if (product.product_offered.data[0] == 1){
+                    if (!this.state.active.includes(index.toString())) {
+                        return (
+                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
+                                <Table.Cell>{product['product_id']}</Table.Cell>
+                                <Table.Cell>{product['product_name']}</Table.Cell>
+                                <Table.Cell>{product['product_category']}</Table.Cell>
+                                <Table.Cell>{product['product_price']}</Table.Cell>
+                            </Table.Row>
+                        );
+                    } else {
+                        return (
+                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
+                                <Table.Cell>{product['product_id']}</Table.Cell>
+                                <Table.Cell>{product['product_name']}</Table.Cell>
+                                <Table.Cell>{product['product_category']}</Table.Cell>
+                                <Table.Cell>{product['product_price']}</Table.Cell>
+                            </Table.Row>
+                        );
+                    }
+                }
             });
         }
     }
