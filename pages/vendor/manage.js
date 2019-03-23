@@ -14,7 +14,8 @@ class Manage extends Component {
         description: '',
         isOpen: false,
         username: '',
-        auth: ''
+        auth: '',
+        active: []
     };
 
     render() {
@@ -50,6 +51,7 @@ class Manage extends Component {
                 <Layout />
                 <VendorNavBar />
                 <div>
+                    {console.log('hello')}
                     <Segment>
                         <br />
                         <br />
@@ -57,7 +59,7 @@ class Manage extends Component {
                         <Grid columns={2}>
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center' color='violet'>
                                 <h1>Manage Your Products</h1>
-                                <Table celled selectable >
+                                <Table selectable>
                                     <Table.Header>
                                         <Table.Row>
                                             <Table.HeaderCell>ID</Table.HeaderCell>
@@ -70,7 +72,7 @@ class Manage extends Component {
                                     </Table.Header>
 
                                     <Table.Body>
-                                        {this.renderRow()}
+                                        {this.renderRow(this.state.products)}
                                     </Table.Body>
                                 </Table>
                                 <Button negative floated='left'>Remove Items</Button>
@@ -160,21 +162,52 @@ class Manage extends Component {
         this.setState({ isOpen: false });
     }
 
-    renderRow() {
+    renderRow(products) {
         if (this.state.products) {
-            return this.state.products.map((object) => {
-                console.log();
-                return (
-                    <Table.Row key={object['product_id']}>
-                        <Table.Cell>{object['product_id']}</Table.Cell>
-                        <Table.Cell>{object['product_name']}</Table.Cell>
-                        <Table.Cell>{object['product_category']}</Table.Cell>
-                        <Table.Cell>{object['product_price']}</Table.Cell>
-                        <Table.Cell>{object['product_offered'].data[0]}</Table.Cell>
-                    </Table.Row>
-                );
+            return this.state.products.map((product, index) => {
+                if (!this.state.active.includes(index.toString())) {
+                    return (
+                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
+                            <Table.Cell>{product['product_id']}</Table.Cell>
+                            <Table.Cell>{product['product_name']}</Table.Cell>
+                            <Table.Cell>{product['product_category']}</Table.Cell>
+                            <Table.Cell>{product['product_price']}</Table.Cell>
+                            <Table.Cell>{product['product_offered'].data[0]}</Table.Cell>
+                        </Table.Row>
+                    );
+                } else {
+                    return (
+                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
+                            <Table.Cell>{product['product_id']}</Table.Cell>
+                            <Table.Cell>{product['product_name']}</Table.Cell>
+                            <Table.Cell>{product['product_category']}</Table.Cell>
+                            <Table.Cell>{product['product_price']}</Table.Cell>
+                            <Table.Cell>{product['product_offered'].data[0]}</Table.Cell>
+                        </Table.Row>
+                    );
+                }
+
             });
         }
+    }
+
+    onRowClick = (product, index) => {
+        console.log(event.target.parentNode.getAttribute('data-item'));
+        const selectedRowIndex = event.target.parentNode.getAttribute('data-item');
+        const { active } = this.state;
+
+        if (!active.includes(selectedRowIndex))
+        {
+            active.push(selectedRowIndex);
+        } else {
+            for(var i = 0; i < active.length; i++){
+                if ( active[i] === selectedRowIndex) {
+                    active.splice(i, 1);
+                }
+            }
+        }
+        this.setState({ active });
+        console.log(active);
     }
 
     onClick = async () => {
