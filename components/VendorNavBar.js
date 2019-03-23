@@ -19,7 +19,7 @@ class VendorNavBar extends Component {
 
                     <MenuItem
                         name='Loyalty Cocoon'
-                        onClick={event => Router.pushRoute(`/vendor/${this.state.username}`)}
+                        onClick={event => Router.pushRoute(`/vendor/`)}
                     />
 
                     <MenuItem

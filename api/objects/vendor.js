@@ -17,7 +17,7 @@ exports.authVendor = (req, res, next) => {
             if (err) throw err;
             if (result.length > 0) {
                 jwt.sign({ result }, 'secretKey', (err, token) => {
-                    res.json({
+                    res.status(200).json({
                         token,
                         result
                     })
@@ -26,11 +26,11 @@ exports.authVendor = (req, res, next) => {
                 const errorObj = {
                     'message': 'Invalid Username/Password'
                 }
-                res.send(errorObj)
+                res.status(401).send(errorObj)
             }
         });
     } else {
-        res.send('Some inputs are missing');
+        res.status(400).send('Some inputs are missing');
     }
 }
 
