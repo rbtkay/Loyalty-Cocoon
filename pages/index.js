@@ -20,8 +20,6 @@ class SignIn extends Component {
             <div  >
                 <Layout />
                 <div >
-                    {/* <div style={{ backgroundColor: "#7539e5", height: '600px' }}> */}
-
                     <Segment color='violet' inverted>
                         <br />
                         <br />
@@ -35,41 +33,32 @@ class SignIn extends Component {
 
                                 <br />
                                 <br />
-                                {/* <Container textAlign=""> */}
-                                {/* <Container className="ui raised very text segment" textAlign='center'> */}
-                                {/* <Container> */}
-                                {/* <Segment inverted color='violet'> */}
-                                    <Form error={!!this.state.errorMessage["message"]}>
-                                        <h1>Sign In</h1>
-                                        <br/>
-                                        {/* <Form.Group inline widths='5'> */}
-                                        <Form.Field >
-                                            {/* <label style={{ color: 'white' }}>Username</label> */}
-                                            <Input
-                                                placeholder="Username"
-                                                name="username"
-                                                value={this.state.username}
-                                                onChange={event => this.setState({ username: event.target.value })}
-                                            />
-                                        </Form.Field>
-                                        <br/>
-                                        <Form.Field>
-                                            {/* <label style={{ color: 'white' }}>Password</label> */}
-                                            <Input
-                                                placeholder="Password"
-                                                name="password"
-                                                value={this.state.password}
-                                                onChange={event => this.setState({ password: event.target.value })}
-                                            />
-                                        </Form.Field>
-                                        {/* </Form.Group> */}
-                                        <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
-                                        <br />
-                                        <br />
-                                        <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
-                                    </Form>
-                                {/* </Segment> */}
-                                {/* </Container> */}
+
+                                <Form error={!!this.state.errorMessage["message"]}>
+                                    <h1>Sign In</h1>
+                                    <br />
+                                    <Form.Field >
+                                        <Input
+                                            placeholder="Username"
+                                            name="username"
+                                            value={this.state.username}
+                                            onChange={event => this.setState({ username: event.target.value })}
+                                        />
+                                    </Form.Field>
+                                    <br />
+                                    <Form.Field>
+                                        <Input
+                                            placeholder="Password"
+                                            name="password"
+                                            value={this.state.password}
+                                            onChange={event => this.setState({ password: event.target.value })}
+                                        />
+                                    </Form.Field>
+                                    <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
+                                    <br />
+                                    <br />
+                                    <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
+                                </Form>
                             </Grid.Column>
                             <Grid.Column width='2'></Grid.Column>
 
@@ -79,7 +68,6 @@ class SignIn extends Component {
                         <br />
                     </Segment>
 
-                    {/* <Divider /> */}
                     <Segment>
                         <Grid columns={2} >
                             <Grid.Column verticalAlign='middle' textAlign='center'>
@@ -153,25 +141,40 @@ class SignIn extends Component {
         const hashedPassword = sha256(password);
 
         try {
-            var response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
-            var data = await response.json();
-            if (/* data.length > 0 && data[0]["user_username"] == username */ data.token) {
-                req['authorization'] = data.token;
-                localStorage.setItem('authorization', data.token);
-                localStorage.setItem('username', data.result[0]["user_username"]);
-                localStorage.setItem('address', data.result[0]["user_address"]);
+            let response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
+
+            if (response.status === 200) {
+                const data = await response.json();
+                this.createLocalStorage(data, "user");
                 Router.pushRoute("/user");
-                // console.log(req['authorization']);
-            } else {
-                this.setState({ errorMessage: data });
-                console.log(this.state.errorMessage);
-            }
+            } else
+                if (response.status === 401) {
+
+                    response = await fetch(`http://localhost:8000/api/vendor/auth?username=${username}&password=${hashedPassword}`);
+
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        this.createLocalStorage(data, "vendor");
+                        Router.pushRoute("/vendor");
+                    } else {
+                        this.setState({ errorMessage: data });
+                        console.log(this.state.errorMessage);
+                    }
+                }
         } catch (err) {
             throw err;
         }
 
         this.setState({ loading: false });
     }
+
+    createLocalStorage(data, type) {
+        localStorage.setItem('authorization', data.token);
+        localStorage.setItem('username', data.result[0][type + "_username"]);
+        localStorage.setItem('address', data.result[0][type + "_address"]);
+    }
+
+
 }
 
 export default SignIn;
