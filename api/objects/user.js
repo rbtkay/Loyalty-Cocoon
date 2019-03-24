@@ -36,7 +36,7 @@ exports.authUser = (req, res, next) => {
                         email: result[0].user_email,
                         type: "regular"
                     },
-                    'jwtPrivateKey');
+                    'secretKey');
 
                 console.log("token:" + token);
 

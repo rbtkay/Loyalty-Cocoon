@@ -7,13 +7,18 @@ exports.verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
 
     try {
-        const decoded = jwt.verify(token, "jwtPrivateKey");
-        console.log("decoded email");
-        console.log(decoded); //{username, email, type, iat}
-        userData = decoded;
+        // const decoded = decode(token);
+        // const type = decode.type;
+        // console.log("user type" + type);
 
-        console.log("url");
-        console.log(req.originalUrl); // /api/product/offered
+        const decoded = jwt.verify(token, "secretKey");
+        // console.log("decoded email");
+        console.log(decoded); //{username, email, type, iat}
+
+        // const userData = decoded;
+
+        // console.log("url");
+        // console.log(req.originalUrl); // /api/product/offered
 
         // if (userData.type === 'regular') {
 

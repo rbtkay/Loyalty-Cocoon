@@ -3,15 +3,21 @@ import { Menu, MenuItem, Dropdown, DropdownItem, Modal, Input, Button, Message }
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
-import {Link} from '../routes';
+import { Link } from '../routes';
 
 class VendorNavBar extends Component {
+
     state = {
         username: '',
         isOpen: false,
         modalUsername: '',
         modalPassword: '',
         submission: { msg: '', error: false }
+    };
+
+    constructor(props) {
+        super(props);
+        console.log("In the Constructor");
     };
 
     render() {
@@ -42,8 +48,8 @@ class VendorNavBar extends Component {
 
                         <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={event => Router.pushRoute('/vendor/:id/settings')}>Settings</Dropdown.Item>
-                                <Dropdown.Item onClick={event => Router.pushRoute('/logout')}>Logout</Dropdown.Item>
+                                <Dropdown.Item onClick={event => Router.pushRoute('/vendor/settings')}>Settings</Dropdown.Item>
+                                <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
@@ -74,6 +80,11 @@ class VendorNavBar extends Component {
         this.setState({ isOpen: false });
     }
 
+    logout = () => {
+        localStorage.clear();
+        Router.pushRoute('/');
+    }
+
     onClick = async () => {
         const { modalUsername, modalPassword } = this.state;
 
@@ -83,7 +94,7 @@ class VendorNavBar extends Component {
             const response = await fetch(`http://localhost:8000/api/vendor/auth?username=${modalUsername}&password=${hashedPassword}`);
 
             if (response.status === 200) {
-                Router.pushRoute(`/vendor/manage/` + {modalUsername});
+                Router.pushRoute(`/vendor/manage/` + { modalUsername });
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }
@@ -153,7 +164,7 @@ class VendorNavBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-
+        // Router.pushRoute('/');
         if (auth === null) {
             Router.pushRoute('/');
         } else {

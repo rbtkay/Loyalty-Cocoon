@@ -1,13 +1,33 @@
 import React, { Component } from 'react';
 import NavigationBar from '../../components/VendorNavBar';
 import Layout from '../../components/Layout';
+import { Router } from '../../routes';
 
 class Transaction extends Component {
 
-    getInitialProps(req) {
-        const user = req.userData;
-        console.log("User" + user);
-        return { user };
+    static async getInitialProps(props) {
+
+        try {
+            
+
+
+            const response = await fetch(`http://localhost:8000/api/product/offered`, {
+                headers: new Headers({
+                    'authorization': localStorage.getItem('authorization')
+                })
+            });
+            if (response.status === 401) {
+                console.log('redirecting...'); 
+                Router.push('/');
+            }
+
+        } catch (err) {
+
+            //FIXME: no Router instance found. when altering the url manually.
+            Router.pushRoute('/');
+        }
+
+        return { props };
     }
 
     render() {
