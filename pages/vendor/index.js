@@ -7,25 +7,27 @@ class Transaction extends Component {
 
     static async getInitialProps(props) {
 
-        try {
-            
+        // try {
+        const response = await fetch(`http://localhost:8000/api/product/offered`, {
+            headers: new Headers({
+                'authorization': localStorage.getItem('authorization')
+            })
+        });
 
+        const products = await response.json();
 
-            const response = await fetch(`http://localhost:8000/api/product/offered`, {
-                headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
-                })
-            });
-            if (response.status === 401) {
-                console.log('redirecting...'); 
-                Router.push('/');
-            }
-
-        } catch (err) {
-
-            //FIXME: no Router instance found. when altering the url manually.
-            Router.pushRoute('/');
+        if (response.status === 401) {
+            console.log('redirecting...');
+            Router.push('/');
         }
+
+        console.log(products);
+
+        // } catch (err) {
+
+        //FIXME: no Router instance found. when altering the url manually.
+        // Router.pushRoute('/');
+        // }
 
         return { props };
     }
