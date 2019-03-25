@@ -13,8 +13,8 @@ exports.verifyToken = (req, res, next) => {
 
         const decoded = jwt.verify(token, "secretKey");
         // console.log("decoded email");
-        console.log(decoded); //{username, email, type, iat}
-
+        // console.log(decoded); //{username, email, type, iat}
+        const userType = decoded.type;
         // const userData = decoded;
 
         // console.log("url");
@@ -25,10 +25,17 @@ exports.verifyToken = (req, res, next) => {
         // } else if (userData.type === 'vendor') {
 
         // }
+        const url = req.originalUrl;
 
+        const type = url.split('/')[2];
+        console.log("req.originalUrl");
 
-
-        next();
+        if (userType === type) {
+            console.log(type);
+            next();
+        }else{
+            return res.status(401).send('Auth Failed');
+        }
 
     } catch (err) {
         res.status(401).send("Auth Failed");
