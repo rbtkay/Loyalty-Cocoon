@@ -3,8 +3,9 @@ const mysqlconnection = require('../../database/connection');
 exports.getPurchasesByVendor = (req, res) => {
     const vendor = req.query.username;
 
-    mysqlconnection.query('select * from purchase_t where vendor_username = ?', [vendor], (err, result) => {
+    mysqlconnection.query('select purchase_t.*, product_t.product_name from purchase_t, product_t where purchase_t.vendor_username = ? and purchase_t.product_id = product_t.product_id', [vendor], (err, result) => {
         if (err) throw err;
+        console.log(result);
         if (result.length > 0) {
             res.status(200).send(result);
         } else {
