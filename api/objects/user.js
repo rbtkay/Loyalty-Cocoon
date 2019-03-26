@@ -108,6 +108,6 @@ exports.signUp = (req, res) => {
             }
         })
     } else {
-        res.send("Some Fields are Empty");
+        res.status(400).send("Some Fields are Empty");
     }
 }
