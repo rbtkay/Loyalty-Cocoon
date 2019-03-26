@@ -3,6 +3,7 @@ const mysqlConnection = require('../../database/connection');
 exports.getAllProducts = (req, res, next) => {
     mysqlConnection.query('select * from Product_T', (err, result, fields) => {
         if (err) throw err;
+        console.log(result.length);
         res.send(result);
     });
 }

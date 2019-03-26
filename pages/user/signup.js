@@ -199,7 +199,7 @@ class SignUp extends Component {
         const hashedPassword = sha256(password);
         try {
             const newAccount = web3.eth.accounts.create();
-            var response = await fetch(`http://localhost:8000/api/user/signUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+            var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
             var data = await response.json();
             if (data.token) {
                 localStorage.setItem('authorization', data.token);
