@@ -16,11 +16,17 @@ exports.authVendor = (req, res, next) => {
         mysqlConnection.query('select * from Vendor_T where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                jwt.sign({ result }, 'secretKey', (err, token) => {
-                    res.status(200).json({
-                        token,
-                        result
-                    })
+                const token = jwt.sign(
+                    {
+                        username: result['vendor_username'],
+                        email: result['vendor_email'],
+                        type: "vendor"
+                    },
+                    'secretKey');
+
+                res.status(200).json({
+                    token,
+                    result
                 })
             } else {
                 const errorObj = {

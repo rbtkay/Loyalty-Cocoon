@@ -23,10 +23,13 @@ class SignUp extends Component {
 
         const { username, email, password, name, phone, location, tag } = this.state;
         const hashedPassword = sha256(password);
+
         try {
             const newAccount = web3.eth.accounts.create();
-            var response = await fetch(`http://localhost:8000/api/vendor/signUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
+
+            var response = await fetch(`http://localhost:8000/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
             var data = await response.json();
+            
             if (data.token) {
                 localStorage.setItem('authorization', data.token);
                 localStorage.setItem('username', username);
