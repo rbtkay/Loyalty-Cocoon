@@ -7,7 +7,6 @@ class Purchase extends Component {
         const { purchaseId, productId, username, vendor, time, productName } = this.props;
         return (
             <div>
-                <h1>These are Your Purchases</h1>
                 <Item.Group divided>
                     <Item>
                         <Item.Image size='small' src='../static/default_product_image.jpg' />
@@ -20,7 +19,7 @@ class Purchase extends Component {
                             <Item.Extra>
                                 <Label>id: {purchaseId}</Label>
                                 <Label>on: {time}</Label>
-                                <Button className='success' floated='right'>Finalize</Button>
+                                <Button className='success' size='big' basic color='violet' floated='right'>Finalize</Button>
                             </Item.Extra>
                         </Item.Content>
                     </Item>
