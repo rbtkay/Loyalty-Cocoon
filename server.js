@@ -7,7 +7,9 @@ const app = next({
     dev: process.env.NODE_ENV !== 'production'
 });
 
-const handle = app.getRequestHandler(app);
+const routes = require('./routes')
+
+const handle = routes.getRequestHandler(app);
 
 app.prepare().then(() => {
 

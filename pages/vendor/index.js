@@ -19,7 +19,7 @@ class Transaction extends Component {
         purchases: [],
         purchaseLength: '',
         searchValue: '',
-        searchResult: [],
+        searchResult: '',
         isSearchLoading: false,
         searchValue: ''
     }
@@ -49,8 +49,7 @@ class Transaction extends Component {
 
     // return { props };
     // }
-    //TODO: implement search by customer username.
-    //TODO: implement finalize function.
+
 
     render() {
         const { purchases, isSearchLoading, searchResult, searchValue } = this.state;
@@ -62,12 +61,13 @@ class Transaction extends Component {
                 <br />
                 <br />
                 <Segment>
-                    <Grid columns={2}>
-                        <Grid.Column >
+                    <Grid>
+                        <Grid.Column width={12}>
                             <h1>These are Your Purchases</h1>
                         </Grid.Column>
-                        <Grid.Column textAlign='right'>
+                        <Grid.Column width={4}>
                             <Search
+                                input={{ fluid: true }}
                                 loading={isSearchLoading}
                                 onResultSelect={this.handleResultSelect}
                                 onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
@@ -86,19 +86,29 @@ class Transaction extends Component {
         )
     }
 
-    resetComponent = () => this.setState({ isSearchLoading: false, searchResults: [], searchValue: '' })
+    resetComponent = () => this.setState(({ isSearchLoading: false, searchResults: [], searchValue: '' }), () => {
+        this.refresh();
+    })
 
     handleResultSelect = (e, { result }) => {
         console.log('handling the select result');
         console.log(this.state.searchValue);
+        console.log('result');
+        console.log(result.name);
 
-        this.setState({ searchValue: result.name });
-        console.log(this.state.searchValue);
-        //TODO: on result click the api should be called to filter the transaction by vendor and user.
+        this.setState(({ searchValue: result.name }), () => {
+            this.refresh();
+        });
+    }
+
+    refresh() {
+        this.componentDidMount();
     }
 
     handleSearchChange = (e, { value }) => {
         this.setState({ isSearchLoading: true, searchValue: value })
+
+        console.log(this.state.searchValue);
 
         setTimeout(() => {
             if (this.state.searchValue.length < 1) return this.resetComponent()
@@ -108,27 +118,37 @@ class Transaction extends Component {
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
 
-            const source = _.times(purchaseLength, () => ({
-                name: purchases[0]['user_username'],
-                description: purchases[0]['user_username'],
-            }))
+            // const source = _.times(purchaseLength, () => ({
+            //     name: purchases[0]['user_username'],
+            //     description: purchases[0]['user_username'],
+            // }))
+
+            const source = purchases.map(object => {
+                return {
+                    name: object['user_username'],
+                    description: object['user_username']
+                }
+            })
 
             this.setState({
                 isSearchLoading: false,
                 searchResult: _.filter(source, isMatch),
             })
             console.log('source');
-            console.log(this.state.searchResult);
+            console.log(source);
         }, 300)
     }
+
     async componentDidMount() {
         const username = localStorage.getItem('username');
-        const { searchResult } = this.state;
+        const { searchValue } = this.state;
 
+        console.log("searchValue");
+        console.log(searchValue);
         let response;
 
-        if (searchResult.length > 0) {
-            response = await fetch(`http://localhost:8000/api/vendor/purchase/byVendorUser?vendorUsername=${username}&userUsername=${searchResult}`, {
+        if (searchValue.length > 0) {
+            response = await fetch(`http://localhost:8000/api/vendor/purchase/byVendorUser?vendorUsername=${username}&userUsername=${searchValue}`, {
                 headers: new Headers({
                     'authorization': localStorage.getItem('authorization')
                 })
@@ -155,9 +175,6 @@ class Transaction extends Component {
                 }
             )
         }
-        console.log(this.state.purchases);
-        // console.log(this.state.purchaseLength);
-
     }
 
 
@@ -182,11 +199,16 @@ class Transaction extends Component {
                             username={object['user_email']}
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
+                            finalize={this.finalizePurchase}
                         />
                     )
                 })
             )
         }
+    }
+
+    finalizePurchase = () => {
+        this.componentDidMount();
     }
 }
 
