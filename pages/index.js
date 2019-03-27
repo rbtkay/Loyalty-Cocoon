@@ -48,6 +48,7 @@ class SignIn extends Component {
                                     <br />
                                     <Form.Field>
                                         <Input
+                                            type='password'
                                             placeholder="Password"
                                             name="password"
                                             value={this.state.password}
@@ -141,7 +142,7 @@ class SignIn extends Component {
         const hashedPassword = sha256(password);
 
         try {
-            let response = await fetch(`http://localhost:8000/api/user/auth?username=${username}&password=${hashedPassword}`);
+            let response = await fetch(`http://localhost:8000/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
 
             if (response.status === 200) {
                 const data = await response.json();
@@ -150,7 +151,7 @@ class SignIn extends Component {
             } else
                 if (response.status === 401) {
 
-                    response = await fetch(`http://localhost:8000/api/vendor/auth?username=${username}&password=${hashedPassword}`);
+                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
 
                     if (response.status === 200) {
                         const data = await response.json();

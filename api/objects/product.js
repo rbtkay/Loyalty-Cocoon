@@ -3,7 +3,8 @@ const mysqlConnection = require('../../database/connection');
 exports.getAllProducts = (req, res, next) => {
     mysqlConnection.query('select * from Product_T', (err, result, fields) => {
         if (err) throw err;
-        res.send(result);
+        console.log(result.length);
+        res.status(200).send(result);
     });
 }
 
@@ -11,9 +12,9 @@ exports.getAllProducts = (req, res, next) => {
 exports.getOfferedProducts = (req, res, next) => {
     const isOffered = 1;
 
-    mysqlConnection.query('select * from Product_T where product_offered = ?',[isOffered], (err, result, fields) => {
+    mysqlConnection.query('select * from Product_T where product_offered = ?', [isOffered], (err, result, fields) => {
         if (err) throw err;
-        res.send(result);
+        res.status(200).send(result);
     });
 }
 
@@ -30,11 +31,11 @@ exports.getProductSearch = (req, res, next) => {
                 filteredResult.push(object);
             }
         })
-
+        //TODO: searches only by product name. Let's make it better!
         if (filteredResult.length > 0) {
-            res.send(filteredResult);
+            res.status(200).send(filteredResult);
         } else {
-            res.send('404');
+            res.status(404).send('No Result Found');
         }
     });
 }
@@ -44,7 +45,7 @@ exports.getProductByCategory = (req, res) => {
 
     mysqlConnection.query('select * from Product_T where product_category = ?', [category], (err, result, fields) => {
         if (err) throw err;
-        res.send(result);
+        res.status(200).send(result);
     })
 }
 
@@ -54,7 +55,7 @@ exports.getTopDeals = (req, res) => {
 
     mysqlConnection.query('select * from Product_T where product_loco < ? and product_offered = ?', [topDealsMargin, isOffered], (err, result) => {
         if (err) throw err;
-        res.send(result);
+        res.status(200).send(result);
     })
 }
 
@@ -63,7 +64,7 @@ exports.getProductsByVendor = (req, res) => {
 
     mysqlConnection.query('select * from product_t where vendor_username = ?', [vendor], (err, result) => {
         if (err) throw err;
-        res.send(result);
+        res.status(200).send(result);
     });
 }
 

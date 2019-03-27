@@ -29,12 +29,16 @@ exports.authUser = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
+                console.log(result[0].user_username);
                 const token = jwt.sign(
                     {
-                        username: result['user_username'],
-                        email: result['user_email']
+                        username: result[0].user_username,
+                        email: result[0].user_email,
+                        type: "regular"
                     },
-                    'jwtPrivateKey');
+                    'secretKey');
+
+                console.log("token:" + token);
 
                 res.status(200).json({
                     token,
@@ -104,6 +108,6 @@ exports.signUp = (req, res) => {
             }
         })
     } else {
-        res.send("Some Fields are Empty");
+        res.status(400).send("Some Fields are Empty");
     }
 }

@@ -10,7 +10,6 @@ class NavigationBar extends Component {
     state = {
         username: '',
         balance: 0,
-        isVendor: false,
         search: ''
     };
 
@@ -71,7 +70,7 @@ class NavigationBar extends Component {
         const auth = localStorage.getItem('authorization');
 
         if (auth === null) {
-            Router.pushRoute("/signin");
+            Router.pushRoute("/");
         } else {
             const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
