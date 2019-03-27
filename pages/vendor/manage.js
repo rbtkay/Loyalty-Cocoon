@@ -56,7 +56,7 @@ class Manage extends Component {
                 <Layout />
                 <VendorNavBar />
                 <div>
-                    <Segment color='violet' inverted style={{height: '800px'}} >
+                    <Segment color='violet' inverted>
 
                         <br />
                         <br />
@@ -108,6 +108,11 @@ class Manage extends Component {
 
                             </Grid.Column>
                         </Grid>
+
+                        <br />
+                        <br />
+                        <br />
+                        
                     </Segment>
                 </div>
 
@@ -198,7 +203,7 @@ class Manage extends Component {
 
     async componentDidMount() {
         const username = localStorage.getItem('username');
-        const response = await fetch(`http://localhost:8000/api/product/vendor?username=${username}`, {
+        const response = await fetch(`http://localhost:8000/api/vendor/product/vendor?username=${username}`, {
             headers: new Headers({
                 'authorization':
                 localStorage.getItem('authorization')
@@ -233,7 +238,7 @@ class Manage extends Component {
 
     addItem = async () => {
         const { username, name, category, price, loco, description, products } = this.state;
-        const response = await fetch(`http://localhost:8000/api/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
+        const response = await fetch(`http://localhost:8000/api/vendor/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
             headers: new Headers({
                 'authorization':
                 localStorage.getItem('authorization')
@@ -257,7 +262,7 @@ class Manage extends Component {
         });
 
         const id = temp.join(',');
-        const response = await fetch(`http://localhost:8000/api/product/delete?id=${id}`, {
+        const response = await fetch(`http://localhost:8000/api/vendor/product/delete?id=${id}`, {
                 headers: new Headers({
                 'authorization':
                 localStorage.getItem('authorization')
@@ -274,7 +279,7 @@ class Manage extends Component {
         });
 
         const id = temp.join(',');
-        const response = await fetch(`http://localhost:8000/api/product/addOffer?id=${id}`, {
+        const response = await fetch(`http://localhost:8000/api/vendor/product/addOffer?id=${id}`, {
             headers: new Headers({
                 'authorization':
                 localStorage.getItem('authorization')
@@ -291,7 +296,7 @@ class Manage extends Component {
         });
 
         const id = temp.join(',');
-        const response = await fetch(`http://localhost:8000/api/product/removeOffer?id=${id}`, {
+        const response = await fetch(`http://localhost:8000/api/vendor/product/removeOffer?id=${id}`, {
             headers: new Headers({
                 'authorization':
                 localStorage.getItem('authorization')
