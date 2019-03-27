@@ -90,7 +90,7 @@ class NavigationBar extends Component {
     handleSubmit = (e) => {
         console.log("form submitted with:");
         console.log(this.state.search);
-        Router.pushRoute(`/user/${this.state.search}`);
+        Router.pushRoute(`/user/search/${this.state.search}`);
     }
 
     logout = () =>{
