@@ -87,7 +87,51 @@ exports.insertProduct = (req, res) => {
         ], (err, result) => {
             if (err) throw err;
             else {
-                res.status(200).send('Successfully added');
+                res.status(200).send(result);
+            }
+        })
+    } else {
+        res.status(400).send();
+    }
+}
+
+exports.deleteProductById = (req, res) => {
+    var id = req.query.id;
+    let temp = id.split(',');
+
+    if (temp) {
+        mysqlConnection.query('delete from product_t where product_id in (?)', [temp], (err, result) => {
+            if (err) throw err;
+            else {
+                res.status(200).send(result);
+            }
+        })
+    }
+}
+
+exports.addOffersById = (req, res) => {
+    var id = req.query.id;
+    let temp = id.split(',');
+
+    if (temp) {
+        mysqlConnection.query('update product_t set product_offered = 1 where product_id in (?)', [temp], (err, result) => {
+            if (err) throw err;
+            else {
+                res.status(200).send(result);
+            }
+        })
+    }
+}
+
+exports.removeOffersById = (req, res) => {
+    var id = req.query.id;
+    let temp = id.split(',');
+
+    if (temp) {
+        mysqlConnection.query('update product_t set product_offered = 0 where product_id in (?)', [temp], (err, result) => {
+            if (err) throw err;
+            else {
+                res.status(200).send(result);
             }
         })
     }

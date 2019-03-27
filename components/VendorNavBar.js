@@ -94,7 +94,7 @@ class VendorNavBar extends Component {
             const response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${modalUsername}&password=${hashedPassword}`);
 
             if (response.status === 200) {
-                Router.pushRoute(`/vendor/manage/` + { modalUsername });
+                Router.push(`/vendor/manage/${modalUsername}`);
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }
