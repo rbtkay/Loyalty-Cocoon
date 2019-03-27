@@ -43,7 +43,10 @@ class VendorNavBar extends Component {
                         <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={event => Router.pushRoute('/vendor/:id/settings')}>Settings</Dropdown.Item>
-                                <Dropdown.Item onClick={event => Router.pushRoute('/logout')}>Logout</Dropdown.Item>
+                                <Dropdown.Item onClick={event =>{
+                                        localStorage.clear();
+                                        Router.pushRoute('/')}
+                                    }>Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
 
@@ -83,7 +86,7 @@ class VendorNavBar extends Component {
             const response = await fetch(`http://localhost:8000/api/vendor/auth?username=${modalUsername}&password=${hashedPassword}`);
 
             if (response.status === 200) {
-                Router.pushRoute(`/vendor/manage/` + {modalUsername});
+                Router.push(`/vendor/manage/${modalUsername}`);
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }

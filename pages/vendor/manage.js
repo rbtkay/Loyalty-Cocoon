@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider } from 'semantic-ui-react';
+import { Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import VendorNavBar from '../../components/VendorNavBar';
+import ManageTable from '../../components/ManageTable';
 
 class Manage extends Component {
     state = {
         products: [],
+        offered: [],
         name: '',
         category: '',
         price: '',
         loco: '',
         description: '',
         isOpen: false,
+        isConfirmOpen: false,
         username: '',
         auth: '',
         active: [],
@@ -47,27 +50,28 @@ class Manage extends Component {
                 value: 'Toys'
             }
         ]
+
         return (
             <div>
                 <Layout />
                 <VendorNavBar />
                 <div>
-                    {console.log('hello')}
-                    <Segment color='violet' inverted>
+                    <Segment color='violet' inverted style={{height: '800px'}} >
+
                         <br />
                         <br />
                         <br />
+
                         <Grid columns={2}>
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
                                 <h1>Manage Your Products</h1>
-                                <Table selectable>
-                                    {this.renderHeader()}
 
-                                    <Table.Body>
-                                        {this.renderRow(this.state.products)}
-                                    </Table.Body>
-                                </Table>
-                                <Button negative floated='left'>Remove Items</Button>
+                                <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active}/>
+
+                                <Button
+                                    negative
+                                    onClick={this.showConfirm}
+                                    floated='left'>Remove Selected Items</Button>
                                 <Button
                                     positive
                                     floated='right'
@@ -75,27 +79,39 @@ class Manage extends Component {
                             </Grid.Column>
 
                             <Grid.Column width='2' verticalAlign='middle' textAlign='center'>
-                                <Button positive icon='angle double right' size='massive'></Button>
+                                <Button
+                                    as='a'
+                                    circular
+                                    inverted
+                                    icon='angle double right'
+                                    size='massive'
+                                    fluid
+                                    onClick={this.addOffers}></Button>
+
                                 <br />
                                 <br />
-                                <Button negative icon='angle double left' size='massive'></Button>
+
+                                <Button
+                                    as='a'
+                                    circular
+                                    inverted
+                                    icon='angle double left'
+                                    size='massive'
+                                    fluid
+                                    onClick={this.removeOffers}></Button>
                             </Grid.Column>
 
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
                                 <h1>Products Offered</h1>
-                                <Table selectable>
-                                    {this.renderHeader()}
 
-                                    <Table.Body>
-                                        {this.renderOfferedRow(this.state.products)}
-                                    </Table.Body>
-                                </Table>
+                                <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered}/>
+
                             </Grid.Column>
                         </Grid>
                     </Segment>
                 </div>
 
-                <Modal open={this.state.isOpen} onClose={this.close} size='tiny' style={{color: 'red'}}>
+                <Modal open={this.state.isOpen} onClose={this.close} size='tiny'>
                     <Modal.Header>Add a new item</Modal.Header>
                     <Modal.Content>
                         <Grid columns={2} rows={2} textAlign='center' verticalAlign='middle'>
@@ -157,128 +173,27 @@ class Manage extends Component {
 
                         <Button
                             color='violet'
-                            onClick={this.onClick}>Button>Add Item</Button>
+                            onClick={this.addItem}>Add Item</Button>
                     </Modal.Content>
                 </Modal>
+
+                <Modal open={this.state.isConfirmOpen} onClose={this.confirmClose} size='tiny' basic>
+                    <Modal.Header>
+                        <Icon name='times circle' /> Confirm Removal
+                    </Modal.Header>
+                    <Modal.Content>
+                        <h3>Are you sure you want to permanently remove the selected items?</h3>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button onClick={this.closeConfirm} inverted>No</Button>
+                        <Button color='red' onClick={this.removeItems} inverted>
+                            <Icon name='checkmark' /> Yes
+                        </Button>
+                    </Modal.Actions>
+                </Modal>
+
             </div>
         );
-    }
-
-    show = () => {
-        this.setState({ isOpen: true });
-    }
-
-    close = () => {
-        this.setState({ isOpen: false });
-    }
-
-    renderHeader = () => {
-        return (
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>ID</Table.HeaderCell>
-                    <Table.HeaderCell>Name</Table.HeaderCell>
-                    <Table.HeaderCell>Category</Table.HeaderCell>
-                    <Table.HeaderCell>Price</Table.HeaderCell>
-                    <Table.HeaderCell>Image (link?)</Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-        );
-    }
-
-    renderRow(products) {
-        if (this.state.products) {
-            return this.state.products.map((product, index) => {
-                if (product.product_offered.data[0] == 0) {
-                    if (!this.state.active.includes(index.toString())) {
-                        return (
-                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
-                                <Table.Cell>{product['product_id']}</Table.Cell>
-                                <Table.Cell>{product['product_name']}</Table.Cell>
-                                <Table.Cell>{product['product_category']}</Table.Cell>
-                                <Table.Cell>{product['product_price']}</Table.Cell>
-                            </Table.Row>
-                        );
-                    } else {
-                        return (
-                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
-                                <Table.Cell>{product['product_id']}</Table.Cell>
-                                <Table.Cell>{product['product_name']}</Table.Cell>
-                                <Table.Cell>{product['product_category']}</Table.Cell>
-                                <Table.Cell>{product['product_price']}</Table.Cell>
-                            </Table.Row>
-                        );
-                    }
-                } else {
-                    return (
-                        <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} disabled>
-                            <Table.Cell>{product['product_id']}</Table.Cell>
-                            <Table.Cell>{product['product_name']}</Table.Cell>
-                            <Table.Cell>{product['product_category']}</Table.Cell>
-                            <Table.Cell>{product['product_price']}</Table.Cell>
-                        </Table.Row>
-                    );
-                }
-            });
-        }
-    }
-
-    renderOfferedRow(products) {
-        if (this.state.products) {
-            return this.state.products.map((product, index) => {
-                if (product.product_offered.data[0] == 1){
-                    if (!this.state.active.includes(index.toString())) {
-                        return (
-                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick}>
-                                <Table.Cell>{product['product_id']}</Table.Cell>
-                                <Table.Cell>{product['product_name']}</Table.Cell>
-                                <Table.Cell>{product['product_category']}</Table.Cell>
-                                <Table.Cell>{product['product_price']}</Table.Cell>
-                            </Table.Row>
-                        );
-                    } else {
-                        return (
-                            <Table.Row key={product['product_id']} data-item={index} onClick={this.onRowClick} active>
-                                <Table.Cell>{product['product_id']}</Table.Cell>
-                                <Table.Cell>{product['product_name']}</Table.Cell>
-                                <Table.Cell>{product['product_category']}</Table.Cell>
-                                <Table.Cell>{product['product_price']}</Table.Cell>
-                            </Table.Row>
-                        );
-                    }
-                }
-            });
-        }
-    }
-
-    onRowClick = (product, index) => {
-        console.log(event.target.parentNode.getAttribute('data-item'));
-        const selectedRowIndex = event.target.parentNode.getAttribute('data-item');
-        const { active } = this.state;
-
-        if (!active.includes(selectedRowIndex))
-        {
-            active.push(selectedRowIndex);
-        } else {
-            for(var i = 0; i < active.length; i++){
-                if ( active[i] === selectedRowIndex) {
-                    active.splice(i, 1);
-                }
-            }
-        }
-        this.setState({ active });
-        console.log(active);
-    }
-
-    onClick = async () => {
-        const { username, name, category, price, loco, description } = this.state;
-        console.log(username);
-        const response = await fetch(`http://localhost:8000/api/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
-            headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
-            })
-        });
     }
 
     async componentDidMount() {
@@ -291,7 +206,132 @@ class Manage extends Component {
         });
 
         const products = await response.json();
-        this.setState({ products, username });
+        const offered = [];
+        products.map((product) => {
+            if (product.product_offered.data[0] == 1) {
+                offered.push(product);
+            }
+        })
+        this.setState({ products, username, offered });
+    }
+
+    show = () => {
+        this.setState({ isOpen: true });
+    }
+
+    close = () => {
+        this.setState({ isOpen: false });
+    }
+
+    showConfirm = () => {
+        this.setState({ isConfirmOpen: true });
+    }
+
+    closeConfirm = () => {
+        this.setState({ isConfirmOpen: false });
+    }
+
+    addItem = async () => {
+        const { username, name, category, price, loco, description, products } = this.state;
+        const response = await fetch(`http://localhost:8000/api/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
+            headers: new Headers({
+                'authorization':
+                localStorage.getItem('authorization')
+            })
+        });
+        const result = await response.json();
+        console.log(result);
+        if (result.affectedRows > 0) {
+            console.log('mafroud ya3mil pushRoute');
+            this.setState({ isOpen: false });
+            this.componentDidMount();
+        } else {
+            console.log('ma akal');
+        }
+    }
+
+    removeItems = async () => {
+        const { active, products } = this.state;
+        const temp = active.map((index) => {
+            return parseInt(products[index]['product_id']);
+        });
+
+        const id = temp.join(',');
+        const response = await fetch(`http://localhost:8000/api/product/delete?id=${id}`, {
+                headers: new Headers({
+                'authorization':
+                localStorage.getItem('authorization')
+            })
+        });
+        this.setState({ active: [], isConfirmOpen: false });
+        this.componentDidMount();
+    }
+
+    addOffers = async () => {
+        const { active, products } = this.state;
+        const temp = active.map((index) => {
+            return parseInt(products[index]['product_id']);
+        });
+
+        const id = temp.join(',');
+        const response = await fetch(`http://localhost:8000/api/product/addOffer?id=${id}`, {
+            headers: new Headers({
+                'authorization':
+                localStorage.getItem('authorization')
+            })
+        });
+        this.setState({ active: [] });
+        this.componentDidMount();
+    }
+
+    removeOffers = async () => {
+        const { activeOffered, offered } = this.state;
+        const temp = activeOffered.map((index) => {
+            return parseInt(offered[index]['product_id']);
+        });
+
+        const id = temp.join(',');
+        const response = await fetch(`http://localhost:8000/api/product/removeOffer?id=${id}`, {
+            headers: new Headers({
+                'authorization':
+                localStorage.getItem('authorization')
+            })
+        });
+        this.setState({ activeOffered: [] });
+        this.componentDidMount();
+    }
+
+    onRowClick = (event, product, index) => {
+        const selectedRowIndex = event.target.parentNode.getAttribute('data-item');
+        const { active } = this.state;
+
+        if (!active.includes(selectedRowIndex)) {
+            active.push(selectedRowIndex);
+        } else {
+            for(var i = 0; i < active.length; i++){
+                if ( active[i] === selectedRowIndex) {
+                    active.splice(i, 1);
+                }
+            }
+        }
+        this.setState({ active });
+    }
+
+    onOfferedRowClick = (event, product, index) => {
+        const selectedRowIndex = event.target.parentNode.getAttribute('data-item');
+        const { activeOffered } = this.state;
+
+        if (!activeOffered.includes(selectedRowIndex)) {
+            activeOffered.push(selectedRowIndex);
+        } else {
+                for(var i = 0; i < activeOffered.length; i++) {
+                    if (activeOffered[i] === selectedRowIndex) {
+                        activeOffered.splice(i, 1);
+                    }
+                }
+            }
+        this.setState({ activeOffered });
+        console.log(activeOffered);
     }
 }
 

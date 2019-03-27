@@ -27,7 +27,7 @@ class NavigationBar extends Component {
                     </Link>
                 </MenuItem>
 
-                <MenuItem  onClick={this.redirect}>
+                <MenuItem onClick={this.redirect}>
                     Purchases
                 </MenuItem>
 
