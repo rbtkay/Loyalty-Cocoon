@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form } from 'semantic-ui-react';
+import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form, Button } from 'semantic-ui-react';
 import indexPage from '../pages/user';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
@@ -8,14 +8,14 @@ import { Link } from '../routes';
 
 class NavigationBar extends Component {
     state = {
+        categories: ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'],
         username: '',
         balance: 0,
         search: ''
     };
 
     render() {
-        const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
-        const username = this.state.username;
+        const { categories, username } = this.state;
 
         return (
             <Menu fixed="top" inverted color="violet">
@@ -32,13 +32,14 @@ class NavigationBar extends Component {
 
                 <Dropdown text='Categories' pointing className='item'>
                     <Dropdown.Menu>
-                        <Dropdown.Item>{categories[0]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[1]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[2]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[3]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[4]}</Dropdown.Item>
+                        <Dropdown.Item text={categories[0]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[1]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[2]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[3]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[4]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+
                 <Menu.Menu position='right'>
 
                     <MenuItem position='left' >
@@ -53,7 +54,7 @@ class NavigationBar extends Component {
                             />
                         </Form>
                     </MenuItem>
-                    <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
+                    <Dropdown text={`Welcome, ${username}`} className='item' pointing >
                         <Dropdown.Menu>
                             <Dropdown.Header style={{ textAlign: "right" }}>{this.state.balance} LOCO</Dropdown.Header>
                             <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
@@ -80,6 +81,10 @@ class NavigationBar extends Component {
         }
     }
 
+    goCategory = (data) => {
+        Router.pushRoute(`/user/categories/${data}`);
+    }
+
     redirect = () => {
         console.log('in the redirection ');
         console.log(this.state.username);
@@ -93,12 +98,12 @@ class NavigationBar extends Component {
         Router.pushRoute(`/user/search/${this.state.search}`);
     }
 
-    logout = () =>{
+    logout = () => {
         localStorage.clear();
         Router.pushRoute(`/`);
     }
 
-    settings = () =>{
+    settings = () => {
         Router.pushRoute(`/user/settings/${this.state.username}`);
     }
 
