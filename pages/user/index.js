@@ -5,6 +5,7 @@ import ProductCard from '../../components/ProductCard';
 import ProductRow from '../../components/ProductRow';
 import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
+import session from 'express-session';
 
 class Loyalty extends Component {
     constructor(props) {

@@ -11,7 +11,7 @@ class SignIn extends Component {
         username: '',
         password: '',
         loading: false,
-        errorMessage: { message: '' },
+        errorMessage: '',
         data: {}
     };
 
@@ -34,7 +34,7 @@ class SignIn extends Component {
                                 <br />
                                 <br />
 
-                                <Form error={!!this.state.errorMessage["message"]}>
+                                <Form error={!!this.state.errorMessage}>
                                     <h1>Sign In</h1>
                                     <br />
                                     <Form.Field >
@@ -55,7 +55,7 @@ class SignIn extends Component {
                                             onChange={event => this.setState({ password: event.target.value })}
                                         />
                                     </Form.Field>
-                                    <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
+                                    <Message error header="Oops!" content={this.state.errorMessage}></Message>
                                     <br />
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
@@ -131,10 +131,18 @@ class SignIn extends Component {
             </div>
         );
     }
+    componentDidMount() {
+        // if(this.props.network){
+        console.log('yes');
+        console.log(this.props);
+        if (this.props.url.asPath === '/error') {
+            this.setState({ errorMessage: 'Network Message' });
+        }
+    }
 
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
+        this.setState({ loading: true, errorMessage: '' });
 
         console.log(this.state.errorMessage);
 
@@ -153,20 +161,23 @@ class SignIn extends Component {
 
                     response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
 
+                    if (response.status === 401) {
+                        const errorMessage = 'Invalid Username/Password';
+                        this.setState({ errorMessage, loading: false });
+                        console.log(this.state.errorMessage);
+                    }
+
                     if (response.status === 200) {
                         const data = await response.json();
                         this.createLocalStorage(data, "vendor");
                         Router.pushRoute("/vendor");
-                    } else {
-                        this.setState({ errorMessage: data });
-                        console.log(this.state.errorMessage);
                     }
                 }
         } catch (err) {
+            this.setState({ loading: false });
             throw err;
         }
 
-        this.setState({ loading: false });
     }
 
     createLocalStorage(data, type) {

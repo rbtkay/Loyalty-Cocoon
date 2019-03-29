@@ -15,7 +15,7 @@ class NavigationBar extends Component {
     };
 
     render() {
-        const { categories, username } = this.state;
+        const { categories } = this.state;
 
         return (
             <Menu fixed="top" inverted color="violet">
@@ -54,7 +54,7 @@ class NavigationBar extends Component {
                             />
                         </Form>
                     </MenuItem>
-                    <Dropdown text={`Welcome, ${username}`} className='item' pointing >
+                    <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
                         <Dropdown.Menu>
                             <Dropdown.Header style={{ textAlign: "right" }}>{this.state.balance} LOCO</Dropdown.Header>
                             <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
@@ -69,15 +69,21 @@ class NavigationBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-
+        console.log('componetv');
         if (auth === null) {
             Router.pushRoute("/");
         } else {
+            console.log('else');
             const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
+            try {
+                const balance = await loco.methods.balances(account).call();
+                this.setState({ username, balance });
+            } catch (e) {
+                const errorMessage = 'NetworkError';
+                Router.pushRoute(`/error`);
+            }
             console.log(username);
-            const balance = await loco.methods.balances(account).call();
-            this.setState({ username, balance });
         }
     }
 

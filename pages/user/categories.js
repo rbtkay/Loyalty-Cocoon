@@ -66,6 +66,8 @@ class Categories extends Component {
             } else {
                 return (<h4>No Product are Available for this Category.</h4>);
             }
+        } else {
+            return (<h4>Loading Products...</h4>)
         }
     }
 }

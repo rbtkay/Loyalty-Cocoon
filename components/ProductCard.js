@@ -9,7 +9,7 @@ class ProductCard extends Component {
 
     render() {
         const { name, description, priceLoco, category, vendor } = this.props;
-        console.log(this.props);
+
         return (
             <div>
                 <Card color="violet">
