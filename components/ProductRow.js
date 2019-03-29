@@ -78,26 +78,7 @@ class ProductRow extends Component {
         const recomended = products.slice(3, 7);
         const bestSeller = products.slice(7, 12);
         this.setState({ products, topDeals, recomended, bestSeller });
-        // console.log(products);
     }
-
-    // async componentWillReceiveProps() {
-
-    //     const filter = this.state.filter;
-    //     console.log("filter in componentWillReceiveProps" + filter);
-
-
-    //     const response = await fetch(`http://localhost:8000/api/product/${filter}`, {
-    //         headers: new Headers({
-    //             'authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN1bHQiOlt7InVzZXJfdXNlcm5hbWUiOiJyYnRrYXkiLCJ1c2VyX2VtYWlsIjoicm9iZXJ0QGdtYWlsLmNvbSIsInVzZXJfcGFzc3dvcmQiOiJoYWhhaGEiLCJ1c2VyX25hbWUiOiJyb2JlcnQiLCJ1c2VyX2RvYiI6IjIwMTktMDMtMDFUMjI6MDA6MDAuMDAwWiIsInVzZXJfZ2VuZGVyIjoiTSIsInVzZXJfcGhvbmUiOiI3MDY1NzMwMCIsInVzZXJfcHJlZnMiOiJuZXNjYWZlIiwidXNlcl9hZGRyZXNzIjoiMHhhZXJic2VyYnNiIiwidXNlcl9jb3VudHJ5IjoiTGViYW5vbiIsInVzZXJfcHJvZmVzc2lvbiI6IkRvY3RvciIsInVzZXJfb3JnYW5pemF0aW9uIjoiSG90ZWwgRGlldSJ9XSwiaWF0IjoxNTUyNjQxNDA3fQ.Ao-ZJ9yifCnnjInOWC6gRwleSYCHmJ9Ob1L6-jQsKF0"
-    //         })
-    //     });
-    //     const products = await response.json();
-
-    //     // console.log("working" + products);
-    //     this.setState({ products });
-    //     // console.log(this.state.products);
-    // }
 }
 
 export default ProductRow;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form } from 'semantic-ui-react';
+import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form, Button } from 'semantic-ui-react';
 import indexPage from '../pages/user';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
@@ -8,14 +8,14 @@ import { Link } from '../routes';
 
 class NavigationBar extends Component {
     state = {
+        categories: ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'],
         username: '',
         balance: 0,
         search: ''
     };
 
     render() {
-        const categories = ['Electronics', 'Food', 'Clothing', 'Toys', 'Groceries'];
-        const username = this.state.username;
+        const { categories } = this.state;
 
         return (
             <Menu fixed="top" inverted color="violet">
@@ -32,13 +32,14 @@ class NavigationBar extends Component {
 
                 <Dropdown text='Categories' pointing className='item'>
                     <Dropdown.Menu>
-                        <Dropdown.Item>{categories[0]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[1]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[2]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[3]}</Dropdown.Item>
-                        <Dropdown.Item>{categories[4]}</Dropdown.Item>
+                        <Dropdown.Item text={categories[0]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[1]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[2]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[3]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
+                        <Dropdown.Item text={categories[4]} onClick={(event, data) => this.goCategory(data.text)}></Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+
                 <Menu.Menu position='right'>
 
                     <MenuItem position='left' >
@@ -68,16 +69,26 @@ class NavigationBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-
+        console.log('componetv');
         if (auth === null) {
             Router.pushRoute("/");
         } else {
+            console.log('else');
             const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
+            try {
+                const balance = await loco.methods.balances(account).call();
+                this.setState({ username, balance });
+            } catch (e) {
+                const errorMessage = 'NetworkError';
+                Router.pushRoute(`/error`);
+            }
             console.log(username);
-            const balance = await loco.methods.balances(account).call();
-            this.setState({ username, balance });
         }
+    }
+
+    goCategory = (data) => {
+        Router.pushRoute(`/user/categories/${data}`);
     }
 
     redirect = () => {
@@ -93,12 +104,12 @@ class NavigationBar extends Component {
         Router.pushRoute(`/user/search/${this.state.search}`);
     }
 
-    logout = () =>{
+    logout = () => {
         localStorage.clear();
         Router.pushRoute(`/`);
     }
 
-    settings = () =>{
+    settings = () => {
         Router.pushRoute(`/user/settings/${this.state.username}`);
     }
 

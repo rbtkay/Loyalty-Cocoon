@@ -5,6 +5,7 @@ import ProductCard from '../../components/ProductCard';
 import ProductRow from '../../components/ProductRow';
 import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
+import session from 'express-session';
 
 class Loyalty extends Component {
     constructor(props) {
@@ -19,16 +20,13 @@ class Loyalty extends Component {
         };
     }
 
-    propsNavigation = (filter) => {
-        this.setState({ filter });
-    }
 
     render() {
         { console.log(this.state.products) }
         return (
             <div>
                 <Layout />
-                <NavigationBar propsNavigation={this.propsNavigation} />
+                <NavigationBar />
                 <br /><br /><br /><br /><br />
                 <ProductRow />
                 <br />
