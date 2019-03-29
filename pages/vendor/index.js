@@ -73,6 +73,7 @@ class Transaction extends Component {
                                 onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
                                 results={searchResult}
                                 value={searchValue}
+                                placeholder={'Search for Customers...'}
                             />
                         </Grid.Column>
                     </Grid>

@@ -19,17 +19,14 @@ class Loyalty extends Component {
             loading: false
         };
     }
-    //TODO: check if this propsNavigation is still used.
-    propsNavigation = (filter) => {
-        this.setState({ filter });
-    }
+
 
     render() {
         { console.log(this.state.products) }
         return (
             <div>
                 <Layout />
-                <NavigationBar propsNavigation={this.propsNavigation} />
+                <NavigationBar />
                 <br /><br /><br /><br /><br />
                 <ProductRow />
                 <br />

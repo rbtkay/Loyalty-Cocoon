@@ -48,7 +48,7 @@ class VendorNavBar extends Component {
 
                         <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={event => Router.pushRoute('/vendor/settings')}>Settings</Dropdown.Item>
+                                <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
                                 <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -83,6 +83,10 @@ class VendorNavBar extends Component {
     logout = () => {
         localStorage.clear();
         Router.pushRoute('/');
+    }
+
+    settings = () => {
+        Router.pushRoute(`/vendor/settings/${this.state.username}`);
     }
 
     onClick = async () => {
