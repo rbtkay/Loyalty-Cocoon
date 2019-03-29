@@ -33,13 +33,6 @@ class SignUp extends Component {
         loading: false
     };
 
-
-
-    // handleRadio = (e, { value }) => {
-    //     console.log(value);
-    //     this.setState({ gender: value });
-    // }
-
     render() {
         return (
             <div>

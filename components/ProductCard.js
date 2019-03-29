@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Button, Modal, Image, Header } from 'semantic-ui-react';
 import Layout from './Layout';
-// import image from '../static/default_product_image.jpg';
 
 class ProductCard extends Component {
 

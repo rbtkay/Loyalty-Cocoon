@@ -118,12 +118,7 @@ class Transaction extends Component {
 
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
-
-            // const source = _.times(purchaseLength, () => ({
-            //     name: purchases[0]['user_username'],
-            //     description: purchases[0]['user_username'],
-            // }))
-
+            
             const source = purchases.map(object => {
                 return {
                     name: object['user_username'],

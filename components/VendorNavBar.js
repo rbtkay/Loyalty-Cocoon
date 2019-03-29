@@ -32,12 +32,6 @@ class VendorNavBar extends Component {
                         </Link>
                     </MenuItem>
 
-
-                    {/* <MenuItem
-                        name='Transactions'
-                        onClick={event => Router.pushRoute('/vendor/:id/transactions')}
-                    /> */}
-
                     <MenuItem
                         name='Manage Products'
                         color='red'
@@ -168,7 +162,7 @@ class VendorNavBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-        // Router.pushRoute('/');
+
         if (auth === null) {
             Router.pushRoute('/');
         } else {

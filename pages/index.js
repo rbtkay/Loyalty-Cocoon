@@ -132,9 +132,6 @@ class SignIn extends Component {
         );
     }
     componentDidMount() {
-        // if(this.props.network){
-        console.log('yes');
-        console.log(this.props);
         if (this.props.url.asPath === '/error') {
             this.setState({ errorMessage: 'Network Message' });
         }
@@ -185,8 +182,6 @@ class SignIn extends Component {
         localStorage.setItem('username', data.result[0][type + "_username"]);
         localStorage.setItem('address', data.result[0][type + "_address"]);
     }
-
-
 }
 
 export default SignIn;
