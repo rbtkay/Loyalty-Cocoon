@@ -18,7 +18,7 @@ class Loyalty extends Component {
             loading: false
         };
     }
-
+    //TODO: check if this propsNavigation is still used.
     propsNavigation = (filter) => {
         this.setState({ filter });
     }
