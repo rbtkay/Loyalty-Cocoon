@@ -13,8 +13,6 @@ class Loyalty extends Component {
         this.state = {
             products: [],
             filter: "all",
-            account: '',
-            balance: 0,
             loading: false
         };
     }
@@ -24,7 +22,6 @@ class Loyalty extends Component {
     }
 
     render() {
-        { console.log(this.state.products) }
         return (
             <div>
                 <Layout />

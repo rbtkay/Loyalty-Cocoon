@@ -72,33 +72,27 @@ class NavigationBar extends Component {
         if (auth === null) {
             Router.pushRoute("/");
         } else {
-            const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
-            console.log(username);
-            const balance = await loco.methods.balances(account).call();
+            const balance = localStorage.getItem('balance');
             this.setState({ username, balance });
         }
     }
 
     redirect = () => {
-        console.log('in the redirection ');
-        console.log(this.state.username);
         const { username } = this.state;
         Router.pushRoute(`/user/purchases/${username}`);
     }
 
     handleSubmit = (e) => {
-        console.log("form submitted with:");
-        console.log(this.state.search);
         Router.pushRoute(`/user/search/${this.state.search}`);
     }
 
-    logout = () =>{
+    logout = () => {
         localStorage.clear();
         Router.pushRoute(`/`);
     }
 
-    settings = () =>{
+    settings = () => {
         Router.pushRoute(`/user/settings/${this.state.username}`);
     }
 

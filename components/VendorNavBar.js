@@ -17,7 +17,6 @@ class VendorNavBar extends Component {
 
     constructor(props) {
         super(props);
-        console.log("In the Constructor");
     };
 
     render() {
@@ -31,12 +30,6 @@ class VendorNavBar extends Component {
                             <a>Loyalty Cocoon</a>
                         </Link>
                     </MenuItem>
-
-
-                    {/* <MenuItem
-                        name='Transactions'
-                        onClick={event => Router.pushRoute('/vendor/:id/transactions')}
-                    /> */}
 
                     <MenuItem
                         name='Manage Products'
@@ -99,7 +92,6 @@ class VendorNavBar extends Component {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }
         } else {
-            console.log("state");
             this.setState({ submission: { msg: 'Fields Required', error: true } });
         }
     }
@@ -116,7 +108,6 @@ class VendorNavBar extends Component {
                         value={this.state.modalUsername}
                         onChange={event => {
                             this.setState({ modalUsername: event.target.value })
-                            console.log(this.state.modalUsername);
                         }}
                     />
 
@@ -144,7 +135,6 @@ class VendorNavBar extends Component {
                         value={this.state.modalUsername}
                         onChange={event => {
                             this.setState({ modalUsername: event.target.value })
-                            console.log(this.state.modalUsername);
                         }}
                     />
 
@@ -164,13 +154,11 @@ class VendorNavBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-        // Router.pushRoute('/');
         if (auth === null) {
             Router.pushRoute('/');
         } else {
             const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
-            console.log(username);
             this.setState({ username });
         }
     }

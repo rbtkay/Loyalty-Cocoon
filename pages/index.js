@@ -5,6 +5,7 @@ import NavigationBar from '../components/NavigationBar';
 import { Router } from '../routes';
 import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
+import loco from '../ethereum/loco';
 
 class SignIn extends Component {
     state = {
@@ -90,7 +91,7 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Link href='/user/userSignup'>
+                                <Link href='/user/signup'>
                                     <Button size="big" color='violet'>Sign Up</Button>
                                 </Link>
                             </Grid.Column>
@@ -132,11 +133,14 @@ class SignIn extends Component {
         );
     }
 
+    static getInitialProps() {
+        console.log('hello props');
+        return {};
+    }
+
 
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: { message: '' } });
-
-        console.log(this.state.errorMessage);
 
         const { username, password } = this.state;
         const hashedPassword = sha256(password);
@@ -146,22 +150,23 @@ class SignIn extends Component {
 
             if (response.status === 200) {
                 const data = await response.json();
-                this.createLocalStorage(data, "user");
+                this.createlocalStorage(data, "user");
+                const account = localStorage.getItem('address');
+                const balance = await loco.methods.balances(account).call();
+                localStorage.setItem('balance', balance);
                 Router.pushRoute("/user");
-            } else
-                if (response.status === 401) {
+            } else if (response.status === 401) {
 
-                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+                response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
 
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        this.createLocalStorage(data, "vendor");
-                        Router.pushRoute("/vendor");
-                    } else {
-                        this.setState({ errorMessage: data });
-                        console.log(this.state.errorMessage);
-                    }
+                if (response.status === 200) {
+                    const data = await response.json();
+                    this.createlocalStorage(data, "vendor");
+                    Router.pushRoute("/vendor");
+                } else {
+                    this.setState({ errorMessage: data });
                 }
+            }
         } catch (err) {
             throw err;
         }
@@ -169,13 +174,11 @@ class SignIn extends Component {
         this.setState({ loading: false });
     }
 
-    createLocalStorage(data, type) {
+    createlocalStorage(data, type) {
         localStorage.setItem('authorization', data.token);
         localStorage.setItem('username', data.result[0][type + "_username"]);
         localStorage.setItem('address', data.result[0][type + "_address"]);
     }
-
-
 }
 
 export default SignIn;

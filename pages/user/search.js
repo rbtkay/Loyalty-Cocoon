@@ -32,8 +32,6 @@ class search extends Component {
     async componentdidmount(req) {
         const { search } = req.query;
 
-        console.log("the search:" + search);
-
         const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
@@ -41,9 +39,6 @@ class search extends Component {
         });
 
         const products = await response.json();
-
-        console.log(products);
-
         this.setState({ search, products });
     }
 

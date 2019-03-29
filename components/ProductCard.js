@@ -5,7 +5,7 @@ import Layout from './Layout';
 
 class ProductCard extends Component {
 
-    state = { isOpen: false };
+    state = { isOpen: false, balance: 0 };
 
     render() {
         const { name, description, priceLoco, category, vendor } = this.props;
@@ -20,7 +20,10 @@ class ProductCard extends Component {
                     </Card.Content>
                     <Card.Content extra>
                         <div className='ui two buttons'>
-                            <Button inverted color="violet" >Buy</Button>
+                            <Button
+                                inverted
+                                color="violet"
+                                onClick={this.test}>Buy</Button>
                         </div>
                     </Card.Content>
                 </Card>
@@ -53,6 +56,8 @@ class ProductCard extends Component {
     close = () => {
         this.setState({ isOpen: false });
     }
+
+    test = () => {}
 }
 
 export default ProductCard;

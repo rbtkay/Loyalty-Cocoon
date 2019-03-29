@@ -48,8 +48,8 @@ class SignUp extends Component {
                 <Segment inverted color='violet'>
                     <br />
                     <br />
-                    <div class="ui raised very padded text container segment">
-                        <h1>Sign Up</h1>
+                    <div className="ui raised very padded text container segment">
+                        <h1>Join Millions of Shoppers</h1>
 
                         <Form error={!!this.state.errorMessage["message"]} autoComplete="off">
                             <Form.Group widths='2'>
@@ -203,9 +203,9 @@ class SignUp extends Component {
             var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
             var data = await response.json();
             if (data.token) {
-                localStorage.setItem('authorization', data.token);
                 localStorage.setItem('username', username);
                 localStorage.setItem('address', newAccount["address"]);
+                localStorage.setItem('authorization', data.token);
                 Router.pushRoute('/user');
             } else {
                 this.setState({ errorMessage: data });
@@ -218,7 +218,9 @@ class SignUp extends Component {
 
     handleDate = (event, { name, value }) => {
         if (this.state.hasOwnProperty(name)) {
-            this.setState({ [name]: value });
+            this.setState({
+                [name]: value
+            });
         }
     }
 }

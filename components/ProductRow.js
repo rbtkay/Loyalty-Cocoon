@@ -30,8 +30,7 @@ class ProductRow extends Component {
                     </Grid.Row>
                 </Grid>
             );
-        }
-        else {
+        } else {
             return <div>Loading Products...</div>
         }
     }
@@ -57,7 +56,6 @@ class ProductRow extends Component {
 
     async componentDidMount() {
         const filter = this.state.filter;
-        console.log("filter in component did mount" + filter);
 
         const response = await fetch(`http://localhost:8000/api/user/product/offered`, {
             headers: new Headers({

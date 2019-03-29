@@ -13,7 +13,7 @@ export default class SearchExampleStandard extends Component {
 
     state = { isSearchLoading: false, searchResult: [], searchValue: '' }
 
-    
+
 
 
     handleSearchChange = (e, { value }) => {
@@ -36,8 +36,6 @@ export default class SearchExampleStandard extends Component {
                 isSearchLoading: false,
                 searchResult: _.filter(source, isMatch),
             })
-            console.log('source');
-            console.log(source);
         }, 300)
     }
 

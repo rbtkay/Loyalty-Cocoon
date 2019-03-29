@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 
 exports.verifyToken = (req, res, next) => {
-    console.log("req.headers");
-    console.log(req.headers);
 
     const token = req.headers['authorization'];
 
@@ -28,10 +26,8 @@ exports.verifyToken = (req, res, next) => {
         const url = req.originalUrl;
 
         const type = url.split('/')[2];
-        console.log("req.originalUrl");
 
         if (userType === type) {
-            console.log(type);
             next();
         }else{
             return res.status(401).send('Auth Failed');
