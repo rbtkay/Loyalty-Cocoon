@@ -9,7 +9,7 @@ class Purchase extends Component {
     }
 
     render() {
-        const { purchaseId, productId, username, vendor, time, productName, type } = this.props;
+        const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
         if (type === 'vendor') {
             return (
@@ -47,6 +47,7 @@ class Purchase extends Component {
                 </div>
             );
         } else {
+            console.log(isFinalized)
             return (
                 <div>
                     <Item.Group divided>
@@ -59,12 +60,37 @@ class Purchase extends Component {
                                 <Item.Description>Bought At: {vendor}</Item.Description>
 
                                 <Item.Extra>
-                                    <Label>on: {time}</Label>
+                                    {this.renderExtra(isFinalized, time)}
                                 </Item.Extra>
                             </Item.Content>
                         </Item>
                     </Item.Group>
                 </div>)
+        }
+    }
+
+
+    renderExtra(finalized, time) {
+        if (finalized.data[0] === 0) {
+            finalized = 'Pending';
+            return (
+                <div>
+                    <Label>on: {time}</Label>
+                    <br />
+                    <br />
+                    <Label>{finalized}</Label>
+                </div>
+            )
+        } else {
+            finalized = 'Finalized';
+            return (
+                <div>
+                    <Label>on: {time}</Label>
+                    <br />
+                    <br />
+                    <Label color='green'>{finalized}</Label>
+                </div>
+            )
         }
     }
 

@@ -68,6 +68,7 @@ class Purchases extends Component {
                             username={object['user_email']}
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
+                            isFinalized={object['purchase_finalized']}
                             type={'regular'}
                         />
                     )
