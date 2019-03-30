@@ -35,7 +35,7 @@ class Purchase extends Component {
                     <Modal open={this.state.isOpen} basic size='small'>
                         <Header icon='Archive' content='Finalize Purchase?' />
                         <Modal.Content>
-                            <p>You're about to finalize a purchase</p>
+                            <p>You're about to Finalize a purchase</p>
                         </Modal.Content>
                         <Modal.Actions>
                             <Button basic color='red' inverted onClick={this.close}>
