@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProductCard from './ProductCard';
-import { Card, CardGroup, Grid, GridColumn } from 'semantic-ui-react';
+import { Card, CardGroup, Grid, GridColumn, Segment, Container } from 'semantic-ui-react';
 import { Router } from '../routes';
 
 class ProductRow extends Component {
@@ -15,20 +15,39 @@ class ProductRow extends Component {
     render() {
         if (this.state.products.length > 0) {
             return (
-                <Grid>
-                    <h1>Top Deals</h1>
-                    <Grid.Row columns={this.state.topDeals.length}>
-                        {this.renderProducts(this.state.topDeals)}
+
+                <Grid.Row>
+                    <Grid.Row>
+                        <h1>Top Deals</h1>
                     </Grid.Row>
-                    <h1>Recomended for You</h1>
-                    <Grid.Row columns={this.state.recomended.length}>
-                        {this.renderProducts(this.state.recomended)}
+
+                    <Segment inverted color='violet'>
+                        <Grid columns={this.state.topDeals.length}>
+                            {this.renderProducts(this.state.topDeals)}
+                        </Grid>
+                    </Segment>
+                    <Grid.Row>
+
+                        <h1>Recomended for You</h1>
                     </Grid.Row>
-                    <h1>Best Seller</h1>
-                    <Grid.Row columns={this.state.bestSeller.length}>
-                        {this.renderProducts(this.state.bestSeller)}
+                    <Segment inverted color='violet'>
+                        <Grid columns={this.state.recomended.length}>
+                            {this.renderProducts(this.state.recomended)}
+                        </Grid>
+                    </Segment>
+                    <Grid.Row>
+
+                        <h1>Best Seller</h1>
                     </Grid.Row>
-                </Grid>
+                    <Segment inverted color='violet'>
+
+                        <Grid columns={this.state.bestSeller.length}>
+                            {this.renderProducts(this.state.bestSeller)}
+                        </Grid>
+                    </Segment>
+
+                </Grid.Row>
+
             );
         }
         else {

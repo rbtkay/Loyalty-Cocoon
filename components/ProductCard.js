@@ -13,9 +13,10 @@ class ProductCard extends Component {
             <div>
                 <Card color="violet">
                     <Card.Content onClick={this.show}>
+                    <Image floated='left' size='tiny' src='/static/default_product_image.jpg' />
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{priceLoco}</Card.Meta>
-                        <Card.Description>{vendor}</Card.Description>
+                        <Card.Meta>{vendor}</Card.Meta>
                     </Card.Content>
                     <Card.Content extra>
                         <div className='ui two buttons'>
@@ -28,7 +29,7 @@ class ProductCard extends Component {
                 <Modal open={this.state.isOpen} onClose={this.close}>
                     <Modal.Header>{name}</Modal.Header>
                     <Modal.Content image>
-                        <Image wrapped size='medium' src='/static/default_product_image.jpg' />
+                        <Image wrapped size='big' src='/static/default_product_image.jpg' />
                         <Modal.Description>
                             <b>Price </b>{priceLoco}
                             <br />

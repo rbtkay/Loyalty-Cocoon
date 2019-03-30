@@ -1,9 +1,6 @@
 const mysqlConnection = require('../../database/connection');
 const jwt = require('jsonwebtoken');
 
-
-//FIXME: the signup function are not returning the correct token, the type of user is missing.
-
 exports.vendorSignUp = (req, res) => {
     var username = req.query.username;
     var email = req.query.email;

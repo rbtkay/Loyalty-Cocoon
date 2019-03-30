@@ -78,11 +78,10 @@ class Transaction extends Component {
                         </Grid.Column>
                     </Grid>
                 </Segment>
-                <Container>
-                    <Segment>
-                        {this.renderPurchases()}
-                    </Segment>
-                </Container>
+
+                <Segment>
+                    {this.renderPurchases()}
+                </Segment>
             </div>
         )
     }
@@ -118,7 +117,7 @@ class Transaction extends Component {
 
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
-            
+
             const source = purchases.map(object => {
                 return {
                     name: object['user_username'],
@@ -181,7 +180,7 @@ class Transaction extends Component {
             )
         } else if (this.state.purchaseLength === 0) {
             return (
-                <h3>No Purchase Were Found</h3>
+                <h3>Purchases Not Found</h3>
             )
         } else {
             const purchases = this.state.purchases;
@@ -196,6 +195,7 @@ class Transaction extends Component {
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
                             finalize={this.finalizePurchase}
+                            type={'vendor'}
                         />
                     )
                 })
