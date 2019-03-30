@@ -27,7 +27,8 @@ exports.getProductSearch = (req, res, next) => {
         if (err) throw err;
         result.map((object) => {
             const name = object['product_name'].toLowerCase();
-            if (name.includes(searchRequest)) {
+            const vendor = object['vendor_username'].toLowerCase();
+            if (name.includes(searchRequest) || vendor.includes(searchRequest)) {
                 filteredResult.push(object);
             }
         })
