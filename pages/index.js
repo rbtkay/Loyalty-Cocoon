@@ -5,6 +5,7 @@ import NavigationBar from '../components/NavigationBar';
 import { Router } from '../routes';
 import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
+import loco from '../ethereum/loco';
 
 class SignIn extends Component {
     state = {
@@ -90,7 +91,7 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Link href='/user/userSignup'>
+                                <Link href='/user/signup'>
                                     <Button size="big" color='violet'>Sign Up</Button>
                                 </Link>
                             </Grid.Column>
@@ -120,7 +121,7 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Link href='/user/userSignup'>
+                                <Link href='/vender/signup'>
                                     <Button color='green' size="big">Sign Up</Button>
                                 </Link>
                             </Grid.Column>
@@ -145,11 +146,10 @@ class SignIn extends Component {
 
         const { username, password } = this.state;
         if (username === '' || password === '') {
-            this.setState(
-                {
-                    errorMessage: 'Some Field are Missing!',
-                    loading: false
-                });
+            this.setState({
+                errorMessage: 'Some Field are Missing!',
+                loading: false
+            });
         } else {
             const hashedPassword = sha256(password);
             try {
@@ -158,24 +158,27 @@ class SignIn extends Component {
                 if (response.status === 200) {
                     const data = await response.json();
                     this.createLocalStorage(data, "user");
+                    const address = localStorage.getItem('address');
+                    const balance = await loco.methods.balances(address).call();
+                    localStorage.setItem('balance', balance);
                     Router.pushRoute("/user");
                 } else
+                if (response.status === 401) {
+
+                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+
                     if (response.status === 401) {
-
-                        response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
-                        if (response.status === 401) {
-                            const errorMessage = 'Invalid Username/Password';
-                            this.setState({ errorMessage, loading: false });
-                            console.log(this.state.errorMessage);
-                        }
-
-                        if (response.status === 200) {
-                            const data = await response.json();
-                            this.createLocalStorage(data, "vendor");
-                            Router.pushRoute("/vendor");
-                        }
+                        const errorMessage = 'Invalid Username/Password';
+                        this.setState({ errorMessage, loading: false });
+                        console.log(this.state.errorMessage);
                     }
+
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        this.createLocalStorage(data, "vendor");
+                        Router.pushRoute("/vendor");
+                    }
+                }
             } catch (err) {
                 this.setState({ loading: false });
                 throw err;
