@@ -28,11 +28,9 @@ class CategoryCard extends Component {
 
     divide(products) {
         var temporal = [];
-
         for (var i = 0; i < products.length; i += 4) {
             temporal.push(products.slice(i, i + 4));
         }
-
         return temporal;
     }
 

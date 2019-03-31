@@ -45,9 +45,9 @@ class search extends Component {
                 <Layout />
                 <NavigationBar />
                 <br /><br /><br /><br /><br /><br />
-                <Container>
-                    <Card.Group>{this.renderProducts()}</Card.Group>
-                </Container>
+                <Segment>
+                    {this.renderProducts()}
+                </Segment>
             </div>
         )
     }

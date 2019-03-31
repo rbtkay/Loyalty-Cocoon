@@ -159,27 +159,33 @@ class SignIn extends Component {
                     const data = await response.json();
                     this.createLocalStorage(data, "user");
                     const address = localStorage.getItem('address');
+                    let balance = 0;
                     console.log(address);
-                    const balance = await loco.methods.balances(address).call();
-                    localStorage.setItem('balance', balance);
-                    Router.pushRoute("/user");
+                    try {
+                        balance = await loco.methods.balances(address).call();
+                    } catch (e) {
+                        throw e;
+                    } finally {
+                        localStorage.setItem('balance', balance);
+                        Router.pushRoute("/user");
+                    }
                 } else
-                if (response.status === 401) {
-
-                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
                     if (response.status === 401) {
-                        const errorMessage = 'Invalid Username/Password';
-                        this.setState({ errorMessage, loading: false });
-                        console.log(this.state.errorMessage);
-                    }
 
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        this.createLocalStorage(data, "vendor");
-                        Router.pushRoute("/vendor");
+                        response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+
+                        if (response.status === 401) {
+                            const errorMessage = 'Invalid Username/Password';
+                            this.setState({ errorMessage, loading: false });
+                            console.log(this.state.errorMessage);
+                        }
+
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            this.createLocalStorage(data, "vendor");
+                            Router.pushRoute("/vendor");
+                        }
                     }
-                }
             } catch (err) {
                 this.setState({ loading: false });
                 throw err;
