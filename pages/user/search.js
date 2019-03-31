@@ -3,13 +3,16 @@ import NavigationBar from '../../components/NavigationBar';
 import Layout from '../../components/Layout';
 import { Card, Segment, Container, Button } from 'semantic-ui-react';
 import ProductCard from '../../components/ProductCard';
+import CategoryCard from '../../components/CategoryCard';
 import { Router } from '../../routes';
+import { SemanticToastContainer, toast } from "react-semantic-toasts";
 
 class search extends Component {
 
     state = {
         products: [],
-        search: ''
+        search: '',
+        successful: false
     }
 
     static async getInitialProps(props) {
@@ -44,9 +47,15 @@ class search extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br /><br /><br /><br /><br /><br />
                 <Segment>
-                    {this.renderProducts()}
+                    <br /><br /><br />
+                    <Segment>
+                        <h1>Search Results for '{this.props.search}'</h1>
+                    </Segment>
+                    <SemanticToastContainer />
+                    <Segment color='violet' inverted>
+                        {this.renderProducts()}
+                    </Segment>
                 </Segment>
             </div>
         )
@@ -68,18 +77,7 @@ class search extends Component {
     renderProducts() {
         if (this.props.products) {
             if (this.props.products.length > 0) {
-                return this.props.products.map((object) => {
-                    return (
-                        <ProductCard
-                            key={object["product_id"]}
-                            name={object["product_name"]}
-                            description={object["product_description"]}
-                            vendor={object["vendor_username"]}
-                            priceLoco={object["product_loco"] + " Loco"}
-                            category={object["product_category"]}
-                        />
-                    );
-                })
+                return (<CategoryCard {...this.props} handleSuccess={this.flipSuccess} />);
             } else {
                 return (
                     <Container>
@@ -95,6 +93,27 @@ class search extends Component {
                     <h3>Loading Products...</h3>
                 </Segment>
             </Container>
+        }
+    }
+
+    showSuccessToast = () => {
+        setTimeout(() => {
+            toast({
+                type: "success",
+                icon: "thumbs up",
+                title: "Transaction Successful",
+                description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
+                time: 5000
+            });
+        }, 5000);
+    }
+
+    flipSuccess = () => {
+        if (!this.state.successful) {
+            this.setState({ successful: true });
+            this.showSuccessToast();
+        } else {
+            this.setState({ successful: false });
         }
     }
 }

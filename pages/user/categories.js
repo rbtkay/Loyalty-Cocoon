@@ -44,8 +44,10 @@ class Categories extends Component {
                 <br />
                 <br />
                 <br />
+                <Segment>
+                    <h1>{this.props.category}</h1>
+                </Segment>
                 <SemanticToastContainer />
-                <h1>{this.props.category}</h1>
                 <Segment inverted color='violet'>
 
                     {this.renderProducts()}
