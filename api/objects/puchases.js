@@ -47,4 +47,15 @@ exports.getPurchaseByVendorUser = (req, res) => {
     });
 }
 
+exports.addPurchase = (req, res) => {
+    const { username, productId, vendorUsername, purchaseTime } = req.query;
+
+    mysqlconnection.query('insert into purchase_t (user_username, product_id, vendor_username, purchase_time) values (?,?,?,?)', [username, productId, vendorUsername, purchaseTime], (err, result) => {
+        if (err) throw err;
+        // if (result.length > 0) {
+        res.status(200).send(result);
+        // }
+    });
+}
+
 

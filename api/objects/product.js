@@ -32,7 +32,7 @@ exports.getProductSearch = (req, res, next) => {
                 filteredResult.push(object);
             }
         })
-        //TODO: searches only by product name. Let's make it better!
+
         if (filteredResult.length > 0) {
             res.status(200).send(filteredResult);
         } else {
