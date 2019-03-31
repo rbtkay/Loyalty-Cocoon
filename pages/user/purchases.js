@@ -7,18 +7,21 @@ import { Segment } from 'semantic-ui-react';
 class Purchases extends Component {
 
     state = {
+        username: '',
         purchases: [],
         purchaseLength: ''
     }
 
     render() {
+        // const { username } = localStorage.getItem('username');
         return (
             <div>
                 <Layout />
                 <NavigationBar />
                 <br />
                 <br />
-                <h1>Here Are your Purchases {this.props.username}</h1>
+                <br />
+                <h1 className='violet'>Your Purchases</h1>
                 <Segment>
                     {this.renderPurchases()}
                 </Segment>
@@ -39,6 +42,7 @@ class Purchases extends Component {
             const purchases = await response.json();
             console.log(purchases);
             this.setState({
+                username,
                 purchases,
                 purchaseLength: purchases.length
             })
@@ -61,16 +65,18 @@ class Purchases extends Component {
             return (
                 purchases.map(object => {
                     return (
-                        <Purchase
-                            key={object['purchase_id']}
-                            purchaseId={object['purchase_id']}
-                            productName={object['product_name']}
-                            username={object['user_email']}
-                            vendor={object['vendor_username']}
-                            time={object['purchase_time']}
-                            isFinalized={object['purchase_finalized']}
-                            type={'regular'}
-                        />
+                        <Segment color='violet'>
+                            <Purchase
+                                key={object['purchase_id']}
+                                purchaseId={object['purchase_id']}
+                                productName={object['product_name']}
+                                username={object['user_email']}
+                                vendor={object['vendor_username']}
+                                time={object['purchase_time']}
+                                isFinalized={object['purchase_finalized']}
+                                type={'regular'}
+                            />
+                        </Segment>
                     )
                 })
             )
