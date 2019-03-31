@@ -85,13 +85,17 @@ class VendorNavBar extends Component {
     onClick = async () => {
         const { modalUsername, modalPassword } = this.state;
 
-        if (modalUsername !== "" && modalPassword !== "") {
+        console.log("alo?")
+        if (modalUsername !== '' && modalPassword !== '') {
 
             const hashedPassword = sha256(modalPassword);
             const response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${modalUsername}&password=${hashedPassword}`);
+            const res = await response.json();
+
+            const username = res['result'][0].vendor_username;
 
             if (response.status === 200) {
-                Router.push(`/vendor/manage/${modalUsername}`);
+                Router.pushRoute(`/vendor/manage/${modalUsername}`);
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }
