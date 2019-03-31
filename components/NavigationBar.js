@@ -92,15 +92,11 @@ class NavigationBar extends Component {
     }
 
     redirect = () => {
-        console.log('in the redirection ');
-        console.log(this.state.username);
         const { username } = this.state;
         Router.pushRoute(`/user/purchases/${username}`);
     }
 
     handleSubmit = (e) => {
-        console.log("form submitted with:");
-        console.log(this.state.search);
         Router.pushRoute(`/user/search/${this.state.search}`);
     }
 

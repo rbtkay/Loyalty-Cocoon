@@ -9,7 +9,6 @@ router.use('/purchase', purchaseRoutes);
 
 router.get('/all', User.getAllUser)
 router.get('/byEmail', User.getUserByEmail);
-router.get('/auth', User.authUser);
-router.get('/signUp', User.signUp);
+router.get('/address', User.getVendorAddress);
 
 module.exports = router;

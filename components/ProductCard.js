@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import { Card, Button, Modal, Image, Header } from 'semantic-ui-react';
 import Layout from './Layout';
+import BuyModal from './BuyModal';
 
 class ProductCard extends Component {
 
-    state = { isOpen: false };
+    state = {
+        isOpen: false,
+        balance: localStorage.getItem('balance'),
+        isConfirmOpen: false,
+        errorMessage: ''
+    };
 
     render() {
         const { name, description, priceLoco, category, vendor } = this.props;
@@ -20,11 +26,15 @@ class ProductCard extends Component {
                     </Card.Content>
                     <Card.Content extra>
                         <div className='ui two buttons'>
-                            <Button inverted color="violet" >Buy</Button>
+                            <Button
+                                inverted
+                                color="violet"
+                                onClick={this.confirmOpen}>Buy</Button>
                         </div>
                     </Card.Content>
                 </Card>
 
+                {this.appendBuyModal()}
 
                 <Modal open={this.state.isOpen} onClose={this.close}>
                     <Modal.Header>{name}</Modal.Header>
@@ -52,6 +62,47 @@ class ProductCard extends Component {
 
     close = () => {
         this.setState({ isOpen: false });
+    }
+
+    confirmOpen = () => {
+        this.setState({ isConfirmOpen: true });
+        this.handleMessage('');
+    }
+
+    confirmClose = () => {
+        this.setState({ isConfirmOpen: false });
+    }
+
+    appendBuyModal = () => {
+        const { balance } = this.state;
+        const { priceLoco } = this.props;
+        const temp = priceLoco.split(' ');
+        let val = parseInt(temp[0]);
+
+        if (balance > val) {
+            return <BuyModal
+                    handleSuccess={this.props.handleSuccess}
+                    msg={this.state.errorMessage}
+                    errorMessage={this.handleMessage}
+                    affordable={true}
+                    price={val}
+                    isConfirmOpen={this.state.isConfirmOpen}                  confirmClose={this.confirmClose}
+                    vendor={this.props.vendor}
+            />;
+        } else {
+            return <BuyModal
+                handleSuccess={this.props.handleSuccess}
+                affordable={false}
+                price={val}
+                isConfirmOpen={this.state.isConfirmOpen}
+                confirmClose={this.confirmClose}
+                vendor={this.props.vendor}
+            />;
+        }
+    }
+
+    handleMessage = (msg) => {
+        this.setState({ errorMessage: msg });
     }
 }
 

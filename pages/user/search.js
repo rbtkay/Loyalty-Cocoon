@@ -44,12 +44,7 @@ class search extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+                <br /><br /><br /><br /><br /><br />
                 <Container>
                     <Card.Group>{this.renderProducts()}</Card.Group>
                 </Container>
@@ -57,14 +52,17 @@ class search extends Component {
         )
     }
 
-    checkAuth = () => {
-        if (this.props.redirect) {
-            Router.pushRoute(this.props.redirect);
-        }
-    }
+    async componentdidmount(req) {
+        const { search } = req.query;
 
-    componentDidMount() {
-        this.checkAuth();
+        const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
+            headers: new Headers({
+                'authorization': localStorage.getItem('authorization')
+            })
+        });
+
+        const products = await response.json();
+        this.setState({ search, products });
     }
 
     renderProducts() {

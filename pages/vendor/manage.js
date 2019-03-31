@@ -23,8 +23,7 @@ class Manage extends Component {
     };
 
     render() {
-        const options = [
-            {
+        const options = [{
                 key: 'Clothing',
                 text: 'Clothing',
                 value: 'Clothing'
@@ -58,9 +57,7 @@ class Manage extends Component {
                 <div>
                     <Segment color='violet' inverted>
 
-                        <br />
-                        <br />
-                        <br />
+                        <br /><br /><br />
 
                         <Grid columns={2}>
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
@@ -88,8 +85,7 @@ class Manage extends Component {
                                     fluid
                                     onClick={this.addOffers}></Button>
 
-                                <br />
-                                <br />
+                                <br /><br />
 
                                 <Button
                                     as='a'
@@ -109,10 +105,8 @@ class Manage extends Component {
                             </Grid.Column>
                         </Grid>
 
-                        <br />
-                        <br />
-                        <br />
-                        
+                        <br /><br /><br />
+
                     </Segment>
                 </div>
 
@@ -190,7 +184,7 @@ class Manage extends Component {
                         <h3>Are you sure you want to permanently remove the selected items?</h3>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={this.closeConfirm} inverted>No</Button>
+                        <Button onClick={this.confirmClose} inverted>No</Button>
                         <Button color='red' onClick={this.removeItems} inverted>
                             <Icon name='checkmark' /> Yes
                         </Button>
@@ -205,8 +199,7 @@ class Manage extends Component {
         const username = localStorage.getItem('username');
         const response = await fetch(`http://localhost:8000/api/vendor/product/vendor?username=${username}`, {
             headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
+                'authorization': localStorage.getItem('authorization')
             })
         });
 
@@ -240,14 +233,11 @@ class Manage extends Component {
         const { username, name, category, price, loco, description, products } = this.state;
         const response = await fetch(`http://localhost:8000/api/vendor/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
             headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
+                'authorization': localStorage.getItem('authorization')
             })
         });
         const result = await response.json();
-        console.log(result);
         if (result.affectedRows > 0) {
-            console.log('mafroud ya3mil pushRoute');
             this.setState({ isOpen: false });
             this.componentDidMount();
         } else {
@@ -263,9 +253,8 @@ class Manage extends Component {
 
         const id = temp.join(',');
         const response = await fetch(`http://localhost:8000/api/vendor/product/delete?id=${id}`, {
-                headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
+            headers: new Headers({
+                'authorization': localStorage.getItem('authorization')
             })
         });
         this.setState({ active: [], isConfirmOpen: false });
@@ -281,8 +270,7 @@ class Manage extends Component {
         const id = temp.join(',');
         const response = await fetch(`http://localhost:8000/api/vendor/product/addOffer?id=${id}`, {
             headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
+                'authorization': localStorage.getItem('authorization')
             })
         });
         this.setState({ active: [] });
@@ -298,8 +286,7 @@ class Manage extends Component {
         const id = temp.join(',');
         const response = await fetch(`http://localhost:8000/api/vendor/product/removeOffer?id=${id}`, {
             headers: new Headers({
-                'authorization':
-                localStorage.getItem('authorization')
+                'authorization': localStorage.getItem('authorization')
             })
         });
         this.setState({ activeOffered: [] });
@@ -313,8 +300,8 @@ class Manage extends Component {
         if (!active.includes(selectedRowIndex)) {
             active.push(selectedRowIndex);
         } else {
-            for(var i = 0; i < active.length; i++){
-                if ( active[i] === selectedRowIndex) {
+            for (var i = 0; i < active.length; i++) {
+                if (active[i] === selectedRowIndex) {
                     active.splice(i, 1);
                 }
             }
@@ -329,14 +316,13 @@ class Manage extends Component {
         if (!activeOffered.includes(selectedRowIndex)) {
             activeOffered.push(selectedRowIndex);
         } else {
-                for(var i = 0; i < activeOffered.length; i++) {
-                    if (activeOffered[i] === selectedRowIndex) {
-                        activeOffered.splice(i, 1);
-                    }
+            for (var i = 0; i < activeOffered.length; i++) {
+                if (activeOffered[i] === selectedRowIndex) {
+                    activeOffered.splice(i, 1);
                 }
             }
+        }
         this.setState({ activeOffered });
-        console.log(activeOffered);
     }
 }
 

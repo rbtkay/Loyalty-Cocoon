@@ -7,7 +7,7 @@ class ProductRow extends Component {
     state = {
         products: [],
         topDeals: [],
-        recomended: [],
+        recommended: [],
         bestSeller: [],
         filter: "all"
     }
@@ -20,27 +20,28 @@ class ProductRow extends Component {
                     <Grid.Row>
                         <h1>Top Deals</h1>
                     </Grid.Row>
-
+              
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.topDeals.length}>
                             {this.renderProducts(this.state.topDeals)}
                         </Grid>
                     </Segment>
+      
                     <Grid.Row>
-
                         <h1>Recomended for You</h1>
                     </Grid.Row>
+      
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.recomended.length}>
                             {this.renderProducts(this.state.recomended)}
                         </Grid>
                     </Segment>
+      
                     <Grid.Row>
-
                         <h1>Best Seller</h1>
                     </Grid.Row>
+      
                     <Segment inverted color='violet'>
-
                         <Grid columns={this.state.bestSeller.length}>
                             {this.renderProducts(this.state.bestSeller)}
                         </Grid>
@@ -49,8 +50,7 @@ class ProductRow extends Component {
                 </Grid.Row>
 
             );
-        }
-        else {
+        } else {
             return <div>Loading Products...</div>
         }
     }
@@ -61,6 +61,7 @@ class ProductRow extends Component {
                 return (
                     <Grid.Column key={object["product_id"]}>
                         <ProductCard
+                            handleSuccess={this.props.handleSuccess}
                             key={object["product_id"] + object["product_name"]}
                             name={object["product_name"]}
                             description={object["product_description"]}
@@ -76,7 +77,6 @@ class ProductRow extends Component {
 
     async componentDidMount() {
         const filter = this.state.filter;
-        console.log("filter in component did mount" + filter);
 
         const response = await fetch(`http://localhost:8000/api/user/product/offered`, {
             headers: new Headers({
@@ -94,9 +94,10 @@ class ProductRow extends Component {
 
         //TODO: Make create the following arrays from api calls.
         const topDeals = topDealsArray.slice(0, 3);
-        const recomended = products.slice(3, 7);
+        const recommended = products.slice(3, 7);
         const bestSeller = products.slice(7, 12);
-        this.setState({ products, topDeals, recomended, bestSeller });
+
+        this.setState({ products, topDeals, recommended, bestSeller });
     }
 }
 

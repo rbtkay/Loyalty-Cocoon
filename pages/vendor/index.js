@@ -3,7 +3,7 @@ import NavigationBar from '../../components/VendorNavBar';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import Purchase from '../../components/Purchase'
-import { Container, Segment, Search, Grid } from 'semantic-ui-react';
+import { Container, Segment, Search, Grid, Statistic } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class Transaction extends Component {
@@ -29,7 +29,7 @@ class Transaction extends Component {
                 <Segment>
                     <Grid>
                         <Grid.Column width={12}>
-                            <h1>These are Your Purchases</h1>
+                            <h1>Your Transactions</h1>
                         </Grid.Column>
                         <Grid.Column width={4}>
                             <Search
@@ -45,9 +45,25 @@ class Transaction extends Component {
                     </Grid>
                 </Segment>
 
-                <Segment>
-                    {this.renderPurchases()}
-                </Segment>
+
+                <Statistic.Group color='violet' size='small'>
+                    <Statistic>
+                        <Statistic.Value>100</Statistic.Value>
+                        <Statistic.Label>Items Currently Offered</Statistic.Label>
+                    </Statistic>
+
+                    <Statistic>
+                        <Statistic.Value>200</Statistic.Value>
+                        <Statistic.Label>Items Sold This Month</Statistic.Label>
+                    </Statistic>
+                </Statistic.Group>
+
+                <Container>
+                    <Segment>
+
+                        {this.renderPurchases()}
+                    </Segment>
+                </Container>
             </div>
         )
     }
@@ -57,11 +73,6 @@ class Transaction extends Component {
     })
 
     handleResultSelect = (e, { result }) => {
-        console.log('handling the select result');
-        console.log(this.state.searchValue);
-        console.log('result');
-        console.log(result.name);
-
         this.setState(({ searchValue: result.name }), () => {
             this.refresh();
         });
@@ -73,8 +84,6 @@ class Transaction extends Component {
 
     handleSearchChange = (e, { value }) => {
         this.setState({ isSearchLoading: true, searchValue: value })
-
-        console.log(this.state.searchValue);
 
         setTimeout(() => {
             if (this.state.searchValue.length < 1) return this.resetComponent()
@@ -95,17 +104,12 @@ class Transaction extends Component {
                 isSearchLoading: false,
                 searchResult: _.filter(source, isMatch),
             })
-            console.log('source');
-            console.log(source);
         }, 300)
     }
 
     async componentDidMount() {
         const username = localStorage.getItem('username');
         const { searchValue } = this.state;
-
-        console.log("searchValue");
-        console.log(searchValue);
         let response;
 
         if (searchValue.length > 0) {
@@ -114,8 +118,7 @@ class Transaction extends Component {
                     'authorization': localStorage.getItem('authorization')
                 })
             });
-        }
-        else {
+        } else {
             response = await fetch(`http://localhost:8000/api/vendor/purchase/byVendor?username=${username}`, {
                 headers: new Headers({
                     'authorization': localStorage.getItem('authorization')
@@ -129,12 +132,10 @@ class Transaction extends Component {
             this.setState({ purchaseLength: 0 });
         } else {
             const purchases = await response.json();
-            this.setState(
-                {
-                    purchases: purchases,
-                    purchaseLength: purchases.length
-                }
-            )
+            this.setState({
+                purchases: purchases,
+                purchaseLength: purchases.length
+            })
         }
     }
 
@@ -146,7 +147,7 @@ class Transaction extends Component {
             )
         } else if (this.state.purchaseLength === 0) {
             return (
-                <h3>Purchases Not Found</h3>
+                <h3>No transactions at this point...</h3>
             )
         } else {
             const purchases = this.state.purchases;
@@ -174,4 +175,4 @@ class Transaction extends Component {
     }
 }
 
-export default Transaction 
+export default Transaction
