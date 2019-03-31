@@ -163,6 +163,7 @@ class Transaction extends Component {
                             username={object['user_username']}
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
+                            isFinalized={object['purchase_finalized']}
                             finalize={this.finalizePurchase}
                             type={'vendor'}
                         />
