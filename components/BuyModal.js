@@ -9,6 +9,9 @@ class BuyModal extends Component {
     };
 
     render() {
+        const { username, vendorUsername, productId } = this.props;
+
+
         if (!this.props.affordable) {
             return (
                 <Modal
@@ -66,6 +69,12 @@ class BuyModal extends Component {
 
     purchaseProduct = async (event) => {
         event.preventDefault();
+
+        const { username, vendorUsername, productId } = this.props;
+
+        console.log(username);
+        console.log(vendorUsername);
+        console.log(productId);
 
         if (!this.state.loading) {
             this.setState({ loading: true });

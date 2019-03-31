@@ -62,7 +62,8 @@ class ProductRow extends Component {
                     <Grid.Column key={object["product_id"]}>
                         <ProductCard
                             handleSuccess={this.props.handleSuccess}
-                            key={object["product_id"] + object["product_name"]}
+                            key={object["product_id"]}
+                            id={object["product_id"]}
                             name={object["product_name"]}
                             description={object["product_description"]}
                             vendor={object["vendor_username"]}

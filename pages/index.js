@@ -159,6 +159,7 @@ class SignIn extends Component {
                     const data = await response.json();
                     this.createLocalStorage(data, "user");
                     const address = localStorage.getItem('address');
+                    console.log(address);
                     const balance = await loco.methods.balances(address).call();
                     localStorage.setItem('balance', balance);
                     Router.pushRoute("/user");
