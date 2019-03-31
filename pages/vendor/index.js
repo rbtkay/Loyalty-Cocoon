@@ -37,7 +37,7 @@ class Transaction extends Component {
                                 loading={isSearchLoading}
                                 onResultSelect={this.handleResultSelect}
                                 onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                                results={searchResult}
+                                result={searchResult}
                                 value={searchValue}
                                 placeholder={'Search for Customers...'}
                             />
