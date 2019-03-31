@@ -158,10 +158,7 @@ class VendorNavBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/buy-product
         if (auth === null) {
             Router.pushRoute('/');
         } else {

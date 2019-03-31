@@ -44,12 +44,7 @@ class search extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+                <br /><br /><br /><br /><br /><br />
                 <Container>
                     <Card.Group>{this.renderProducts()}</Card.Group>
                 </Container>
@@ -57,16 +52,6 @@ class search extends Component {
         )
     }
 
-<<<<<<< HEAD
-    checkAuth = () => {
-        if (this.props.redirect) {
-            Router.pushRoute(this.props.redirect);
-        }
-    }
-
-    componentDidMount() {
-        this.checkAuth();
-=======
     async componentdidmount(req) {
         const { search } = req.query;
 
@@ -78,7 +63,6 @@ class search extends Component {
 
         const products = await response.json();
         this.setState({ search, products });
->>>>>>> origin/buy-product
     }
 
     renderProducts() {

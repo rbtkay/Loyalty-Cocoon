@@ -76,12 +76,8 @@ class ProductRow extends Component {
         const topDeals = topDealsArray.slice(0, 3);
         const recommended = products.slice(3, 7);
         const bestSeller = products.slice(7, 12);
-<<<<<<< HEAD
-        this.setState({ products, topDeals, recomended, bestSeller });
-=======
+
         this.setState({ products, topDeals, recommended, bestSeller });
-        // console.log(products);
->>>>>>> origin/buy-product
     }
 }
 
