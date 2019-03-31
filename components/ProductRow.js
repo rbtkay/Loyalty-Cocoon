@@ -20,7 +20,7 @@ class ProductRow extends Component {
                     <Grid.Row>
                         <h1>Top Deals</h1>
                     </Grid.Row>
-              
+
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.topDeals.length}>
                             {this.renderProducts(this.state.topDeals)}
@@ -28,19 +28,19 @@ class ProductRow extends Component {
                     </Segment>
       
                     <Grid.Row>
-                        <h1>Recomended for You</h1>
+                        <h1>Recommended for You</h1>
                     </Grid.Row>
-      
+
                     <Segment inverted color='violet'>
-                        <Grid columns={this.state.recomended.length}>
-                            {this.renderProducts(this.state.recomended)}
+                        <Grid columns={this.state.recommended.length}>
+                            {this.renderProducts(this.state.recommended)}
                         </Grid>
                     </Segment>
-      
+
                     <Grid.Row>
                         <h1>Best Seller</h1>
                     </Grid.Row>
-      
+
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.bestSeller.length}>
                             {this.renderProducts(this.state.bestSeller)}
