@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import NavigationBar from '../../components/NavigationBar';
+import Layout from '../../components/Layout';
+import { Segment } from 'semantic-ui-react';
 
 class Settings extends Component {
 
@@ -10,7 +13,17 @@ class Settings extends Component {
 
     render() {
         return (
-            <h1>Your Settings {this.props.username}</h1>
+            <div>
+                <Layout />
+                <NavigationBar />
+                <br />
+                <br />
+                <br />
+                <br />
+                <Segment textAlign='center'>
+                    <h1>Page Under Construction...</h1>
+                </Segment>
+            </div>
         )
     }
 }

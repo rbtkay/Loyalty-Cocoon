@@ -37,7 +37,7 @@ class Transaction extends Component {
                                 loading={isSearchLoading}
                                 onResultSelect={this.handleResultSelect}
                                 onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                                result={searchResult}
+                                results={searchResult}
                                 value={searchValue}
                                 placeholder={'Search for Customers...'}
                             />
@@ -45,25 +45,23 @@ class Transaction extends Component {
                     </Grid>
                 </Segment>
 
+                <Segment>
+                    <Statistic.Group widths='2' color='violet' size='small'>
+                        <Statistic>
+                            <Statistic.Value>100</Statistic.Value>
+                            <Statistic.Label>Items Currently Offered</Statistic.Label>
+                        </Statistic>
 
-                <Statistic.Group color='violet' size='small'>
-                    <Statistic>
-                        <Statistic.Value>100</Statistic.Value>
-                        <Statistic.Label>Items Currently Offered</Statistic.Label>
-                    </Statistic>
+                        <Statistic>
+                            <Statistic.Value>200</Statistic.Value>
+                            <Statistic.Label>Items Sold This Month</Statistic.Label>
+                        </Statistic>
+                    </Statistic.Group>
+                </Segment>
 
-                    <Statistic>
-                        <Statistic.Value>200</Statistic.Value>
-                        <Statistic.Label>Items Sold This Month</Statistic.Label>
-                    </Statistic>
-                </Statistic.Group>
-
-                <Container>
-                    <Segment>
-
-                        {this.renderPurchases()}
-                    </Segment>
-                </Container>
+                <Segment inverted color='violet'>
+                    {this.renderPurchases()}
+                </Segment>
             </div>
         )
     }
@@ -156,16 +154,19 @@ class Transaction extends Component {
             return (
                 purchases.map(object => {
                     return (
-                        <Purchase
-                            key={object['purchase_id']}
-                            purchaseId={object['purchase_id']}
-                            productName={object['product_name']}
-                            username={object['user_username']}
-                            vendor={object['vendor_username']}
-                            time={object['purchase_time']}
-                            finalize={this.finalizePurchase}
-                            type={'vendor'}
-                        />
+                        <Segment color='violet'>
+                            <Purchase
+                                key={object['purchase_id']}
+                                purchaseId={object['purchase_id']}
+                                productName={object['product_name']}
+                                username={object['user_username']}
+                                vendor={object['vendor_username']}
+                                time={object['purchase_time']}
+                                isFinalized={object['purchase_finalized']}
+                                finalize={this.finalizePurchase}
+                                type={'vendor'}
+                            />
+                        </Segment>
                     )
                 })
             )

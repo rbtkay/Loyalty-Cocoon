@@ -13,7 +13,9 @@ class Settings extends Component {
                 <br />
                 <br />
                 <br />
-                <h1>Settings</h1>
+                <Segment textAlign='center'>
+                    <h1>Page Under Construction...</h1>
+                </Segment>
             </div>
         )
     }

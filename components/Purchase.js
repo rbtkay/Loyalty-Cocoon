@@ -7,13 +7,13 @@ class Purchase extends Component {
     state = {
         isOpen: false
     }
-
-    //FIXME: api needs to return finalized purchases and the card should show that this purchase is finalized.
-
+    
     render() {
         const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
         if (type === 'vendor') {
+            console.log('isFinalized');
+            console.log(isFinalized);
             return (
                 <div>
                     <Item.Group divided>
@@ -27,8 +27,7 @@ class Purchase extends Component {
 
                                 <Item.Extra>
                                     <Label>id: {purchaseId}</Label>
-                                    <Label>on: {time}</Label>
-                                    <Button size='big' basic color='violet' floated='right' onClick={this.show}>Finalize</Button>
+                                    {this.renderExtra(isFinalized, time, type)}
                                 </Item.Extra>
                             </Item.Content>
                         </Item>
@@ -62,7 +61,7 @@ class Purchase extends Component {
                                 <Item.Description>Bought At: {vendor}</Item.Description>
 
                                 <Item.Extra>
-                                    {this.renderExtra(isFinalized, time)}
+                                    {this.renderExtra(isFinalized, time, type)}
                                 </Item.Extra>
                             </Item.Content>
                         </Item>
@@ -72,27 +71,48 @@ class Purchase extends Component {
     }
 
 
-    renderExtra(finalized, time) {
-        if (finalized.data[0] === 0) {
-            finalized = 'Pending';
-            return (
-                <div>
-                    <Label>on: {time}</Label>
-                    <br />
-                    <br />
-                    <Label>{finalized}</Label>
-                </div>
-            )
-        } else {
-            finalized = 'Finalized';
-            return (
-                <div>
-                    <Label>on: {time}</Label>
-                    <br />
-                    <br />
-                    <Label color='green'>{finalized}</Label>
-                </div>
-            )
+    renderExtra(finalized, time, type) {
+
+        if (type === 'vendor') {
+            if (finalized.data[0] === 0) {
+                return (
+                    <div>
+                        <Label>on: {time}</Label>
+                        <Button size='big' basic color='violet' floated='right' onClick={this.show}>Finalize</Button>
+                    </div>
+                )
+            } else {
+                const final = 'Finalized';
+                return (
+                    <div>
+                        <Label>on: {time}</Label>
+                        <Button size='big' color='green' floated='right'>{final}</Button>
+                    </div>
+                )
+            }
+        }
+        else {
+            if (finalized.data[0] === 0) {
+                finalized = 'Pending';
+                return (
+                    <div>
+                        <Label>on: {time}</Label>
+                        <br />
+                        <br />
+                        <Label>{finalized}</Label>
+                    </div>
+                )
+            } else {
+                finalized = 'Finalized';
+                return (
+                    <div>
+                        <Label>on: {time}</Label>
+                        <br />
+                        <br />
+                        <Label color='green'>{finalized}</Label>
+                    </div>
+                )
+            }
         }
     }
 
@@ -114,6 +134,7 @@ class Purchase extends Component {
         });
 
         if (response.status === 200) {
+            this.setState({ isOpen: false });
             this.props.finalize();
         }
     }

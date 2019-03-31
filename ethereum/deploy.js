@@ -3,7 +3,7 @@ const Web3 = require('web3');
 const compiledFactory = require('./build/Loco.json');
 
 const provider = new HDWalletProvider(
-    'dance corn property ritual never mesh distance canvas weekend enemy neck pact',
+    'tube story avocado bless early deputy void else wrap deposit space culture',
     'https://rinkeby.infura.io/v3/af133582ff384aa99f64946e33b16a05'
 );
 

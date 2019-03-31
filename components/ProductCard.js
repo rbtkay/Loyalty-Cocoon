@@ -7,19 +7,18 @@ class ProductCard extends Component {
 
     state = {
         isOpen: false,
-        balance: localStorage.getItem('balance'),
         isConfirmOpen: false,
         errorMessage: ''
     };
 
     render() {
-        const { name, description, priceLoco, category, vendor } = this.props;
+        const { name, description, priceLoco, category, vendor, id } = this.props;
 
         return (
             <div>
                 <Card color="violet">
                     <Card.Content onClick={this.show}>
-                    <Image floated='left' size='tiny' src='/static/default_product_image.jpg' />
+                        <Image floated='left' size='tiny' src='/static/default_product_image.jpg' />
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{priceLoco}</Card.Meta>
                         <Card.Meta>{vendor}</Card.Meta>
@@ -74,20 +73,30 @@ class ProductCard extends Component {
     }
 
     appendBuyModal = () => {
-        const { balance } = this.state;
+        const balance = localStorage.getItem('balance');
+
         const { priceLoco } = this.props;
         const temp = priceLoco.split(' ');
         let val = parseInt(temp[0]);
-
+        
         if (balance > val) {
+
+            const username = localStorage.getItem('username');
+            const vendorUsername = this.props.vendor;
+            const productId = this.props.id;
+
             return <BuyModal
-                    handleSuccess={this.props.handleSuccess}
-                    msg={this.state.errorMessage}
-                    errorMessage={this.handleMessage}
-                    affordable={true}
-                    price={val}
-                    isConfirmOpen={this.state.isConfirmOpen}                  confirmClose={this.confirmClose}
-                    vendor={this.props.vendor}
+                username={username}
+                vendorUsername={vendorUsername}
+                productId={productId}
+                handleSuccess={this.props.handleSuccess}
+                msg={this.state.errorMessage}
+                errorMessage={this.handleMessage}
+                affordable={true}
+                price={val}
+                isConfirmOpen={this.state.isConfirmOpen}
+                confirmClose={this.confirmClose}
+                vendor={this.props.vendor}
             />;
         } else {
             return <BuyModal
