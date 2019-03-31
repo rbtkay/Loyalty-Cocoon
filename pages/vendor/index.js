@@ -12,7 +12,7 @@ class Transaction extends Component {
         purchases: [],
         purchaseLength: '',
         searchValue: '',
-        searchResult: '',
+        searchResult: [],
         isSearchLoading: false,
         searchValue: ''
     }
@@ -95,6 +95,8 @@ class Transaction extends Component {
 
             const source = purchases.map(object => {
                 return {
+                    key: object['purchase_id'],
+                    title: object['user_username'],
                     name: object['user_username'],
                     description: object['user_username']
                 }
@@ -158,7 +160,7 @@ class Transaction extends Component {
                             key={object['purchase_id']}
                             purchaseId={object['purchase_id']}
                             productName={object['product_name']}
-                            username={object['user_email']}
+                            username={object['user_username']}
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
                             finalize={this.finalizePurchase}

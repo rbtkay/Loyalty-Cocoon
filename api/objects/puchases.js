@@ -35,7 +35,7 @@ exports.getPurchaseByVendorUser = (req, res) => {
     const vendorUsername = req.query.vendorUsername;
     const userUsername = req.query.userUsername;
 
-    mysqlconnection.query('select purchase_t.*, product_t.product_name, user_t.user_username from purchase_t, product_t, user_t where purchase_t.vendor_username = ? and purchase_t.product_id = product_t.product_id and purchase_t.user_email = user_t.user_email and purchase_t.user_email in (select user_t.user_email where user_t.user_username = ?)', [vendorUsername, userUsername], (err, result) => {
+    mysqlconnection.query('select purchase_t.*, product_t.product_name from purchase_t, product_t where (purchase_t.vendor_username = ? and purchase_t.user_username = ?) and purchase_t.product_id = product_t.product_id', [vendorUsername, userUsername], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
             res.status(200).send(result);
