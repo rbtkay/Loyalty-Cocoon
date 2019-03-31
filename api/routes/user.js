@@ -6,5 +6,6 @@ const productRoutes = require('./product');
 router.use('/product', productRoutes);
 router.get('/all', User.getAllUser)
 router.get('/byEmail', User.getUserByEmail);
+router.get('/address', User.getVendorAddress);
 
 module.exports = router;

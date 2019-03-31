@@ -32,9 +32,7 @@ exports.verifyToken = (req, res, next) => {
         }else{
             return res.status(401).send('Auth Failed');
         }
-
     } catch (err) {
         res.status(401).send("Auth Failed");
     }
-
 }

@@ -18,3 +18,12 @@ exports.getUserByEmail = (req, res, next) => {
         res.send(result);
     });
 }
+
+exports.getVendorAddress = (req, res, next) => {
+    var username = req.query.username;
+
+    mysqlConnection.query('select vendor_address from vendor_t where vendor_username = ? ', [username], (err, result, fields) => {
+        if (err) throw err;
+        res.status(200).send(result);
+    });
+}

@@ -133,12 +133,6 @@ class SignIn extends Component {
         );
     }
 
-    static getInitialProps() {
-        console.log('hello props');
-        return {};
-    }
-
-
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: { message: '' } });
 

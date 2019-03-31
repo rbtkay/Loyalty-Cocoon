@@ -57,9 +57,7 @@ class Manage extends Component {
                 <div>
                     <Segment color='violet' inverted>
 
-                        <br />
-                        <br />
-                        <br />
+                        <br /><br /><br />
 
                         <Grid columns={2}>
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
@@ -87,8 +85,7 @@ class Manage extends Component {
                                     fluid
                                     onClick={this.addOffers}></Button>
 
-                                <br />
-                                <br />
+                                <br /><br />
 
                                 <Button
                                     as='a'
@@ -108,9 +105,7 @@ class Manage extends Component {
                             </Grid.Column>
                         </Grid>
 
-                        <br />
-                        <br />
-                        <br />
+                        <br /><br /><br />
 
                     </Segment>
                 </div>
@@ -189,7 +184,7 @@ class Manage extends Component {
                         <h3>Are you sure you want to permanently remove the selected items?</h3>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={this.closeConfirm} inverted>No</Button>
+                        <Button onClick={this.confirmClose} inverted>No</Button>
                         <Button color='red' onClick={this.removeItems} inverted>
                             <Icon name='checkmark' /> Yes
                         </Button>
