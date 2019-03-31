@@ -12,6 +12,8 @@ class BuyModal extends Component {
         const { username, vendorUsername, productId } = this.props;
 
 
+
+
         if (!this.props.affordable) {
             return (
                 <Modal
@@ -72,16 +74,28 @@ class BuyModal extends Component {
 
         const { username, vendorUsername, productId } = this.props;
 
-        console.log(username);
-        console.log(vendorUsername);
-        console.log(productId);
+        // const time = new Date();
+        const d = new Date();
+
+        const day = d.getDate().toString();
+        const month = (d.getMonth() + 1).toString();
+        const year = d.getFullYear().toString();
+
+        const hour = d.getHours().toString();
+        const minute = d.getSeconds().toString();
+        const second = d.getMinutes().toString();
+
+        const date = year + '-' + month + '-' + day;
+        const time = hour + ':' + minute + ':' + second;
+
+        const DateTime = date + ' ' + time;
 
         if (!this.state.loading) {
             this.setState({ loading: true });
             this.props.errorMessage('Your transaction is being processed...');
             try {
                 const sender = localStorage.getItem('address');
-                const response = await fetch(`http://localhost:8000/api/user/address?username=${this.props.vendor}`, {
+                const response = await fetch(`http://localhost:8000/api/user/address?username=${vendorUsername}`, {
                     headers: new Headers({
                         'authorization': localStorage.getItem('authorization')
                     })
@@ -94,7 +108,11 @@ class BuyModal extends Component {
                     from: manager
                 });
 
-                // TODO: Add a fetch to store purchase in purchase_t
+                const insertPurchase = await fetch(`http://localhost:8000/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
+                    headers: new Headers({
+                        'authorization': localStorage.getItem('authorization')
+                    })
+                });
 
                 this.props.handleSuccess();
                 this.props.confirmClose();
