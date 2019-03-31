@@ -31,7 +31,10 @@ exports.vendorSignUp = (req, res) => {
                     ], (err, result) => {
                         if (err) throw err;
                         else {
-                            jwt.sign({ result }, 'secretKey', (err, token) => {
+                            jwt.sign({
+                            username: username,
+                            email: email,
+                            type: "vendor" }, 'secretKey', (err, token) => {
                                 res.json({
                                     token,
                                     result
@@ -55,8 +58,7 @@ exports.vendorAuth = (req, res, next) => {
         mysqlConnection.query('select * from Vendor_T where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                const token = jwt.sign(
-                    {
+                const token = jwt.sign({
                         username: result['vendor_username'],
                         email: result['vendor_email'],
                         type: "vendor"
@@ -88,16 +90,12 @@ exports.userAuth = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                console.log(result[0].user_username);
-                const token = jwt.sign(
-                    {
+                const token = jwt.sign({
                         username: result[0].user_username,
                         email: result[0].user_email,
                         type: "user"
                     },
                     'secretKey');
-
-                console.log("token:" + token);
 
                 res.status(200).json({
                     token,
@@ -110,8 +108,7 @@ exports.userAuth = (req, res, next) => {
                 res.status(401).send(errorObj);
             }
         });
-    }
-    else {
+    } else {
         res.status(400).send("Some input are missing...");
     }
 }
@@ -136,7 +133,6 @@ exports.userSignUp = (req, res) => {
             if (err) throw err;
             else {
                 if (result.length > 0) {
-                    console.log('checked');
                     res.send('already exists');
                 } else {
                     mysqlConnection.query('insert into user_t values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
@@ -155,7 +151,11 @@ exports.userSignUp = (req, res) => {
                     ], (err, result) => {
                         if (err) throw err;
                         else {
-                            jwt.sign({ result }, 'secretKey', (err, token) => {
+                            jwt.sign({
+                            username: username,
+                            email: email,
+                            type: "user"
+                        }, 'secretKey', (err, token) => {
                                 res.json({
                                     token,
                                     result

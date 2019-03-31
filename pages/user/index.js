@@ -6,33 +6,48 @@ import ProductRow from '../../components/ProductRow';
 import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
 import session from 'express-session';
+import { SemanticToastContainer, toast } from "react-semantic-toasts";
 
 class Loyalty extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            products: [],
-            filter: "all",
-            account: '',
-            balance: 0,
-            loading: false
-        };
-    }
+    state = {
+        products: [],
+        filter: "all",
+        successful: false
+    };
 
 
     render() {
-        { console.log(this.state.products) }
         return (
             <div>
                 <Layout />
                 <NavigationBar />
                 <br /><br /><br /><br /><br />
-                <ProductRow />
+                <SemanticToastContainer />
+                <ProductRow handleSuccess={this.flipSuccess}/>
                 <br />
-                <Button loading={this.state.loading} onClick={this.onClick} color="violet">Send Me Points!</Button>
             </div>
         );
+    }
+
+    showSuccessToast = () => {
+        setTimeout(() => {
+            toast({
+                type: "success",
+                icon: "thumbs up",
+                title: "Transaction Successful",
+                description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
+                time: 5000
+            });
+        }, 5000);
+    }
+
+    flipSuccess = () => {
+        if (!this.state.successful) {
+            this.setState({ successful: true });
+            this.showSuccessToast();
+        } else {
+            this.setState({ successful: false });
+        }
     }
 }
 

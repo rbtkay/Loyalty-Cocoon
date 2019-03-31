@@ -57,6 +57,7 @@ class search extends Component {
         )
     }
 
+<<<<<<< HEAD
     checkAuth = () => {
         if (this.props.redirect) {
             Router.pushRoute(this.props.redirect);
@@ -65,6 +66,19 @@ class search extends Component {
 
     componentDidMount() {
         this.checkAuth();
+=======
+    async componentdidmount(req) {
+        const { search } = req.query;
+
+        const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
+            headers: new Headers({
+                'authorization': localStorage.getItem('authorization')
+            })
+        });
+
+        const products = await response.json();
+        this.setState({ search, products });
+>>>>>>> origin/buy-product
     }
 
     renderProducts() {
