@@ -8,6 +8,8 @@ class Purchase extends Component {
         isOpen: false
     }
 
+    //FIXME: api needs to return finalized purchases and the card should show that this purchase is finalized.
+
     render() {
         const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
