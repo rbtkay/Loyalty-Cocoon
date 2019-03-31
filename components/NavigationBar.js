@@ -69,11 +69,9 @@ class NavigationBar extends Component {
 
     async componentDidMount() {
         const auth = localStorage.getItem('authorization');
-        console.log('componetv');
         if (auth === null) {
             Router.pushRoute("/");
         } else {
-            console.log('else');
             const account = localStorage.getItem('address');
             const username = localStorage.getItem('username');
             try {

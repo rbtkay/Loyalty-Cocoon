@@ -53,7 +53,7 @@ class BuyModal extends Component {
                     </Modal.Content>
                     <Modal.Actions>
                         <Button
-                            onClick={this.props.confirmClose}>Cancel</Button>
+                            onClick={!this.state.loading ? this.props.confirmClose : null}>Cancel</Button>
                         <Button
                             loading={this.state.loading}
                             color='violet'
