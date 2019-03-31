@@ -26,11 +26,12 @@ exports.getProductSearch = (req, res, next) => {
         if (err) throw err;
         result.map((object) => {
             const name = object['product_name'].toLowerCase();
-            if (name.includes(searchRequest)) {
+            const vendor = object['vendor_username'].toLowerCase();
+            if (name.includes(searchRequest) || vendor.includes(searchRequest)) {
                 filteredResult.push(object);
             }
         })
-        //TODO: searches only by product name. Let's make it better!
+
         if (filteredResult.length > 0) {
             res.status(200).send(filteredResult);
         } else {

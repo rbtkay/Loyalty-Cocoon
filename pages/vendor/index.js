@@ -6,13 +6,6 @@ import Purchase from '../../components/Purchase'
 import { Container, Segment, Search, Grid, Statistic } from 'semantic-ui-react';
 import _ from 'lodash';
 
-// const source = _.times(5, () => ({
-//     name: "faker.company.companyName()",
-//     description: "faker.company.catchPhrase()",
-//     image: "faker.internet.avatar()",
-//     price: 'faker.finance.amount(0, 100, 2)',
-// }))
-
 class Transaction extends Component {
 
     state = {
@@ -23,33 +16,6 @@ class Transaction extends Component {
         isSearchLoading: false,
         searchValue: ''
     }
-
-    // static async getInitialProps(props) {
-    //     const username = props.username
-    // try {
-    // const response = await fetch(`http://localhost:8000/api/product/offered`, {
-    //     headers: new Headers({
-    //         'authorization': localStorage.getItem('authorization')
-    //     })
-    // });
-
-    // const products = await response.json();
-
-    // if (response.status === 401) {
-    //     console.log('redirecting...');
-    //     Router.push('/');
-    // }
-
-    // console.log(products);
-
-    // } catch (err) {
-
-    // Router.pushRoute('/');
-    // }
-
-    // return { props };
-    // }
-
 
     render() {
         const { purchases, isSearchLoading, searchResult, searchValue } = this.state;
@@ -78,6 +44,7 @@ class Transaction extends Component {
                         </Grid.Column>
                     </Grid>
                 </Segment>
+
 
                 <Statistic.Group color='violet' size='small'>
                     <Statistic>
@@ -125,7 +92,7 @@ class Transaction extends Component {
 
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
-            
+
             const source = purchases.map(object => {
                 return {
                     name: object['user_username'],
@@ -195,6 +162,7 @@ class Transaction extends Component {
                             vendor={object['vendor_username']}
                             time={object['purchase_time']}
                             finalize={this.finalizePurchase}
+                            type={'vendor'}
                         />
                     )
                 })

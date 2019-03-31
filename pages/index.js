@@ -131,11 +131,11 @@ class SignIn extends Component {
             </div>
         );
     }
-    componentDidMount() {
-        if (this.props.url.asPath === '/error') {
-            this.setState({ errorMessage: 'Network Message' });
-        }
-    }
+    // componentDidMount() {
+    //     if (this.props.url.asPath === '/error') {
+    //         this.setState({ errorMessage: 'Network Error' });
+    //     }
+    // }
 
 
     onSubmit = async (req, res, event) => {
@@ -144,37 +144,43 @@ class SignIn extends Component {
         console.log(this.state.errorMessage);
 
         const { username, password } = this.state;
-        const hashedPassword = sha256(password);
+        if (username === '' || password === '') {
+            this.setState(
+                {
+                    errorMessage: 'Some Field are Missing!',
+                    loading: false
+                });
+        } else {
+            const hashedPassword = sha256(password);
+            try {
+                let response = await fetch(`http://localhost:8000/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
 
-        try {
-            let response = await fetch(`http://localhost:8000/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
-
-            if (response.status === 200) {
-                const data = await response.json();
-                this.createLocalStorage(data, "user");
-                Router.pushRoute("/user");
-            } else
-                if (response.status === 401) {
-
-                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
+                if (response.status === 200) {
+                    const data = await response.json();
+                    this.createLocalStorage(data, "user");
+                    Router.pushRoute("/user");
+                } else
                     if (response.status === 401) {
-                        const errorMessage = 'Invalid Username/Password';
-                        this.setState({ errorMessage, loading: false });
-                        console.log(this.state.errorMessage);
-                    }
 
-                    if (response.status === 200) {
-                        const data = await response.json();
-                        this.createLocalStorage(data, "vendor");
-                        Router.pushRoute("/vendor");
+                        response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+
+                        if (response.status === 401) {
+                            const errorMessage = 'Invalid Username/Password';
+                            this.setState({ errorMessage, loading: false });
+                            console.log(this.state.errorMessage);
+                        }
+
+                        if (response.status === 200) {
+                            const data = await response.json();
+                            this.createLocalStorage(data, "vendor");
+                            Router.pushRoute("/vendor");
+                        }
                     }
-                }
-        } catch (err) {
-            this.setState({ loading: false });
-            throw err;
+            } catch (err) {
+                this.setState({ loading: false });
+                throw err;
+            }
         }
-
     }
 
     createLocalStorage(data, type) {

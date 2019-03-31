@@ -80,8 +80,8 @@ class NavigationBar extends Component {
                 const balance = await loco.methods.balances(account).call();
                 this.setState({ username, balance });
             } catch (e) {
-                const errorMessage = 'NetworkError';
-                Router.pushRoute(`/error`);
+                const balance = 'NaN';
+                this.setState({ username, balance });
             }
             console.log(username);
         }

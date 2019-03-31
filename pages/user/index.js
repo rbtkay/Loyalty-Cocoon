@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid } from 'semantic-ui-react';
+import { Card, Button, Grid, Container, Segment } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import ProductCard from '../../components/ProductCard';
 import ProductRow from '../../components/ProductRow';
@@ -19,6 +19,7 @@ class Loyalty extends Component {
     render() {
         return (
             <div>
+
                 <Layout />
                 <NavigationBar />
                 <br /><br /><br /><br /><br />
