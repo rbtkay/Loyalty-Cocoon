@@ -24,31 +24,32 @@ class Manage extends Component {
 
     render() {
         const options = [{
-                key: 'Clothing',
-                text: 'Clothing',
-                value: 'Clothing'
-            },
-            {
-                key: 'Electronics',
-                text: 'Electronics',
-                value: 'Electronics'
-            },
-            {
-                key: 'Food',
-                text: 'Food',
-                value: 'Food'
-            },
-            {
-                key: 'Groceries',
-                text: 'Groceries',
-                value: 'Groceries'
-            },
-            {
-                key: 'Toys',
-                text: 'Toys',
-                value: 'Toys'
-            }
+            key: 'Clothing',
+            text: 'Clothing',
+            value: 'Clothing'
+        },
+        {
+            key: 'Electronics',
+            text: 'Electronics',
+            value: 'Electronics'
+        },
+        {
+            key: 'Food',
+            text: 'Food',
+            value: 'Food'
+        },
+        {
+            key: 'Groceries',
+            text: 'Groceries',
+            value: 'Groceries'
+        },
+        {
+            key: 'Toys',
+            text: 'Toys',
+            value: 'Toys'
+        }
         ]
+
 
         return (
             <div>
@@ -63,7 +64,7 @@ class Manage extends Component {
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
                                 <h1>Manage Your Products</h1>
 
-                                <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active}/>
+                                <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active} />
 
                                 <Button
                                     negative
@@ -100,7 +101,7 @@ class Manage extends Component {
                             <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
                                 <h1>Products Offered</h1>
 
-                                <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered}/>
+                                <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered} />
 
                             </Grid.Column>
                         </Grid>
@@ -133,7 +134,7 @@ class Manage extends Component {
                                         onChange={event => this.setState({ price: event.target.value })}
                                     />
                                 </Grid.Column>
-                        </Grid.Row>
+                            </Grid.Row>
 
                             <Grid.Row>
                                 <Grid.Column>
@@ -157,7 +158,7 @@ class Manage extends Component {
                                         onChange={event => this.setState({ loco: event.target.value })}
                                     />
                                 </Grid.Column>
-                        </Grid.Row>
+                            </Grid.Row>
                         </Grid>
 
                         <Divider />
@@ -165,7 +166,7 @@ class Manage extends Component {
                         <TextArea
                             name='description'
                             placeholder='Item Description'
-                            style={{width: '100%', height: '100%' }}
+                            style={{ width: '100%', height: '100%' }}
                             value={this.state.description}
                             onChange={event => this.setState({ description: event.target.value })}
                         />
