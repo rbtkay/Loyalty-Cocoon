@@ -3,8 +3,9 @@ import NavigationBar from '../../components/VendorNavBar';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import Purchase from '../../components/Purchase'
-import { Container, Segment, Search, Grid, Statistic } from 'semantic-ui-react';
+import { Container, Segment, Search, Grid, Statistic, Popup, Input, Button, Form } from 'semantic-ui-react';
 import _ from 'lodash';
+import loco from '../../ethereum/loco';
 
 class Transaction extends Component {
 
@@ -14,7 +15,11 @@ class Transaction extends Component {
         searchValue: '',
         searchResult: [],
         isSearchLoading: false,
-        searchValue: ''
+        searchValue: '',
+        username: '',
+        amount: '',
+        loading: false,
+        isOpen: false
     }
 
     render() {
@@ -28,9 +33,58 @@ class Transaction extends Component {
                 <br />
                 <Segment>
                     <Grid>
-                        <Grid.Column width={12}>
+                        <Grid.Column width={4}>
                             <h1>Your Transactions</h1>
                         </Grid.Column>
+                        <Grid.Column width={2} />
+                        <Grid.Column width={3}>
+                            <Popup
+                                trigger={<Button
+                                    color='violet'
+                                    icon='gift'
+                                    content='Grant Points' />}
+                                header='Give Customer LOCO'
+                                open={this.state.isOpen}
+                                onOpen={this.handleOpen}
+                                onClose={this.handleClose}
+                                content={
+                                    <Form>
+                                        <br />
+                                        <Form.Field>
+                                            <Input
+                                                fluid
+                                                name="username"
+                                                value={this.state.username}
+                                                onChange={event => this.setState({ username: event.target.value })}
+                                                placeholder="Username"
+                                            />
+                                        </Form.Field>
+
+                                        <Form.Field>
+                                            <Input
+                                                fluid
+                                                name="amount"
+                                                value={this.state.amount}
+                                                onChange={event => this.setState({ amount: event.target.value })}
+                                                placeholder="Amount"
+                                                label="LOCO"
+                                                labelPosition='right'
+                                            />
+                                        </Form.Field>
+                                        <Button
+                                            loading={this.state.loading}
+                                            fluid
+                                            style={{textAlign: 'center'}}
+                                            circular
+                                            color='violet'
+                                            onClick={this.grantPoints}>Send
+                                        </Button>
+                                    </Form>
+                                        }
+                                on='focus'
+                                position='bottom center' />
+                        </Grid.Column>
+                        <Grid.Column width={3} />
                         <Grid.Column width={4}>
                             <Search
                                 input={{ fluid: true }}
@@ -141,7 +195,6 @@ class Transaction extends Component {
         }
     }
 
-
     renderPurchases() {
         if (this.state.purchaseLength === '') {
             return (
@@ -174,6 +227,41 @@ class Transaction extends Component {
 
     finalizePurchase = () => {
         this.componentDidMount();
+    }
+
+    handleOpen = () => {
+        this.setState({ isOpen: true });
+    }
+
+    handleClose = () => {
+        this.setState({ isOpen: false });
+    }
+
+    grantPoints = async (event) => {
+        event.preventDefault();
+
+        if (!this.state.loading) {
+            this.setState({ loading: true });
+            try {
+                const { username, amount } = this.state;
+                const response = await fetch(`http://localhost:8000/api/vendor/address?username=${this.state.username}`, {
+                    headers: new Headers({
+                        'authorization': localStorage.getItem('authorization')
+                    })
+                });
+
+                const receiver = await response.json();
+                const manager = await loco.methods.manager().call();
+
+                await loco.methods.grantPoints(receiver[0].user_address, this.state.amount).send({
+                    from: manager
+                });
+                this.setState({ username: '', amount: '' });
+            } catch (err) {
+                throw err;
+            }
+            this.setState({ loading: false, isOpen: false });
+        }
     }
 }
 
