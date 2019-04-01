@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form, Button } from 'semantic-ui-react';
+import { Input, Menu, MenuItem, Dropdown, DropdownItem, Search, Form, Button, Image } from 'semantic-ui-react';
 import indexPage from '../pages/user';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
@@ -22,7 +22,7 @@ class NavigationBar extends Component {
 
                 <MenuItem>
                     <Link href={`/user/`}>
-                        <a>Loyalty Cocoon</a>
+                        <a><Image circular src='../static/Logo.gif' centered size='mini' /></a>
                     </Link>
                 </MenuItem>
 

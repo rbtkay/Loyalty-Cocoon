@@ -27,7 +27,7 @@ class SignIn extends Component {
                         <br />
                         <Grid columns={2}>
                             <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
-                                <Image circular src='../static/default_product_image.jpg' centered size='small' />
+                                <Image circular src='../static/Logo.gif' centered size='small' />
                                 <h1>Loyalty Cocoon</h1>
                             </Grid.Column>
                             <Grid.Column width='4' textAlign='center'>
@@ -170,22 +170,22 @@ class SignIn extends Component {
                         Router.pushRoute("/user");
                     }
                 } else
+                if (response.status === 401) {
+
+                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+
                     if (response.status === 401) {
-
-                        response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
-                        if (response.status === 401) {
-                            const errorMessage = 'Invalid Username/Password';
-                            this.setState({ errorMessage, loading: false });
-                            console.log(this.state.errorMessage);
-                        }
-
-                        if (response.status === 200) {
-                            const data = await response.json();
-                            this.createLocalStorage(data, "vendor");
-                            Router.pushRoute("/vendor");
-                        }
+                        const errorMessage = 'Invalid Username/Password';
+                        this.setState({ errorMessage, loading: false });
+                        console.log(this.state.errorMessage);
                     }
+
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        this.createLocalStorage(data, "vendor");
+                        Router.pushRoute("/vendor");
+                    }
+                }
             } catch (err) {
                 this.setState({ loading: false });
                 throw err;

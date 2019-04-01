@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, MenuItem, Dropdown, DropdownItem, Modal, Input, Button, Message } from 'semantic-ui-react';
+import { Menu, MenuItem, Dropdown, DropdownItem, Modal, Input, Button, Message, Image, Form } from 'semantic-ui-react';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
@@ -27,7 +27,7 @@ class VendorNavBar extends Component {
 
                     <MenuItem>
                         <Link href={`/vendor/`}>
-                            <a>Loyalty Cocoon</a>
+                            <a><Image circular src='/static/Logo.gif' centered size='mini' /></a>
                         </Link>
                     </MenuItem>
 
@@ -120,10 +120,9 @@ class VendorNavBar extends Component {
                     />
 
                     <br />
-
                     <Input
+                        type="password"
                         fluid
-                        error
                         name="modalPassword"
                         placeholder="Password"
                         value={this.state.modalPassword}
