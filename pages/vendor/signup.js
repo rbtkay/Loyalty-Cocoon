@@ -21,6 +21,8 @@ class SignUp extends Component {
         locationError: false,
         tag: '',
         errorMessage: '',
+        isFormEmpty: false,
+        isFormValid: true,
         loading: false
     };
 
@@ -31,25 +33,31 @@ class SignUp extends Component {
 
         // console.log(isValid);
         if (username === '') {
-            this.setState({ usernameError: true, isFormValid: false });
+            await this.setState({ usernameError: true, isFormEmpty: true });
         }
         if (email === '') {
-            this.setState({ emailError: true, isFormValid: false });
+            await this.setState({ emailError: true, isFormEmpty: true });
         }
         if (password === '') {
-            this.setState({ passwordError: true, isFormValid: false });
+            await this.setState({ passwordError: true, isFormEmpty: true });
         }
         if (name === '') {
-            this.setState({ nameError: true, isFormValid: false });
+            await this.setState({ nameError: true, isFormEmpty: true });
         }
         if (phone === '') {
-            this.setState({ phoneError: true, isFormValid: false });
+            await this.setState({ phoneError: true, isFormEmpty: true });
         }
         if (location === '') {
-            this.setState({ locationError: true, isFormValid: false });
+            await this.setState({ locationError: true, isFormEmpty: true });
         }
 
-        if (this.state.isFormValid === true) {
+        if (this.state.isFormEmpty === false) {
+            const emailRegEx = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
+
+            console.log('email');
+            console.log(email);
+
+
             const hashedPassword = sha256(password);
 
             try {
@@ -69,6 +77,7 @@ class SignUp extends Component {
             } catch (err) {
                 throw err;
             }
+            // this.setState({ errorMessage: 'Inserting User...' });
         } else {
             console.log("the form is not valid");
             this.setState({ errorMessage: 'Some Fields are Empty' });

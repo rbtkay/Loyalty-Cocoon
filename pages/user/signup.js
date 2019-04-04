@@ -29,7 +29,14 @@ class SignUp extends Component {
         country: '',
         profession: '',
         organization: '',
-        errorMessage: { message: '' },
+        errorMessage: '',
+        usernameError: false,
+        nameError: false,
+        emailError: false,
+        passwordError: false,
+        usernameError: false,
+        isFormEmpty: false,
+        isFormValid: true,
         loading: false
     };
 
@@ -44,9 +51,9 @@ class SignUp extends Component {
                     <div className="ui raised very padded text container segment">
                         <h1>Join Millions of Shoppers</h1>
 
-                        <Form error={!!this.state.errorMessage["message"]} autoComplete="off">
+                        <Form error={!!this.state.errorMessage} autoComplete="off">
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.nameError}>
                                     <Input
                                         fluid
                                         name="name"
@@ -56,7 +63,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.usernameError}>
                                     <Input
                                         fluid
                                         name="username"
@@ -68,7 +75,7 @@ class SignUp extends Component {
                             </Form.Group>
 
                             <Form.Group widths="2">
-                                <Form.Field>
+                                <Form.Field error={this.state.emailError}>
                                     <Input
                                         fluid
                                         name="email"
@@ -78,7 +85,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.passwordError}>
                                     <Input
                                         fluid
                                         name="password"
@@ -172,38 +179,65 @@ class SignUp extends Component {
                                     placeholder="Preferences"
                                 />
                             </Form.Field>
-                            <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
+                            <Message error header="Oops!" content={this.state.errorMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>
-                        <br/>
-                        <br/>
-                        <br/>
+                    <br />
+                    <br />
+                    <br />
                 </Segment>
             </div>
         );
     }
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
+        this.setState({ loading: true, errorMessage: '' });
 
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
-        const hashedPassword = sha256(password);
 
-        try {
-            const newAccount = web3.eth.accounts.create();
-            var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
-            var data = await response.json();
-            if (data.token) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('address', newAccount["address"]);
-                localStorage.setItem('authorization', data.token);
-                Router.pushRoute('/user');
-            } else {
-                this.setState({ errorMessage: data });
+        if (username === '') {
+            await this.setState({ usernameError: true, isFormEmpty: true });
+        }
+        if (email === '') {
+            await this.setState({ emailError: true, isFormEmpty: true });
+        }
+        if (password === '') {
+            await this.setState({ passwordError: true, isFormEmpty: true });
+        }
+        if (name === '') {
+            await this.setState({ nameError: true, isFormEmpty: true });
+        }
+
+        if (this.state.isFormEmpty === false) {
+            const emailRegEx = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
+
+            if (!emailRegEx.test(email)) {
+                await this.setState({ emailError: true, isFormValid: false, errorMessage: 'Email is not Valid' });
             }
-        } catch (err) {
-            throw err;
+
+            if (this.state.isFormValid) {
+                // const hashedPassword = sha256(password);
+
+                // try {
+                //     const newAccount = web3.eth.accounts.create();
+                //     var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+                //     var data = await response.json();
+                //     if (data.token) {
+                //         localStorage.setItem('username', username);
+                //         localStorage.setItem('address', newAccount["address"]);
+                //         localStorage.setItem('authorization', data.token);
+                //         Router.pushRoute('/user');
+                //     } else {
+                //         this.setState({ errorMessage: data['message'] });
+                //     }
+                // } catch (err) {
+                //     throw err;
+                // }
+                this.setState({ errorMessage: 'Inserting User...' });
+            }
+        } else {
+            this.setState({ errorMessage: 'Some Field are Empty' });
         }
         this.setState({ loading: false });
     }
