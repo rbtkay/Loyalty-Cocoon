@@ -22,7 +22,7 @@ class NavigationBar extends Component {
 
                 <MenuItem>
                     <Link href={`/user/`}>
-                        <a><Image circular src='../static/Logo.gif' centered size='mini' /></a>
+                        <a><Image circular src='/static/Logo.gif' centered size='mini' /></a>
                     </Link>
                 </MenuItem>
 
