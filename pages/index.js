@@ -121,7 +121,7 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Link href='/vender/signup'>
+                                <Link href='/vendor/signup'>
                                     <Button color='green' size="big">Sign Up</Button>
                                 </Link>
                             </Grid.Column>

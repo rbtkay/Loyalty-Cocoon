@@ -187,7 +187,6 @@ class SignUp extends Component {
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: { message: '' } });
 
-
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
         const hashedPassword = sha256(password);
 

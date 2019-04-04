@@ -13,33 +13,65 @@ class SignUp extends Component {
         name: '',
         phone: '',
         location: '',
+        usernameError: false,
+        emailError: false,
+        passwordError: false,
+        nameError: false,
+        phoneError: false,
+        locationError: false,
         tag: '',
-        errorMessage: { message: '' },
+        errorMessage: '',
         loading: false
     };
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
+        this.setState({ loading: true, errorMessage: '' });
 
         const { username, email, password, name, phone, location, tag } = this.state;
-        const hashedPassword = sha256(password);
 
-        try {
-            const newAccount = web3.eth.accounts.create();
+        // console.log(isValid);
+        if (username === '') {
+            this.setState({ usernameError: true, isFormValid: false });
+        }
+        if (email === '') {
+            this.setState({ emailError: true, isFormValid: false });
+        }
+        if (password === '') {
+            this.setState({ passwordError: true, isFormValid: false });
+        }
+        if (name === '') {
+            this.setState({ nameError: true, isFormValid: false });
+        }
+        if (phone === '') {
+            this.setState({ phoneError: true, isFormValid: false });
+        }
+        if (location === '') {
+            this.setState({ locationError: true, isFormValid: false });
+        }
 
-            var response = await fetch(`http://localhost:8000/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
-            var data = await response.json();
+        if (this.state.isFormValid === true) {
+            const hashedPassword = sha256(password);
 
-            if (data.token) {
-                localStorage.setItem('authorization', data.token);
-                localStorage.setItem('username', username);
-                localStorage.setItem('address', newAccount['address']);
-                Router.pushRoute('/vendor');
-            } else {
-                this.setState({ errorMessage: data });
+            try {
+                const newAccount = web3.eth.accounts.create();
+
+                var response = await fetch(`http://localhost:8000/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
+                var data = await response.json();
+
+                if (data.token) {
+                    localStorage.setItem('authorization', data.token);
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('address', newAccount['address']);
+                    Router.pushRoute('/vendor');
+                } else {
+                    this.setState({ errorMessage: data["message"] });
+                }
+            } catch (err) {
+                throw err;
             }
-        } catch (err) {
-            throw err;
+        } else {
+            console.log("the form is not valid");
+            this.setState({ errorMessage: 'Some Fields are Empty' });
         }
         this.setState({ loading: false });
     }
@@ -55,9 +87,9 @@ class SignUp extends Component {
                     <div className="ui raised very padded text container segment">
                         <h1>Sign Up</h1>
 
-                        <Form error={!!this.state.errorMessage["message"]} autoComplete="off">
+                        <Form error={!!this.state.errorMessage} autoComplete="off">
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.nameError}>
                                     <Input
                                         fluid
                                         name='name'
@@ -67,7 +99,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.usernameError}>
                                     <Input
                                         fluid
                                         name="username"
@@ -79,7 +111,7 @@ class SignUp extends Component {
                             </Form.Group>
 
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.emailError}>
                                     <Input
                                         fluid
                                         name="email"
@@ -89,7 +121,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.passwordError}>
                                     <Input
                                         fluid
                                         name="password"
@@ -102,7 +134,7 @@ class SignUp extends Component {
                             </Form.Group>
 
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.phoneError}>
                                     <Input
                                         fluid
                                         name="phone"
@@ -112,7 +144,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.locationError}>
                                     <Input
                                         fluid
                                         name="location"
@@ -123,7 +155,7 @@ class SignUp extends Component {
                                 </Form.Field>
                             </Form.Group>
 
-                            <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
+                            <Message error header="Oops!" content={this.state.errorMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>

@@ -31,6 +31,7 @@ class Transaction extends Component {
                 <br />
                 <br />
                 <br />
+
                 <Segment>
                     <Grid>
                         <Grid.Column width={4}>
@@ -74,13 +75,13 @@ class Transaction extends Component {
                                         <Button
                                             loading={this.state.loading}
                                             fluid
-                                            style={{textAlign: 'center'}}
+                                            style={{ textAlign: 'center' }}
                                             circular
                                             color='violet'
                                             onClick={this.grantPoints}>Send
                                         </Button>
                                     </Form>
-                                        }
+                                }
                                 on='focus'
                                 position='bottom center' />
                         </Grid.Column>
