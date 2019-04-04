@@ -182,6 +182,7 @@ class SignUp extends Component {
                             <Message error header="Oops!" content={this.state.errorMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
+                        <Button onClick={this.confirmEmail}>Send</Button>
                     </div>
                     <br />
                     <br />
@@ -240,6 +241,20 @@ class SignUp extends Component {
             this.setState({ errorMessage: 'Some Field are Empty' });
         }
         this.setState({ loading: false });
+    }
+
+    confirmEmail = async () => {
+        const { username, email } = this.state;
+
+        console.log(username)
+        console.log(email)
+
+        try {
+            var response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}&email=${email}`);
+
+        } catch (err) {
+            throw err;
+        }
     }
 
     handleDate = (event, { name, value }) => {
