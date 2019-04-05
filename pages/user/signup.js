@@ -30,6 +30,7 @@ class SignUp extends Component {
         profession: '',
         organization: '',
         errorMessage: '',
+        successMessage: '',
         usernameError: false,
         nameError: false,
         emailError: false,
@@ -51,7 +52,7 @@ class SignUp extends Component {
                     <div className="ui raised very padded text container segment">
                         <h1>Join Millions of Shoppers</h1>
 
-                        <Form error={!!this.state.errorMessage} autoComplete="off">
+                        <Form error={!!this.state.errorMessage} success={!!this.state.successMessage} autoComplete="off">
                             <Form.Group widths='2'>
                                 <Form.Field error={this.state.nameError}>
                                     <Input
@@ -180,6 +181,7 @@ class SignUp extends Component {
                                 />
                             </Form.Field>
                             <Message error header="Oops!" content={this.state.errorMessage}></Message>
+                            <Message success header="Congrats!" content={this.state.successMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                         <Button onClick={this.confirmEmail}>Send</Button>
@@ -194,6 +196,8 @@ class SignUp extends Component {
 
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
+
+        //FIXME: check for duplicate email.
 
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
@@ -218,24 +222,26 @@ class SignUp extends Component {
             }
 
             if (this.state.isFormValid) {
-                // const hashedPassword = sha256(password);
+                const hashedPassword = sha256(password);
 
-                // try {
-                //     const newAccount = web3.eth.accounts.create();
-                //     var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
-                //     var data = await response.json();
-                //     if (data.token) {
-                //         localStorage.setItem('username', username);
-                //         localStorage.setItem('address', newAccount["address"]);
-                //         localStorage.setItem('authorization', data.token);
-                //         Router.pushRoute('/user');
-                //     } else {
-                //         this.setState({ errorMessage: data['message'] });
-                //     }
-                // } catch (err) {
-                //     throw err;
-                // }
-                this.setState({ errorMessage: 'Inserting User...' });
+                try {
+                    const newAccount = web3.eth.accounts.create();
+                    var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+                    var data = await response.json();
+                    if (data.token) {
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('address', newAccount["address"]);
+                        localStorage.setItem('authorization', data.token);
+                        // Router.pushRoute('/user/index');
+                        console.log('emailSent');
+                        this.sendConfirmation();
+                        this.setState({ successMessage: "We've sent you a Confirmation Email" });
+                    } else {
+                        this.setState({ errorMessage: data['message'] });
+                    }
+                } catch (err) {
+                    throw err;
+                }
             }
         } else {
             this.setState({ errorMessage: 'Some Field are Empty' });
@@ -243,7 +249,7 @@ class SignUp extends Component {
         this.setState({ loading: false });
     }
 
-    confirmEmail = async () => {
+    async sendConfirmation() {
         const { username, email } = this.state;
 
         console.log(username)

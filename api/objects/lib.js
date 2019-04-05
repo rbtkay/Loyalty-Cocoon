@@ -1,6 +1,7 @@
 //password of email: Loyalty11Cocoon 
 const nodeMailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const mysqlConnection = require('../../database/connection');
 
 exports.sendConfirmEmail = async (req, res) => {
     const username = req.query.username;
@@ -19,15 +20,12 @@ exports.sendConfirmEmail = async (req, res) => {
             username: username
         }, 'emailKey');
 
-        // const emailToken = "wefd";
-
         const url = `http://localhost:8000/${emailToken}`;
 
         const info = await transporter.sendMail({
             to: email,
             subject: 'Confirm Email',
             html: `Please Click on the link to Confirm email:<br/> <a href="${url}">${url}</a>`
-            // html: 'rawa2 rawa2 ya bro, testing some stuff! and apparently it works!!!'
         })
 
         console.log("sent the email");
@@ -36,4 +34,15 @@ exports.sendConfirmEmail = async (req, res) => {
     } catch (e) {
         throw e;
     }
+}
+
+exports.verifyEmail = (req, res) => {
+    const username = req.query.username;
+
+    mysqlConnection.query('update user_t set user_verified = 1 where user_username = ?', [username], (err, result) => {
+        if (err) throw err;
+        else {
+            res.status(200).send('User is verified');
+        }
+    })
 }

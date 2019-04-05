@@ -6,6 +6,7 @@ import { Router } from '../routes';
 import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
 import loco from '../ethereum/loco';
+import fetch from 'isomorphic-fetch';
 
 class SignIn extends Component {
     state = {
@@ -15,6 +16,25 @@ class SignIn extends Component {
         errorMessage: '',
         data: {}
     };
+
+    static async getInitialProps({ req }) {
+
+        try {
+            const confirmation = req.query;
+            const token = confirmation.slice(1);
+
+            const jwt = require('jsonwebtoken');
+            const decodedToken = jwt.decode(token);
+            const username = decodedToken.username;
+
+            console.log(username);
+
+            const response = await fetch(`http://localhost:8000/api/lib/verify?username=${username}`);
+
+            console.log(decodedToken.username);
+        } catch (e) { }
+        return {};
+    }
 
     render() {
         return (
@@ -132,10 +152,12 @@ class SignIn extends Component {
             </div>
         );
     }
-    // componentDidMount() {
-    //     if (this.props.url.asPath === '/error') {
-    //         this.setState({ errorMessage: 'Network Error' });
-    //     }
+    // componentDidMount({ req }) {
+    //     console.log('req');
+    //     console.log(req);
+    //     // if (this.props.url.asPath === '/error') {
+    //     //     this.setState({ errorMessage: 'Network Error' });
+    //     // }
     // }
 
 
@@ -167,7 +189,7 @@ class SignIn extends Component {
                         throw e;
                     } finally {
                         localStorage.setItem('balance', balance);
-                        Router.pushRoute("/user");
+                        Router.pushRoute("/user/index");
                     }
                 } else
                     if (response.status === 401) {
@@ -183,7 +205,7 @@ class SignIn extends Component {
                         if (response.status === 200) {
                             const data = await response.json();
                             this.createLocalStorage(data, "vendor");
-                            Router.pushRoute("/vendor");
+                            Router.pushRoute("/vendor/index");
                         }
                     }
             } catch (err) {

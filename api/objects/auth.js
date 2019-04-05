@@ -132,7 +132,7 @@ exports.userSignUp = (req, res) => {
                 if (result.length > 0) {
                     res.send('already exists');
                 } else {
-                    mysqlConnection.query('insert into user_t values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                    mysqlConnection.query('insert into user_t (user_username, user_email, user_password, user_name, user_dob, user_gender, user_phone, user_prefs, user_address, user_country, user_profession, user_organization) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                         username,
                         email,
                         password,
