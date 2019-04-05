@@ -11,7 +11,6 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') { // ty
         'https://rinkeby.infura.io/v3/2612024af0104c36ace74e6f0158707b'
     );
     web3 = new Web3(provider);
-    // web3.eth.defaultAccount = process.env.DEFAULT_ACCOUNT;
 }
 
 export default web3;

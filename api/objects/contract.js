@@ -18,11 +18,11 @@ const contract = new web3.eth.Contract(JSON.parse(Loco.interface), address, {
 
 exports.grantPoints = (req, res, next) => {
     web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, nonce) => {
-    var address = req.query.address;
-    var amount = req.query.amount;
+    var toAddress = req.query.address;
+    var amount = parseInt(req.query.amount);
     let gasPrices = await getCurrentGasPrices();
 
-    const functionAbi = contract.methods.grantPoints(address.toString(), amount).encodeABI();
+    const functionAbi = contract.methods.grantPoints(toAddress, amount).encodeABI();
 
     var details = {
         'nonce': nonce,
@@ -53,12 +53,12 @@ exports.grantPoints = (req, res, next) => {
 
 exports.transferFrom = (req, res, next) => {
     web3.eth.getTransactionCount(web3.eth.defaultAccount, async (err, nonce) => {
-    var address = req.query.address;
+    var fromAddress = req.query.address;
     var amount = req.query.amount;
     var toAddress = req.query.toAddress;
     let gasPrices = await getCurrentGasPrices();
 
-    const functionAbi = contract.methods.transferFrom(address, amount, toAddress).encodeABI();
+    const functionAbi = contract.methods.transferFrom(fromAddress, amount, toAddress).encodeABI();
 
     var details = {
         'nonce': nonce,

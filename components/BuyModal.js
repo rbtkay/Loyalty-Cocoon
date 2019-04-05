@@ -85,9 +85,7 @@ class BuyModal extends Component {
 
                 const result = await res.json();
 
-                // TODO: Add a fetch to store purchase in purchase_t
-
-                // TODO: check if balances are changing correctly
+                console.log('result: ', result);
 
                 this.props.handleSuccess();
                 this.props.confirmClose();

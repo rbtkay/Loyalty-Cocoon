@@ -5,6 +5,7 @@ import { Router } from '../../routes';
 import Purchase from '../../components/Purchase'
 import { Container, Segment, Search, Grid, Statistic, Popup, Input, Button, Form } from 'semantic-ui-react';
 import _ from 'lodash';
+import loco from '../../ethereum/loco';
 
 
 class Transaction extends Component {

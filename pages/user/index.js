@@ -37,8 +37,8 @@ class Loyalty extends Component {
                 title: "Transaction Successful",
                 description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
                 time: 5000
-            });
-        }, 5000);
+            }, 500);
+        });
     }
 
     flipSuccess = () => {
