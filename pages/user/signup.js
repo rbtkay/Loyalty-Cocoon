@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Input, TextArea, Dropdown, Segment, Container } from 'semantic-ui-react';
+import { Form, Button, Message, Input, TextArea, Dropdown, Segment, Container, Popup } from 'semantic-ui-react';
 import faker from 'faker';
 import _ from 'lodash';
 import { DateInput } from 'semantic-ui-calendar-react';
@@ -31,6 +31,8 @@ class SignUp extends Component {
         organization: '',
         errorMessage: '',
         successMessage: '',
+        takenUsernames: [],
+        takenEmails: [],
         usernameError: false,
         nameError: false,
         emailError: false,
@@ -38,6 +40,7 @@ class SignUp extends Component {
         usernameError: false,
         isFormEmpty: false,
         isFormValid: true,
+        isUsernameOpen: false,
         loading: false
     };
 
@@ -65,13 +68,17 @@ class SignUp extends Component {
                                 </Form.Field>
 
                                 <Form.Field error={this.state.usernameError}>
-                                    <Input
-                                        fluid
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={event => this.setState({ username: event.target.value })}
-                                        placeholder="Username"
-                                    />
+                                    <Popup
+                                        trigger={
+                                            <Input
+                                                fluid
+                                                name="username"
+                                                value={this.state.username}
+                                                onChange={event => this.usernameEvaluation(event.target.value)}
+                                                placeholder="Username"
+                                            />}
+                                        open={this.state.isUsernameOpen}
+                                        content='Username Already Exists' />
                                 </Form.Field>
                             </Form.Group>
 
@@ -81,7 +88,7 @@ class SignUp extends Component {
                                         fluid
                                         name="email"
                                         value={this.state.email}
-                                        onChange={event => this.setState({ email: event.target.value })}
+                                        onChange={event => this.emailEvaluation(event.target.value)}
                                         placeholder="Email"
                                     />
                                 </Form.Field>
@@ -184,6 +191,8 @@ class SignUp extends Component {
                             <Message success header="Congrats!" content={this.state.successMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
+
+
                     </div>
                     <br />
                     <br />
@@ -196,7 +205,30 @@ class SignUp extends Component {
     async componentDidMount() {
         const response = await fetch(`http://localhost:8000/api/lib/usernamesEmails`);
         const result = await response.json();
-        console.log(result);
+
+        await this.setState({ takenUsernames: result['usernames'], takenEmails: result['emails'] });
+        console.log('this.state.takenUsernames');
+        console.log(this.state.takenUsernames);
+    }
+
+    usernameEvaluation = async (username) => {
+        console.log(username);
+        await this.setState({ username });
+
+        if (this.state.takenUsernames.includes(username)) {
+            this.setState({ usernameError: true, isUsernameOpen: true });
+        } else {
+            this.setState({ usernameError: false, isUsernameOpen: false });
+        }
+    }
+
+    emailEvaluation = async (email) => {
+        console.log(email);
+        await this.setState({ email });
+
+        if (this.state.takenEmails.includes(email)) {
+            this.setState({ emailError: true });
+        }
     }
 
     onSubmit = async (req, res, event) => {

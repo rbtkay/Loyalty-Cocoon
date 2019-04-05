@@ -48,13 +48,30 @@ exports.verifyEmail = (req, res) => {
 }
 
 exports.getUsernamesEmails = (req, res) => {
-    mysqlConnection.query('select user_t.user_username, vendor_t.vendor_username from user_t, vendor_t', (err, usernames) => {
+    mysqlConnection.query('select user_t.user_username, vendor_t.vendor_username from user_t, vendor_t', (err, result) => {
         if (err) throw err;
         else {
+            let usernames = [];
+            result.forEach(element => {
+                if (!usernames.includes(element['user_username']))
+                    usernames.push(element['user_username']);
+                if (!usernames.includes(element['vendor_username']))
+                    usernames.push(element['vendor_username']);
+            });
             console.log(usernames);
-            mysqlConnection.query('select user_t.user_email, vendor_t.vendor_email from user_t, vendor_t', (err, emails) => {
+
+            mysqlConnection.query('select user_t.user_email, vendor_t.vendor_email from user_t, vendor_t', (err, result) => {
                 if (err) throw err;
                 else {
+                    let emails = [];
+                    result.forEach(element => {
+                        if (!emails.includes(element['user_email']))
+                            emails.push(element['user_email']);
+                        if (!emails.includes(element['vendor_email']))
+                            emails.push(element['vendor_email']);
+                    });
+
+
                     console.log(emails);
                     res.status(200).send({
                         usernames, emails
