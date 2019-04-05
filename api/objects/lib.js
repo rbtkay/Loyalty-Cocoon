@@ -2,7 +2,7 @@
 const nodeMailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
-exports.sendConfirmEmail = (req, res) => {
+exports.sendConfirmEmail = async (req, res) => {
     const username = req.query.username;
     const email = req.query.email;
 
@@ -23,12 +23,15 @@ exports.sendConfirmEmail = (req, res) => {
 
         const url = `http://localhost:8000/${emailToken}`;
 
-        transporter.sendMail({
+        const info = await transporter.sendMail({
             to: email,
             subject: 'Confirm Email',
             html: `Please Click on the link to Confirm email:<br/> <a href="${url}">${url}</a>`
+            // html: 'rawa2 rawa2 ya bro, testing some stuff! and apparently it works!!!'
         })
+
         console.log("sent the email");
+        console.log(info);
         res.status(200).send('sent');
     } catch (e) {
         throw e;
