@@ -85,8 +85,10 @@ class BuyModal extends Component {
 
                 const result = await res.json();
 
-                console.log('result: ', result);
+                let balance = localStorage.getItem('balance');
+                balance -= this.props.price;
 
+                localStorage.setItem('balance', balance);
                 this.props.handleSuccess();
                 this.props.confirmClose();
 
