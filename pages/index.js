@@ -20,8 +20,9 @@ class SignIn extends Component {
     static async getInitialProps({ req }) {
 
         try {
-            const confirmation = req.query;
+            const confirmation = req.path;
             const token = confirmation.slice(1);
+            // console.log(token);
 
             const jwt = require('jsonwebtoken');
             const decodedToken = jwt.decode(token);
@@ -32,7 +33,9 @@ class SignIn extends Component {
             const response = await fetch(`http://localhost:8000/api/lib/verify?username=${username}`);
 
             console.log(decodedToken.username);
-        } catch (e) { }
+        } catch (e) {
+            //     throw e;
+        }
         return {};
     }
 
@@ -191,23 +194,25 @@ class SignIn extends Component {
                         localStorage.setItem('balance', balance);
                         Router.pushRoute("/user/index");
                     }
-                } else
+                } else if (response.status === 401) {
+
+                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+
                     if (response.status === 401) {
-
-                        response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
-                        if (response.status === 401) {
-                            const errorMessage = 'Invalid Username/Password';
-                            this.setState({ errorMessage, loading: false });
-                            console.log(this.state.errorMessage);
-                        }
-
-                        if (response.status === 200) {
-                            const data = await response.json();
-                            this.createLocalStorage(data, "vendor");
-                            Router.pushRoute("/vendor/index");
-                        }
+                        const errorMessage = 'Invalid Username/Password';
+                        this.setState({ errorMessage, loading: false });
+                        console.log(this.state.errorMessage);
                     }
+
+                    if (response.status === 200) {
+                        const data = await response.json();
+                        this.createLocalStorage(data, "vendor");
+                        Router.pushRoute("/vendor/index");
+                    }
+                } else if (response.status === 403) {
+                    const errorMessage = 'Your Need to Verify your Email to Continue...';
+                    this.setState({ errorMessage, loading: false });
+                }
             } catch (err) {
                 this.setState({ loading: false });
                 throw err;
