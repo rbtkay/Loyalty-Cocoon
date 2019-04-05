@@ -22,5 +22,3 @@ const deploy = async () => {
 };
 
 deploy();
-//rinkeby.infura.io/v3/af133582ff384aa99f64946e33b16a05
-// deployed contract address : 0x78ac83Ad85316A87C3FD93Dfe85feE66F6Fe1ca5

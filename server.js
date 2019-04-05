@@ -3,6 +3,7 @@ const server = express();
 const next = require('next');
 const session = require('express-session');
 const routes = require('./routes');
+require('dotenv').config();
 
 const app = next({
     dev: process.env.NODE_ENV !== 'production'

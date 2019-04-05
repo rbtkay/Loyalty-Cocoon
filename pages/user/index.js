@@ -5,7 +5,6 @@ import ProductCard from '../../components/ProductCard';
 import ProductRow from '../../components/ProductRow';
 import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
-import session from 'express-session';
 import { SemanticToastContainer, toast } from "react-semantic-toasts";
 
 class Loyalty extends Component {
@@ -38,8 +37,8 @@ class Loyalty extends Component {
                 title: "Transaction Successful",
                 description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
                 time: 5000
-            });
-        }, 5000);
+            }, 500);
+        });
     }
 
     flipSuccess = () => {
