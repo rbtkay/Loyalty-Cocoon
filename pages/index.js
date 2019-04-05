@@ -155,14 +155,6 @@ class SignIn extends Component {
             </div>
         );
     }
-    // componentDidMount({ req }) {
-    //     console.log('req');
-    //     console.log(req);
-    //     // if (this.props.url.asPath === '/error') {
-    //     //     this.setState({ errorMessage: 'Network Error' });
-    //     // }
-    // }
-
 
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });

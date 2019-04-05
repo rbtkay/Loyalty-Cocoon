@@ -46,3 +46,21 @@ exports.verifyEmail = (req, res) => {
         }
     })
 }
+
+exports.getUsernamesEmails = (req, res) => {
+    mysqlConnection.query('select user_t.user_username, vendor_t.vendor_username from user_t, vendor_t', (err, usernames) => {
+        if (err) throw err;
+        else {
+            console.log(usernames);
+            mysqlConnection.query('select user_t.user_email, vendor_t.vendor_email from user_t, vendor_t', (err, emails) => {
+                if (err) throw err;
+                else {
+                    console.log(emails);
+                    res.status(200).send({
+                        usernames, emails
+                    });
+                }
+            })
+        }
+    })
+}

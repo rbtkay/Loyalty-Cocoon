@@ -184,7 +184,6 @@ class SignUp extends Component {
                             <Message success header="Congrats!" content={this.state.successMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
-                        <Button onClick={this.confirmEmail}>Send</Button>
                     </div>
                     <br />
                     <br />
@@ -194,10 +193,16 @@ class SignUp extends Component {
         );
     }
 
+    async componentDidMount() {
+        const response = await fetch(`http://localhost:8000/api/lib/usernamesEmails`);
+        const result = await response.json();
+        console.log(result);
+    }
+
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
 
-        //FIXME: check for duplicate email.
+        //FIXME: check for duplicate email and username.
 
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
