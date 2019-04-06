@@ -41,6 +41,7 @@ class SignUp extends Component {
         isFormEmpty: false,
         isFormValid: true,
         isUsernameOpen: false,
+        isEmailOpen: false,
         loading: false
     };
 
@@ -84,13 +85,17 @@ class SignUp extends Component {
 
                             <Form.Group widths="2">
                                 <Form.Field error={this.state.emailError}>
-                                    <Input
-                                        fluid
-                                        name="email"
-                                        value={this.state.email}
-                                        onChange={event => this.emailEvaluation(event.target.value)}
-                                        placeholder="Email"
-                                    />
+                                    <Popup
+                                        trigger={
+                                            <Input
+                                                fluid
+                                                name="email"
+                                                value={this.state.email}
+                                                onChange={event => this.emailEvaluation(event.target.value)}
+                                                placeholder="Email"
+                                            />}
+                                        open={this.state.isEmailOpen}
+                                        content='Email Already Exists' />
                                 </Form.Field>
 
                                 <Form.Field error={this.state.passwordError}>
@@ -109,7 +114,7 @@ class SignUp extends Component {
                                 <Form.Field>
                                     <DateInput
                                         name="dob"
-                                        placeholder="Date"
+                                        placeholder="Date of Birth"
                                         value={this.state.dob}
                                         iconPosition="left"
                                         onChange={this.handleDate}
@@ -227,7 +232,9 @@ class SignUp extends Component {
         await this.setState({ email });
 
         if (this.state.takenEmails.includes(email)) {
-            this.setState({ emailError: true });
+            this.setState({ emailError: true, isEmailOpen: true });
+        } else {
+            this.setState({ emailError: false, isEmailOpen: false });
         }
     }
 
@@ -256,6 +263,8 @@ class SignUp extends Component {
 
             if (!emailRegEx.test(email)) {
                 await this.setState({ emailError: true, isFormValid: false, errorMessage: 'Email is not Valid' });
+            } else if (this.state.isEmailOpen === true || this.state.isUsernameOpen === true) {
+                await this.setState({ isFormValid: false });
             }
 
             if (this.state.isFormValid) {
@@ -265,12 +274,12 @@ class SignUp extends Component {
                     const newAccount = web3.eth.accounts.create();
                     var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
                     var data = await response.json();
+
                     if (data.token) {
                         localStorage.setItem('username', username);
                         localStorage.setItem('address', newAccount["address"]);
                         localStorage.setItem('authorization', data.token);
-                        // Router.pushRoute('/user/index');
-                        console.log('emailSent');
+
                         this.sendConfirmation();
                         this.setState({ successMessage: "We've sent you a Confirmation Email" });
                     } else {
