@@ -1,6 +1,8 @@
 const mysqlConnection = require('../../database/connection');
 const jwt = require('jsonwebtoken');
 
+// TODO: Replace secretKey with process.env.JWT_USER/VENDOR
+
 exports.vendorSignUp = (req, res) => {
     var username = req.query.username;
     var email = req.query.email;
@@ -107,7 +109,7 @@ exports.userAuth = (req, res, next) => {
                         email: result[0].user_email,
                         type: "user"
                     },
-                        'secretKey');
+                    process.env.JWT_USER);
 
                     res.status(200).json({
                         token,

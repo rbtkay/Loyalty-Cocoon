@@ -9,11 +9,6 @@ class BuyModal extends Component {
     };
 
     render() {
-        const { username, vendorUsername, productId } = this.props;
-
-
-
-
         if (!this.props.affordable) {
             return (
                 <Modal
@@ -72,30 +67,12 @@ class BuyModal extends Component {
     purchaseProduct = async (event) => {
         event.preventDefault();
 
-        const { username, vendorUsername, productId } = this.props;
-
-        // const time = new Date();
-        const d = new Date();
-
-        const day = d.getDate().toString();
-        const month = (d.getMonth() + 1).toString();
-        const year = d.getFullYear().toString();
-
-        const hour = d.getHours().toString();
-        const minute = d.getSeconds().toString();
-        const second = d.getMinutes().toString();
-
-        const date = year + '-' + month + '-' + day;
-        const time = hour + ':' + minute + ':' + second;
-
-        const DateTime = date + ' ' + time;
-
         if (!this.state.loading) {
             this.setState({ loading: true });
             this.props.errorMessage('Your transaction is being processed...');
             try {
                 const sender = localStorage.getItem('address');
-                const response = await fetch(`http://localhost:8000/api/user/address?username=${vendorUsername}`, {
+                const response = await fetch(`http://localhost:8000/api/user/address?username=${this.props.vendor}`, {
                     headers: new Headers({
                         'authorization': localStorage.getItem('authorization')
                     })
@@ -104,16 +81,14 @@ class BuyModal extends Component {
 
                 const receiver = await response.json();
 
-                await loco.methods.transferFrom(sender, this.props.price, receiver[0].vendor_address).send({
-                    from: manager
-                });
+                const res = await fetch(`http://localhost:8000/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].vendor_address}`);
 
-                const insertPurchase = await fetch(`http://localhost:8000/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
-                    headers: new Headers({
-                        'authorization': localStorage.getItem('authorization')
-                    })
-                });
+                const result = await res.json();
 
+                let balance = localStorage.getItem('balance');
+                balance -= this.props.price;
+
+                localStorage.setItem('balance', balance);
                 this.props.handleSuccess();
                 this.props.confirmClose();
 

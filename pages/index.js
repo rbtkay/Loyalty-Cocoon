@@ -51,7 +51,7 @@ class SignIn extends Component {
                         <br />
                         <Grid columns={2}>
                             <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
-                                <Image circular src='../static/Logo.gif' centered size='small' />
+                                <Image circular rounded src='../static/Logo.gif' centered size='small'  />
                                 <h1>Loyalty Cocoon</h1>
                             </Grid.Column>
                             <Grid.Column width='4' textAlign='center'>

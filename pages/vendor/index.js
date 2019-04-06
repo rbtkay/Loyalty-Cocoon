@@ -7,6 +7,7 @@ import { Container, Segment, Search, Grid, Statistic, Popup, Input, Button, Form
 import _ from 'lodash';
 import loco from '../../ethereum/loco';
 
+
 class Transaction extends Component {
 
     state = {
@@ -242,6 +243,7 @@ class Transaction extends Component {
     grantPoints = async (event) => {
         event.preventDefault();
 
+
         if (!this.state.loading) {
             this.setState({ loading: true });
             try {
@@ -255,9 +257,11 @@ class Transaction extends Component {
                 const receiver = await response.json();
                 const manager = await loco.methods.manager().call();
 
-                await loco.methods.grantPoints(receiver[0].user_address, this.state.amount).send({
-                    from: manager
-                });
+                const res = await fetch(`http://localhost:8000/api/contract/grant?address=${receiver[0].user_address}&amount=${amount}`);
+
+                const result = await res.json();
+                console.log(result);
+
                 this.setState({ username: '', amount: '' });
             } catch (err) {
                 throw err;
