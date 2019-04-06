@@ -21,6 +21,7 @@ class SignUp extends Component {
         locationError: false,
         tag: '',
         errorMessage: '',
+        successMessage: '',
         isFormEmpty: false,
         isFormValid: true,
         loading: false,
@@ -81,7 +82,10 @@ class SignUp extends Component {
                         localStorage.setItem('authorization', data.token);
                         localStorage.setItem('username', username);
                         localStorage.setItem('address', newAccount['address']);
-                        Router.pushRoute('/vendor');
+
+                        this.sendConfirmation();
+                        this.setState({ successMessage: "We've sent you a Confirmation Email" });
+
                     } else {
                         this.setState({ errorMessage: data["message"] });
                     }
@@ -107,7 +111,7 @@ class SignUp extends Component {
                     <div className="ui raised very padded text container segment">
                         <h1>Sign Up</h1>
 
-                        <Form error={!!this.state.errorMessage} autoComplete="off">
+                        <Form error={!!this.state.errorMessage} success={!!this.state.successMessage} autoComplete="off">
                             <Form.Group widths='2'>
                                 <Form.Field error={this.state.nameError}>
                                     <Input
@@ -184,6 +188,8 @@ class SignUp extends Component {
                             </Form.Group>
 
                             <Message error header="Oops!" content={this.state.errorMessage}></Message>
+                            <Message success header="Congrats!" content={this.state.successMessage}></Message>
+
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>
@@ -223,6 +229,20 @@ class SignUp extends Component {
             this.setState({ emailError: true, isEmailOpen: true });
         } else {
             this.setState({ emailError: false, isEmailOpen: false });
+        }
+    }
+
+    async sendConfirmation() {
+        const { username, email } = this.state;
+
+        console.log(username)
+        console.log(email)
+
+        try {
+            var response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}&email=${email}`);
+
+        } catch (err) {
+            throw err;
         }
     }
 }
