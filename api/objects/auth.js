@@ -31,9 +31,10 @@ exports.vendorSignUp = (req, res) => {
                         if (err) throw err;
                         else {
                             jwt.sign({
-                            username: username,
-                            email: email,
-                            type: "vendor" }, 'secretKey', (err, token) => {
+                                username: username,
+                                email: email,
+                                type: "vendor"
+                            }, 'secretKey', (err, token) => {
                                 res.json({
                                     token,
                                     result
@@ -57,17 +58,25 @@ exports.vendorAuth = (req, res, next) => {
         mysqlConnection.query('select * from Vendor_T where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                const token = jwt.sign({
+                const verifyResult = result[0]['vendor_verified'].toJSON();
+                const isverified = verifyResult.data[0];
+
+                if (isverified === 0) {
+                    res.status(403).send('Email Confirmation Needed');
+                }
+                else {
+                    const token = jwt.sign({
                         username: result['vendor_username'],
                         email: result['vendor_email'],
                         type: "vendor"
                     },
-                    'secretKey');
+                        'secretKey');
 
-                res.status(200).json({
-                    token,
-                    result
-                })
+                    res.status(200).json({
+                        token,
+                        result
+                    })
+                }
             } else {
                 const errorObj = {
                     'message': 'Invalid Username/Password'
@@ -89,17 +98,24 @@ exports.userAuth = (req, res, next) => {
         mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                const token = jwt.sign({
+                const verifyResult = result[0]['user_verified'].toJSON();
+                const isverified = verifyResult.data[0];
+
+                if (isverified === 0) {
+                    res.status(403).send('Email Confirmation Needed');
+                } else {
+                    const token = jwt.sign({
                         username: result[0].user_username,
                         email: result[0].user_email,
                         type: "user"
                     },
                     process.env.JWT_USER);
 
-                res.status(200).json({
-                    token,
-                    result
-                });
+                    res.status(200).json({
+                        token,
+                        result
+                    });
+                }
             } else {
                 const errorObj = {
                     "message": "Invalid Username/Password"
@@ -134,7 +150,7 @@ exports.userSignUp = (req, res) => {
                 if (result.length > 0) {
                     res.send('already exists');
                 } else {
-                    mysqlConnection.query('insert into user_t values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                    mysqlConnection.query('insert into user_t (user_username, user_email, user_password, user_name, user_dob, user_gender, user_phone, user_prefs, user_address, user_country, user_profession, user_organization) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                         username,
                         email,
                         password,
@@ -151,10 +167,10 @@ exports.userSignUp = (req, res) => {
                         if (err) throw err;
                         else {
                             jwt.sign({
-                            username: username,
-                            email: email,
-                            type: "user"
-                        }, 'secretKey', (err, token) => {
+                                username: username,
+                                email: email,
+                                type: "user"
+                            }, 'secretKey', (err, token) => {
                                 res.json({
                                     token,
                                     result

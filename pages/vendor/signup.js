@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Input, TextArea, Dropdown, Segment, Container } from 'semantic-ui-react';
+import { Form, Button, Message, Input, TextArea, Dropdown, Segment, Container, Popup } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import { sha256 } from 'js-sha256';
@@ -13,33 +13,89 @@ class SignUp extends Component {
         name: '',
         phone: '',
         location: '',
+        usernameError: false,
+        emailError: false,
+        passwordError: false,
+        nameError: false,
+        phoneError: false,
+        locationError: false,
         tag: '',
-        errorMessage: { message: '' },
-        loading: false
+        errorMessage: '',
+        successMessage: '',
+        isFormEmpty: false,
+        isFormValid: true,
+        loading: false,
+        takenUsernames: [],
+        takenEmails: [],
+        usernameError: false,
+        emailError: false,
+        isUsernameOpen: false,
+        isEmailOpen: false
     };
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: { message: '' } });
+        this.setState({ loading: true, errorMessage: '' });
 
         const { username, email, password, name, phone, location, tag } = this.state;
-        const hashedPassword = sha256(password);
 
-        try {
-            const newAccount = web3.eth.accounts.create();
+        if (username === '') {
+            await this.setState({ usernameError: true, isFormEmpty: true });
+        }
+        if (email === '') {
+            await this.setState({ emailError: true, isFormEmpty: true });
+        }
+        if (password === '') {
+            await this.setState({ passwordError: true, isFormEmpty: true });
+        }
+        if (name === '') {
+            await this.setState({ nameError: true, isFormEmpty: true });
+        }
+        if (phone === '') {
+            await this.setState({ phoneError: true, isFormEmpty: true });
+        }
+        if (location === '') {
+            await this.setState({ locationError: true, isFormEmpty: true });
+        }
 
-            var response = await fetch(`http://localhost:8000/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
-            var data = await response.json();
+        if (this.state.isFormEmpty === false) {
+            const emailRegEx = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
 
-            if (data.token) {
-                localStorage.setItem('authorization', data.token);
-                localStorage.setItem('username', username);
-                localStorage.setItem('address', newAccount['address']);
-                Router.pushRoute('/vendor');
-            } else {
-                this.setState({ errorMessage: data });
+            console.log('email');
+            console.log(email);
+
+            if (!emailRegEx.test(email)) {
+                await this.setState({ isFormValid: false, emailError: true, errorMessage: 'Email is Invalid' });
+            } else if (this.state.isEmailOpen === true || this.state.isUsernameOpen === true) {
+                await this.setState({ isFormValid: false, errorMessage: 'Some Fields are Invalid' });
             }
-        } catch (err) {
-            throw err;
+
+            if (this.state.isFormValid === true) {
+                const hashedPassword = sha256(password);
+                console.log("in the signUp");
+                try {
+                    const newAccount = web3.eth.accounts.create();
+
+                    var response = await fetch(`http://localhost:8000/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
+                    var data = await response.json();
+
+                    if (data.token) {
+                        localStorage.setItem('authorization', data.token);
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('address', newAccount['address']);
+
+                        this.sendConfirmation();
+                        this.setState({ successMessage: "We've sent you a Confirmation Email" });
+
+                    } else {
+                        this.setState({ errorMessage: data["message"] });
+                    }
+                } catch (err) {
+                    throw err;
+                }
+            }
+        } else {
+            console.log("the form is not valid");
+            this.setState({ errorMessage: 'Some Fields are Empty' });
         }
         this.setState({ loading: false });
     }
@@ -55,9 +111,9 @@ class SignUp extends Component {
                     <div className="ui raised very padded text container segment">
                         <h1>Sign Up</h1>
 
-                        <Form error={!!this.state.errorMessage["message"]} autoComplete="off">
+                        <Form error={!!this.state.errorMessage} success={!!this.state.successMessage} autoComplete="off">
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.nameError}>
                                     <Input
                                         fluid
                                         name='name'
@@ -67,29 +123,37 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
-                                    <Input
-                                        fluid
-                                        name="username"
-                                        value={this.state.username}
-                                        onChange={event => this.setState({ username: event.target.value })}
-                                        placeholder="Username"
-                                    />
+                                <Form.Field error={this.state.usernameError}>
+                                    <Popup
+                                        trigger={
+                                            <Input
+                                                fluid
+                                                name="username"
+                                                value={this.state.username}
+                                                onChange={event => this.usernameEvaluation(event.target.value)}
+                                                placeholder="Username"
+                                            />}
+                                        open={this.state.isUsernameOpen}
+                                        content='Username Already Exists' />
                                 </Form.Field>
                             </Form.Group>
 
                             <Form.Group widths='2'>
-                                <Form.Field>
-                                    <Input
-                                        fluid
-                                        name="email"
-                                        value={this.state.email}
-                                        onChange={event => this.setState({ email: event.target.value })}
-                                        placeholder="Email"
-                                    />
+                                <Form.Field error={this.state.emailError}>
+                                    <Popup
+                                        trigger={
+                                            <Input
+                                                fluid
+                                                name="email"
+                                                value={this.state.email}
+                                                onChange={event => this.emailEvaluation(event.target.value)}
+                                                placeholder="Email"
+                                            />}
+                                        open={this.state.isEmailOpen}
+                                        content='Emails Already Exists' />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.passwordError}>
                                     <Input
                                         fluid
                                         name="password"
@@ -102,7 +166,7 @@ class SignUp extends Component {
                             </Form.Group>
 
                             <Form.Group widths='2'>
-                                <Form.Field>
+                                <Form.Field error={this.state.phoneError}>
                                     <Input
                                         fluid
                                         name="phone"
@@ -112,7 +176,7 @@ class SignUp extends Component {
                                     />
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field error={this.state.locationError}>
                                     <Input
                                         fluid
                                         name="location"
@@ -123,7 +187,9 @@ class SignUp extends Component {
                                 </Form.Field>
                             </Form.Group>
 
-                            <Message error header="Oops!" content={this.state.errorMessage["message"]}></Message>
+                            <Message error header="Oops!" content={this.state.errorMessage}></Message>
+                            <Message success header="Congrats!" content={this.state.successMessage}></Message>
+
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>
@@ -133,6 +199,51 @@ class SignUp extends Component {
                 </Segment>
             </div>
         );
+    }
+
+    async componentDidMount() {
+        const response = await fetch(`http://localhost:8000/api/lib/usernamesEmails`);
+        const result = await response.json();
+
+        await this.setState({ takenUsernames: result['usernames'], takenEmails: result['emails'] });
+        console.log('this.state.takenUsernames');
+        console.log(this.state.takenUsernames);
+    }
+
+    usernameEvaluation = async (username) => {
+        console.log(username);
+        await this.setState({ username });
+
+        if (this.state.takenUsernames.includes(username)) {
+            this.setState({ usernameError: true, isUsernameOpen: true });
+        } else {
+            this.setState({ usernameError: false, isUsernameOpen: false });
+        }
+    }
+
+    emailEvaluation = async (email) => {
+        console.log(email);
+        await this.setState({ email });
+
+        if (this.state.takenEmails.includes(email)) {
+            this.setState({ emailError: true, isEmailOpen: true });
+        } else {
+            this.setState({ emailError: false, isEmailOpen: false });
+        }
+    }
+
+    async sendConfirmation() {
+        const { username, email } = this.state;
+
+        console.log(username)
+        console.log(email)
+
+        try {
+            var response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}&email=${email}`);
+
+        } catch (err) {
+            throw err;
+        }
     }
 }
 
