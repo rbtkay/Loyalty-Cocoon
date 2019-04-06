@@ -14,7 +14,8 @@ class SignIn extends Component {
         password: '',
         loading: false,
         errorMessage: '',
-        data: {}
+        data: {},
+        needConfirm: false
     };
 
     static async getInitialProps({ req }) {
@@ -80,6 +81,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify Email</h5><p>Confirm Email <a onClick={this.sendEmail}>here</a></p></Message>
                                     <br />
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
@@ -186,30 +188,41 @@ class SignIn extends Component {
                         localStorage.setItem('balance', balance);
                         Router.pushRoute("/user/index");
                     }
+                } else if (response.status === 403) {
+                    const errorMessage = 'Your Need to Verify your Email to Continue...';
+                    this.setState({ errorMessage, loading: false });
                 } else if (response.status === 401) {
 
                     response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
 
                     if (response.status === 401) {
                         const errorMessage = 'Invalid Username/Password';
-                        this.setState({ errorMessage, loading: false });
+                        this.setState({ errorMessage, loading: false, needConfirm: false });
                         console.log(this.state.errorMessage);
-                    }
-
-                    if (response.status === 200) {
+                    } else if (response.status === 200) {
                         const data = await response.json();
                         this.createLocalStorage(data, "vendor");
                         Router.pushRoute("/vendor/index");
+                    } else if (response.status === 403) {
+                        // const needConfirm = 'Please Verify your Email to Continue...';
+                        this.setState({ errorMessage: '', loading: false, needConfirm: true });
                     }
-                } else if (response.status === 403) {
-                    const errorMessage = 'Your Need to Verify your Email to Continue...';
-                    this.setState({ errorMessage, loading: false });
                 }
             } catch (err) {
                 this.setState({ loading: false });
                 throw err;
             }
         }
+    }
+
+    sendEmail = async () => {
+        const { username } = this.state;
+        try {
+            const response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}`);
+        } catch (e) {
+            throw e;
+        }
+        console.log('hehey');
     }
 
     createLocalStorage(data, type) {

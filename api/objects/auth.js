@@ -56,17 +56,25 @@ exports.vendorAuth = (req, res, next) => {
         mysqlConnection.query('select * from Vendor_T where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                const token = jwt.sign({
-                    username: result['vendor_username'],
-                    email: result['vendor_email'],
-                    type: "vendor"
-                },
-                    'secretKey');
+                const verifyResult = result[0]['vendor_verified'].toJSON();
+                const isverified = verifyResult.data[0];
 
-                res.status(200).json({
-                    token,
-                    result
-                })
+                if (isverified === 0) {
+                    res.status(403).send('Email Confirmation Needed');
+                }
+                else {
+                    const token = jwt.sign({
+                        username: result['vendor_username'],
+                        email: result['vendor_email'],
+                        type: "vendor"
+                    },
+                        'secretKey');
+
+                    res.status(200).json({
+                        token,
+                        result
+                    })
+                }
             } else {
                 const errorObj = {
                     'message': 'Invalid Username/Password'
