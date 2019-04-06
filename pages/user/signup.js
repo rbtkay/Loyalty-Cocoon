@@ -241,8 +241,6 @@ class SignUp extends Component {
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
 
-        //FIXME: check for duplicate email and username.
-
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
         if (username === '') {
@@ -281,7 +279,10 @@ class SignUp extends Component {
                         localStorage.setItem('authorization', data.token);
 
                         this.sendConfirmation();
-                        this.setState({ successMessage: "We've sent you a Confirmation Email" });
+                        this.setState(({ successMessage: "We've sent you a Confirmation Email" }), () => {
+                            Router.pushRoute('/user/index');
+                        });
+                        //TODO: make sure user can't buy if he/she is not verified.
                     } else {
                         this.setState({ errorMessage: data['message'] });
                     }
