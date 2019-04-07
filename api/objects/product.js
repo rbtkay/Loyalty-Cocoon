@@ -7,7 +7,6 @@ exports.getAllProducts = (req, res, next) => {
     });
 }
 
-
 exports.getOfferedProducts = (req, res, next) => {
     const isOffered = 1;
 

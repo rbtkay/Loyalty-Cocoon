@@ -26,7 +26,7 @@ class VendorNavBar extends Component {
                 <Menu fixed="top" inverted color="violet" style={{ height: "65px" }}>
 
                     <MenuItem>
-                        <Link href={`/vendor/`}>
+                        <Link href={`/vendor`}>
                             <a><Image circular src='/static/Logo.gif' centered size='mini' /></a>
                         </Link>
                     </MenuItem>
