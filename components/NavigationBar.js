@@ -21,7 +21,7 @@ class NavigationBar extends Component {
             <Menu fixed="top" inverted color="violet">
 
                 <MenuItem>
-                    <Link href={`/user/index`}>
+                    <Link href={`/user`}>
                         <a><Image circular src='/static/Logo.gif' centered size='mini' /></a>
                     </Link>
                 </MenuItem>

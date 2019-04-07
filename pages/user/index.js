@@ -18,7 +18,6 @@ class Loyalty extends Component {
     render() {
         return (
             <div>
-
                 <Layout />
                 <NavigationBar />
                 <br /><br /><br /><br /><br />
