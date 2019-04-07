@@ -9,6 +9,8 @@ routes.add('/user/purchases/:username', '/user/purchases')
     .add('/user/search/:search', '/user/search')
     .add('/user/categories/:category', '/user/categories')
     .add('/user/settings/:username', '/user/settings')
+    .add('/user/:username', '/user/index')
+    .add('/resetPassword', '/resetPassword')
     .add('/user', '/user')
     .add('/auth/:token', '/');
 

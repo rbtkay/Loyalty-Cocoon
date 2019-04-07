@@ -3,7 +3,7 @@ const nodeMailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../../database/connection');
 
-sendEmail = async (username, email, res) => {
+sendEmail = async (username, email, res, type) => {
     const transporter = nodeMailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -19,10 +19,15 @@ sendEmail = async (username, email, res) => {
 
         const url = `http://localhost:8000/auth/${emailToken}`;
 
-        const info = await transporter.sendMail({
-            to: email,
-            subject: 'Confirm Email',
-            html: `<html>
+        var content;
+        var code = 0;
+
+        // console.log(content);
+        if (type === 'confirm') {
+            content = {
+                to: email,
+                subject: 'Confirm Email',
+                html: `<html>
             <head>
             </head>
             <body>
@@ -36,11 +41,36 @@ sendEmail = async (username, email, res) => {
             
             </body>
             </html>`
-        })
-
+            }
+        } else if (type === 'forgot') {
+            code = Math.floor((Math.random() * 10000) + 1000);
+            content = {
+                to: email,
+                subject: 'Forgot Password',
+                html: `<html>
+            <head>
+            </head>
+            <body>
+            
+            <div class="container">
+              <h2>Forgot Password!</h2>
+              <p>Here is Your verification Code</p>      
+              <h3>Code: ${code}</h3>
+              
+            </div>
+            
+            </body>
+            </html>`
+            }
+        }
+        const info = await transporter.sendMail(content);
+        if (code !== 0) {
+            res.status(200).send({ code });
+        } else {
+            res.status(200).send('sent');
+        }
         console.log("sent the email");
         console.log(info);
-        res.status(200).send('sent');
     } catch (e) {
         throw e;
     }
@@ -49,6 +79,7 @@ sendEmail = async (username, email, res) => {
 exports.sendConfirmEmail = async (req, res) => {
     const username = req.query.username;
     var email = req.query.email;
+    const type = 'confirm';
 
     if (email == undefined) {
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
@@ -63,7 +94,8 @@ exports.sendConfirmEmail = async (req, res) => {
                         else {
                             if (result.length > 0) {
                                 email = result[0]['vendor_email'];
-                                sendEmail(username, email, res);
+                                sendEmail(username, email, res, type);
+
                             } else {
                                 res.status(404).send('Something Unexpected Happend');
                             }
@@ -73,11 +105,9 @@ exports.sendConfirmEmail = async (req, res) => {
             }
         })
     } else {
-        sendEmail(username, email, res);
+        sendEmail(username, email, res, type);
     }
 }
-
-
 
 exports.verifyEmail = (req, res) => {
     const username = req.query.username;
@@ -128,13 +158,64 @@ exports.getUsernamesEmails = (req, res) => {
                             emails.push(element['vendor_email']);
                     });
 
-
                     console.log(emails);
                     res.status(200).send({
                         usernames, emails
                     });
                 }
             })
+        }
+    })
+}
+
+exports.sendCode = (req, res) => {
+    const email = req.query.email;
+    const type = 'forgot';
+
+    mysqlConnection.query('select * from user_t where user_t.user_email = ?', [email], (err, userResult) => {
+        if (err) throw err;
+        else {
+            if (userResult.length > 0) {
+                const username = userResult[0]['user_username'];
+                sendEmail(username, email, res, type);
+            } else {
+                mysqlConnection.query('select * from vendor_t where vendor_t.vendor_email = ?', [email], (err, vendorResult) => {
+                    if (err) throw err;
+                    else {
+                        if (vendorResult.length > 0) {
+                            const username = vendorResult[0]['vendor_username'];
+                            sendEmail(username, email, res, type);
+                        } else {
+                            res.status(404).send('Not Found');
+                        }
+                    }
+                });
+            }
+        }
+    })
+}
+
+exports.changePassword = (req, res) => {
+    const password = req.query.password;
+    const email = req.query.email;
+
+    mysqlConnection.query('update user_t set user_password = ? where user_email = ?', [password, email], (err, userResult) => {
+        if (err) throw err;
+        else {
+            if (userResult['affectedRows'] > 0) {
+                res.status(200).send(userResult);
+            } else {
+                mysqlConnection.query('update vendor_t set vendor_password = ? where vendor_email = ?', [password, email], (err, vendorResult) => {
+                    if (err) throw err;
+                    else {
+                        if (vendorResult['affectedRows'] > 0) {
+                            res.status(200).send(vendorResult);
+                        } else {
+                            res.status(401).send(vendorResult);
+                        }
+                    }
+                });
+            }
         }
     })
 }
@@ -192,3 +273,4 @@ exports.sendReceiptEmail = async (req, res) => {
         }
     })
 }
+
