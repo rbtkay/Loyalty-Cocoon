@@ -22,7 +22,20 @@ sendEmail = async (username, email, res) => {
         const info = await transporter.sendMail({
             to: email,
             subject: 'Confirm Email',
-            html: `Please Click on the link to Confirm email:<br/> <a href="${url}">${url}</a>`
+            html: `<html>
+            <head>
+            </head>
+            <body>
+            
+            <div class="container">
+              <h2>Confirm Your Email!</h2>
+              <p>Welcome to the Cocoon</p>      
+              <a href='${url}'>www.Loyalty-Cocoon.com</a>
+              
+            </div>
+            
+            </body>
+            </html>`
         })
 
         console.log("sent the email");

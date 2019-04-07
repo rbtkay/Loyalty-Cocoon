@@ -11,23 +11,7 @@ class Categories extends Component {
     static async getInitialProps(props) {
         const { category } = props.query;
 
-        try {
-            const response = await fetch(`http://localhost:8000/api/user/product/category?category=${category}`, {
-                headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
-                })
-            });
-
-            if (response.status === 401) {
-                return { redirect: '/' };
-            } else {
-                const products = await response.json();
-                return { products, category };
-            }
-
-        } catch (e) {
-            return { redirect: '/user' };
-        }
+        return { category };
     }
 
 
@@ -63,16 +47,35 @@ class Categories extends Component {
         }
     }
 
-    componentDidMount() {
-        this.checkAuth();
+    async componentDidMount() {
+        const { category } = this.props;
+        try {
+            const response = await fetch(`http://localhost:8000/api/user/product/category?category=${category}`, {
+                headers: new Headers({
+                    'authorization': localStorage.getItem('authorization')
+                })
+            });
+
+            if (response.status === 401) {
+                Router.pushRoute('/');
+            } else if (response.status === 200) {
+                const products = await response.json();
+                this.setState({ products, category })
+            } else if (response.status === 404) {
+                this.setState({ products: [], category });
+            }
+
+        } catch (e) {
+            throw e;
+        }
     }
 
     renderProducts = () => {
         console.log("category page");
-        console.log(this.props.products);
-        if (this.props.products) {
-            if (this.props.products.length > 0) {
-                return (<CategoryCard {...this.props} handleSuccess={this.flipSuccess} />);
+        console.log(this.state.products);
+        if (this.state.products) {
+            if (this.state.products.length > 0) {
+                return (<CategoryCard {...this.state} handleSuccess={this.flipSuccess} />);
             } else {
                 return (<h4>No Product are Available for this Category.</h4>);
             }

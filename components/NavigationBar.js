@@ -85,7 +85,7 @@ class NavigationBar extends Component {
     }
 
     goCategory = (data) => {
-        Router.pushRoute(`/user/categories/${data}`);
+        window.location = `/user/categories/${data}`;
     }
 
     redirect = () => {
@@ -94,7 +94,7 @@ class NavigationBar extends Component {
     }
 
     handleSubmit = (e) => {
-        Router.pushRoute(`/user/search/${this.state.search}`);
+        window.location = `/user/search/${this.state.search}`;
     }
 
     logout = () => {

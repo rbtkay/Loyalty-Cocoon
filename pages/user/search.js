@@ -12,34 +12,41 @@ class search extends Component {
     state = {
         products: [],
         search: '',
+        isSearching: true,
         successful: false
     }
 
     static async getInitialProps(props) {
         const { search } = props.query;
 
-        console.log(props);
+        // console.log("00000000000000000000000000000000000000000000000000");
+        // console.log(props);
 
-        console.log("the search:" + search);
+        // console.log("the search:" + search);
 
-        try {
-            const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
-                headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
-                })
-            });
+        // try {
+        //     const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
+        //         headers: new Headers({
+        //             'authorization': localStorage.getItem('authorization')
+        //         })
+        //     });
+        //     console.log('response.status');
+        //     console.log(response.status);
 
-            const products = await response.json();
+        //     if (response.status === 404) {
+        //         return { search, products: [] }
+        //     } else if (response.status === 200) {
+        //         const products = await response.json();
+        //         console.log(products);
+        //         isSearching = false;
+        //         return { search, products: products, isSearching };
+        //     }
+        // } catch (e) {
+        //     console.log('chou fik ta3mil');
+        //     isSearching = true;
+        // }
 
-            if (response.status === 401) {
-                return ({ redirect: '/' });
-            }
-
-            return ({ search, products });
-
-        } catch (e) {
-            return ({ redirect: '/user' });
-        }
+        return { search };
     }
 
     render() {
@@ -61,23 +68,54 @@ class search extends Component {
         )
     }
 
-    async componentdidmount(req) {
-        const { search } = req.query;
+    // componentWillReceiveProps() {
+    //     console.log('in the will receive props');
+    //     console.log(this.props.isSearching);
 
-        const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
-            headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
-            })
-        });
+    //     if (this.props.isSearching === false) {
+    //         console.log('in the if');
+    //         this.setState(({ products: this.props.products, isSearching: false }), () => {
+    //             console.log(this.props.products, this.props.isSearching);
+    //         });
+    //     }
+    // }
 
-        const products = await response.json();
-        this.setState({ search, products });
+    // componentdid() {
+    //     this.componentDidMount();
+    // }
+
+    async componentDidMount() {
+
+        console.log("in the component did mount");
+        console.log(this.props);
+        
+        try {
+            const response = await fetch(`http://localhost:8000/api/user/product/search?search=${this.props.search}`, {
+                headers: new Headers({
+                    'authorization': localStorage.getItem('authorization')
+                })
+            });
+            console.log('response.status');
+            console.log(response.status);
+
+            if (response.status === 404) {
+                await this.setState({ isSearching: false, products: [] });
+            } else if (response.status === 200) {
+                const products = await response.json();
+                console.log(products);
+                this.setState({ search, products, isSearching: false });
+            }
+        } catch (e) {
+            throw e;
+        }
     }
 
     renderProducts() {
-        if (this.props.products) {
-            if (this.props.products.length > 0) {
-                return (<CategoryCard {...this.props} handleSuccess={this.flipSuccess} />);
+        console.log('in the render products');
+        if (this.state.isSearching === false) {
+            if (this.state.products.length > 0) {
+                console.log('Rendering');
+                return (<CategoryCard {...this.state} handleSuccess={this.flipSuccess} />);
             } else {
                 return (
                     <Container>
@@ -88,11 +126,12 @@ class search extends Component {
                 )
             }
         } else {
-            <Container>
-                <Segment>
-                    <h3>Loading Products...</h3>
-                </Segment>
-            </Container>
+            return (
+                <Container>
+                    <Segment>
+                        <h3>Loading Products...</h3>
+                    </Segment>
+                </Container>)
         }
     }
 
