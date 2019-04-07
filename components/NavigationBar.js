@@ -21,7 +21,7 @@ class NavigationBar extends Component {
             <Menu fixed="top" inverted color="violet">
 
                 <MenuItem>
-                    <Link href={`/user/`}>
+                    <Link href={`/user/index`}>
                         <a><Image circular src='/static/Logo.gif' centered size='mini' /></a>
                     </Link>
                 </MenuItem>
@@ -85,7 +85,7 @@ class NavigationBar extends Component {
     }
 
     goCategory = (data) => {
-        Router.pushRoute(`/user/categories/${data}`);
+        window.location = `/user/categories/${data}`;
     }
 
     redirect = () => {
@@ -94,7 +94,7 @@ class NavigationBar extends Component {
     }
 
     handleSubmit = (e) => {
-        Router.pushRoute(`/user/search/${this.state.search}`);
+        window.location = `/user/search/${this.state.search}`;
     }
 
     logout = () => {

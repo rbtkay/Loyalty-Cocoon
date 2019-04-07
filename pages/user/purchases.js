@@ -3,6 +3,7 @@ import NavigationBar from '../../components/NavigationBar';
 import Layout from '../../components/Layout';
 import Purchase from '../../components/Purchase';
 import { Segment } from 'semantic-ui-react';
+import Router from '../../routes';
 
 class Purchases extends Component {
 
@@ -38,14 +39,18 @@ class Purchases extends Component {
                     authorization: localStorage.getItem('authorization')
                 })
             })
+            if (response.status === 401) {
+                Router.pushRoute('/');
+            } else {
 
-            const purchases = await response.json();
-            console.log(purchases);
-            this.setState({
-                username,
-                purchases,
-                purchaseLength: purchases.length
-            })
+                const purchases = await response.json();
+                console.log(purchases);
+                this.setState({
+                    username,
+                    purchases,
+                    purchaseLength: purchases.length
+                })
+            }
         } catch (e) {
             throw e;
         }
