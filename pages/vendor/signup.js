@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import { sha256 } from 'js-sha256';
 import web3 from '../../ethereum/web3';
+import NavBar from '../../components/NavBar';
 
 class SignUp extends Component {
     state = {
@@ -104,8 +105,9 @@ class SignUp extends Component {
         return (
             <div>
                 <Layout />
-
+                <NavBar />
                 <Segment inverted color='violet'>
+                    <br />
                     <br />
                     <br />
                     <div className="ui raised very padded text container segment">
@@ -193,6 +195,13 @@ class SignUp extends Component {
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                     <br />
                     <br />
                     <br />

@@ -8,6 +8,7 @@ import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
 import { sha256 } from 'js-sha256';
 import web3 from '../../ethereum/web3';
+import NavBar from '../../components/NavBar';
 
 
 const countryOptions = _.map(faker.definitions.address.country, country => ({
@@ -49,8 +50,9 @@ class SignUp extends Component {
         return (
             <div>
                 <Layout />
-
+                <NavBar />
                 <Segment inverted color='violet'>
+                    <br />
                     <br />
                     <br />
                     <div className="ui raised very padded text container segment">
