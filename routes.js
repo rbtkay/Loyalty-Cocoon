@@ -10,6 +10,7 @@ routes.add('/user/purchases/:username', '/user/purchases')
     .add('/user/categories/:category', '/user/categories')
     .add('/user/settings/:username', '/user/settings')
     .add('/user/:username', '/user/index')
+    .add('/resetPassword', '/resetPassword')
     .add('/:token', '/');
 
 module.exports = routes;
