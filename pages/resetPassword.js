@@ -8,7 +8,10 @@ import NavBar from '../components/NavBar';
 class ResetPassword extends Component {
 
     state = {
+        requiredCode: '',
         matchingErr: '',
+        code: '',
+        codeErr: '',
         password: '',
         passwordConfirm: '',
         email: '',
@@ -16,7 +19,9 @@ class ResetPassword extends Component {
         step: 1,
         isStepOne: true,
         isStepTwo: false,
-        isStepThree: false
+        isStepThree: false,
+        isNextLoading: false,
+        isBackLoading: false
     }
 
     render() {
@@ -66,8 +71,8 @@ class ResetPassword extends Component {
                                             <Grid columns={3}>
                                                 <Grid.Column width='2'></Grid.Column>
                                                 <Grid.Column width='12'>
-                                                    <Button basic inverted floated='left' onClick={this.back}>Back</Button>
-                                                    <Button color='green' floated='right' onClick={this.nextStep}>Next</Button>
+                                                    <Button basic inverted floated='left' loading={this.state.isBackLoading} onClick={this.back}>Back</Button>
+                                                    <Button color='green' floated='right' loading={this.state.isNextLoading} onClick={this.nextStep}>Next</Button>
                                                 </Grid.Column>
                                                 <Grid.Column width='2'></Grid.Column>
                                             </Grid>
@@ -99,28 +104,19 @@ class ResetPassword extends Component {
 
     nextStep = async () => {
         console.log("button clicked")
+        await this.setState({ isNextLoading: true });
+
         switch (this.state.step) {
             case 1:
-                if (this.verifyEmail() === true) {
-                    await this.setState({ step: 2, isStepOne: false, isStepTwo: true, isStepThree: false });
-                }
-                else {
-                    await this.setState({ emailErr: 'Incorrect Email' });
-                }
+                this.verifyEmail();
+                await this.setState({ isNextLoading: false });
                 break;
             case 2:
-                if (this.verifyCode() === true) {
-                    await this.setState({ step: 3, isStepOne: false, isStepTwo: false, isStepThree: true })
-                } else {
-                    await this.setState({ codeErr: 'Invalid Code' });
-                }
+                this.verifyCode();
+                await this.setState({ isNextLoading: false });
                 break;
             case 3:
-                if (this.verifyPasswords() === true) {
-                    await this.setState({ matchingErr: "Password Don't Match" });
-                } else {
-                    //TODO: Update Password
-                }
+                this.verifyPasswords();
                 break;
 
             default:
@@ -129,6 +125,7 @@ class ResetPassword extends Component {
     }
 
     back = async () => {
+        await this.setState({ isBackLoading: true });
         switch (this.state.step) {
             case 2:
                 await this.setState({ step: 1, isStepOne: true, isStepTwo: false, isStepThree: false });
@@ -140,11 +137,22 @@ class ResetPassword extends Component {
             default:
                 break;
         }
+        await this.setState({ isBackLoading: false });
     }
 
-    verifyEmail() {
-        //TODO: API to Verify that email's owner is a LoyaltyCocoon user
-        return true;
+    async verifyEmail() {
+        if (this.state.email === '') {
+            await this.setState({ emailErr: 'You need to Provide your Email' });
+        } else {
+            try {
+                //TODO: API to Verify that email's owner is a LoyaltyCocoon user
+                await this.setState({ step: 2, isStepOne: false, isStepTwo: true, isStepThree: false });
+            } catch (e) {
+                await this.setState({ emailErr: 'Something Went Wrong...' });
+            }
+            // await this.setState({ emailErr: 'Incorrect Email' });
+            return true;
+        }
     }
 
     renderStep() {
@@ -168,19 +176,15 @@ class ResetPassword extends Component {
                             placeholder='Enter your Account Email'
                             size='medium'
                             onChange={event => this.setState({ email: event.target.value })}
+                            value={this.state.email}
                         />
                     </Form.Field>
                     <Message error header='Oops' content={this.state.emailErr} ></Message>
-                    {/* <Button inverted basic onClick={this.sendCode}>Send</Button> */}
                 </Form>
             </div>
         )
     }
 
-    // sendCode = async () => {
-    //     //TODO: fetch the send Code Api
-    //     await this.setState({ step: 2, isStepTwo: true, isStepOne: false, isStepThree: false });
-    // }
 
     renderCode() {
         return (
@@ -193,18 +197,33 @@ class ResetPassword extends Component {
                             placeholder='Enter Code'
                             size='medium'
                             onChange={event => this.setState({ code: event.target.value })}
+                            value={this.state.code}
                         />
                     </Form.Field>
                     <Message error header='Oops' content={this.state.codeErr} ></Message>
-                    {/* <Button inverted basic onClick={this.verifyCode}>Send</Button> */}
                 </Form>
             </div>
         )
     }
 
-    verifyCode = () => {
-        //TODO: Verify that the code inputted matches the one sent in the mail.
-        return true;
+    verifyCode = async () => {
+        if (this.state.code === '') {
+            this.setState({ codeErr: 'You need to Provide a Valid Code' });
+        } else {
+            //TODO: Verify that the code inputted matches the one sent in the mail.
+            try {
+                const code = 1111;
+                const response = code;
+                console.log(response);
+                if (this.state.code == response) {
+                    await this.setState({ step: 3, isStepOne: false, isStepTwo: false, isStepThree: true });
+                } else {
+                    await this.setState({ codeErr: 'Invalid Code' });
+                }
+            } catch (e) {
+                await this.setState({ codeErr: 'Something Went Wrong...' });
+            }
+        }
     }
 
     renderResetPassord() {
@@ -218,6 +237,7 @@ class ResetPassword extends Component {
                             placeholder='Enter new Password'
                             size='medium'
                             onChange={event => this.setState({ password: event.target.value })}
+                            value={this.state.password}
                         />
                     </Form.Field>
 
@@ -227,6 +247,7 @@ class ResetPassword extends Component {
                             placeholder='Confirm Password'
                             size='medium'
                             onChange={event => this.setState({ passwordConfirm: event.target.value })}
+                            value={this.state.passwordConfirm}
                         />
 
                     </Form.Field>
@@ -238,17 +259,16 @@ class ResetPassword extends Component {
         )
     }
 
-    verifyPasswords = () => {
+    verifyPasswords = async () => {
         const { password, passwordConfirm } = this.state;
 
-        console.log('in button');
-        if (password !== passwordConfirm) {
-            // var matchingErr = "Passwords Don't match!";
-            // this.setState({ matchingErr });
-            return false;
+        if (password === '' || passwordConfirm === '') {
+            await this.setState({ matchingErr: "Some Field are Empty", isNextLoading: false });
+        } else if (password !== passwordConfirm) {
+            await this.setState({ matchingErr: "Password Don't Match", isNextLoading: false });
         } else {
-            return true;
-            // Router.pushRoute('/');
+            //TODO: Update Password APi
+            Router.pushRoute('/');
         }
     }
 }
