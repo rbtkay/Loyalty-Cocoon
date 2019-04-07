@@ -198,3 +198,28 @@ exports.sendCode = (req, res) => {
         }
     })
 }
+
+exports.changePassword = (req, res) => {
+    const password = req.query.password;
+    const email = req.query.email;
+
+    mysqlConnection.query('update user_t set user_password = ? where user_email = ?', [password, email], (err, userResult) => {
+        if (err) throw err;
+        else {
+            if (userResult['affectedRows'] > 0) {
+                res.status(200).send(userResult);
+            } else {
+                mysqlConnection.query('update vendor_t set vendor_password = ? where vendor_email = ?', [password, email], (err, vendorResult) => {
+                    if (err) throw err;
+                    else {
+                        if (vendorResult['affectedRows'] > 0) {
+                            res.status(200).send(vendorResult);
+                        } else {
+                            res.status(401).send(vendorResult);
+                        }
+                    }
+                });
+            }
+        }
+    })
+}

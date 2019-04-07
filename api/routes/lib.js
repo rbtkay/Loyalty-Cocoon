@@ -5,5 +5,6 @@ router.get('/confirmEmail', Lib.sendConfirmEmail);
 router.get('/verify', Lib.verifyEmail);
 router.get('/usernamesEmails', Lib.getUsernamesEmails);
 router.get('/code', Lib.sendCode);
+router.get('/changePassword', Lib.changePassword);
 
 module.exports = router;

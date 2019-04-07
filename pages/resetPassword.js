@@ -4,6 +4,7 @@ import { Segment, Form, Input, Container, Button, Message, Grid, Step, Icon } fr
 import Layout from '../components/Layout';
 import { Router } from '../routes';
 import NavBar from '../components/NavBar';
+import { sha256 } from 'js-sha256';
 
 class ResetPassword extends Component {
 
@@ -109,11 +110,9 @@ class ResetPassword extends Component {
         switch (this.state.step) {
             case 1:
                 this.verifyEmail();
-                await this.setState({ isNextLoading: false });
                 break;
             case 2:
                 this.verifyCode();
-                await this.setState({ isNextLoading: false });
                 break;
             case 3:
                 this.verifyPasswords();
@@ -141,16 +140,21 @@ class ResetPassword extends Component {
     }
 
     async verifyEmail() {
-        if (this.state.email === '') {
-            await this.setState({ emailErr: 'You need to Provide your Email' });
+        const { email } = this.state;
+        if (email === '') {
+            await this.setState({ emailErr: 'You need to Provide your Email', isNextLoading: false });
         } else {
             try {
-                //TODO: API to Verify that email's owner is a LoyaltyCocoon user
-                await this.setState({ step: 2, isStepOne: false, isStepTwo: true, isStepThree: false });
+                const response = await fetch(`http://localhost:8000/api/lib/code?email=${email}`);
+                if (response.status === 404) {
+                    await this.setState({ emailErr: 'Invalid Email!', isNextLoading: false });
+                } else {
+                    const requiredCode = await response.json();
+                    await this.setState({ step: 2, isStepOne: false, isStepTwo: true, isStepThree: false, requiredCode: requiredCode['code'], isNextLoading: false });
+                }
             } catch (e) {
                 await this.setState({ emailErr: 'Something Went Wrong...' });
             }
-            // await this.setState({ emailErr: 'Incorrect Email' });
             return true;
         }
     }
@@ -169,7 +173,7 @@ class ResetPassword extends Component {
         return (
             <div>
                 <Form error={!!this.state.emailErr}>
-                    <h1>Send Verification Code</h1>
+                    <h1>Email Verification</h1>
                     <br />
                     <Form.Field>
                         <Input
@@ -207,21 +211,15 @@ class ResetPassword extends Component {
     }
 
     verifyCode = async () => {
-        if (this.state.code === '') {
-            this.setState({ codeErr: 'You need to Provide a Valid Code' });
+        const { code, requiredCode } = this.state;
+
+        if (code === '') {
+            this.setState({ codeErr: 'You need to Provide a Valid Code', isNextLoading: false });
         } else {
-            //TODO: Verify that the code inputted matches the one sent in the mail.
-            try {
-                const code = 1111;
-                const response = code;
-                console.log(response);
-                if (this.state.code == response) {
-                    await this.setState({ step: 3, isStepOne: false, isStepTwo: false, isStepThree: true });
-                } else {
-                    await this.setState({ codeErr: 'Invalid Code' });
-                }
-            } catch (e) {
-                await this.setState({ codeErr: 'Something Went Wrong...' });
+            if (code == requiredCode) {
+                await this.setState({ step: 3, isStepOne: false, isStepTwo: false, isStepThree: true, isNextLoading: false });
+            } else {
+                await this.setState({ codeErr: 'Invalid Code', isNextLoading: false });
             }
         }
     }
@@ -253,22 +251,29 @@ class ResetPassword extends Component {
                     </Form.Field>
 
                     <Message error header="Oops!" content={this.state.matchingErr}></Message>
-                    {/* <Button onClick={this.changePassword} color='green' >Submit</Button> */}
                 </Form>
             </div>
         )
     }
 
     verifyPasswords = async () => {
-        const { password, passwordConfirm } = this.state;
+        const { password, passwordConfirm, email } = this.state;
 
         if (password === '' || passwordConfirm === '') {
             await this.setState({ matchingErr: "Some Field are Empty", isNextLoading: false });
         } else if (password !== passwordConfirm) {
             await this.setState({ matchingErr: "Password Don't Match", isNextLoading: false });
         } else {
-            //TODO: Update Password APi
-            Router.pushRoute('/');
+            const securePass = sha256(password);
+            try {
+                const response = await fetch(`http://localhost:8000/api/lib/changePassword?email=${email}&password=${securePass}`);
+
+                if (response.status === 200) {
+                    Router.pushRoute('/');
+                }
+            } catch (e) {
+                throw e;
+            }
         }
     }
 }
