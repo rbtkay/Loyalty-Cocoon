@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Icon, Button, Message, Form } from 'semantic-ui-react';
 import loco from '../ethereum/loco';
+import { sha256 } from 'js-sha256';
 
 class BuyModal extends Component {
 
@@ -9,9 +10,10 @@ class BuyModal extends Component {
     };
 
     render() {
-        if (!this.props.affordable) {
-            return (
-                <Modal
+        if (localStorage.getItem('isVerified') == sha256('1')) {
+            if (!this.props.affordable) {
+                return (
+                    <Modal
                     open={this.props.isConfirmOpen}
                     onClose={this.props.confirmClose}
                     size='tiny'
@@ -30,10 +32,10 @@ class BuyModal extends Component {
                         </Button>
                     </Modal.Actions>
                 </Modal>
-            );
-        } else {
-            return (
-                <Modal
+                );
+            } else {
+                return (
+                    <Modal
                     open={this.props.isConfirmOpen}
                     onClose={this.props.confirmClose}
                     size='tiny'
@@ -44,7 +46,7 @@ class BuyModal extends Component {
                         <Icon name='shopping cart' /> Confirm Purchase
                     </Modal.Header>
                     <Modal.Content>
-                        <h3>Are you sure you want to purchase this product at {this.props.price} LOCO</h3>
+                        <h3>Are you sure you want to purchase this product from {this.props.vendorUsername} at {this.props.price} LOCO</h3>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button
@@ -60,12 +62,50 @@ class BuyModal extends Component {
                     {this.renderMessage()}
 
                 </Modal>
+                );
+            }
+        } else {
+            return (
+                <Modal
+                open={this.props.isConfirmOpen}
+                onClose={this.props.confirmClose}
+                size='tiny'
+                dimmer='blurring'>
+                <Modal.Header>
+                    <Icon name='times circle' /> Verify Account
+                </Modal.Header>
+                <Modal.Content>
+                    <h3>Please verify your account in order to make purchases.</h3>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button
+                        onClick={this.props.confirmClose}>
+                        <Icon name='checkmark' /> OK
+                    </Button>
+                </Modal.Actions>
+            </Modal>
             );
         }
     }
 
     purchaseProduct = async (event) => {
         event.preventDefault();
+
+        const { username, vendorUsername, productId } = this.props;
+        const d = new Date();
+
+        const day = d.getDate().toString();
+        const month = (d.getMonth() + 1).toString();
+        const year = d.getFullYear().toString();
+
+        const hour = d.getHours().toString();
+        const minute = d.getSeconds().toString();
+        const second = d.getMinutes().toString();
+
+        const date = year + '-' + month + '-' + day;
+        const time = hour + ':' + minute + ':' + second;
+
+        const DateTime = date + ' ' + time;
 
         if (!this.state.loading) {
             this.setState({ loading: true });
@@ -77,16 +117,28 @@ class BuyModal extends Component {
                         'authorization': localStorage.getItem('authorization')
                     })
                 });
-                const manager = await loco.methods.manager().call();
 
                 const receiver = await response.json();
+                console.log('price', this.props.price);
 
                 const res = await fetch(`http://localhost:8000/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].vendor_address}`);
 
                 const result = await res.json();
+                console.log(result.transactionHash);
+
+                const send = await fetch(`http://localhost:8000/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
+
+
+                // TODO: Update user's balance in navbar
 
                 let balance = localStorage.getItem('balance');
                 balance -= this.props.price;
+
+                const insertPurchase = await fetch(`http://localhost:8000/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
+                    headers: new Headers({
+                        'authorization': localStorage.getItem('authorization')
+                    })
+                });
 
                 localStorage.setItem('balance', balance);
                 this.props.handleSuccess();

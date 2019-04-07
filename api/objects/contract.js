@@ -41,7 +41,7 @@ exports.grantPoints = (req, res, next) => {
             console.log(['transferToStaging Trx Hash: ' + hash]);
         })
         .on('receipt', (receipt) => {
-            console.log(['transferToStaging Receipt: ', receipt]);
+            console.log(['transferToStaging Receipt: ' + receipt]);
             res.status(200).send(receipt);
         })
         .on('error', (error) => {
@@ -77,7 +77,7 @@ exports.transferFrom = (req, res, next) => {
             console.log(['transferToStaging Trx Hash: ' + hash]);
         })
         .on('receipt', (receipt) => {
-            console.log(['transferToStaging Receipt: ', receipt]);
+            console.log(['transferToStaging Receipt: ' + receipt]);
             res.status(200).send(receipt);
         })
         .on('error', (error) => {

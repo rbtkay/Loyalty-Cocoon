@@ -1,4 +1,4 @@
-//password of email: Loyalty11Cocoon 
+//password of email: Loyalty11Cocoon
 const nodeMailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../../database/connection');
@@ -17,7 +17,7 @@ sendEmail = async (username, email, res) => {
             username: username
         }, 'emailKey');
 
-        const url = `http://localhost:8000/${emailToken}`;
+        const url = `http://localhost:8000/auth/${emailToken}`;
 
         const info = await transporter.sendMail({
             to: email,
@@ -50,10 +50,7 @@ exports.sendConfirmEmail = async (req, res) => {
     const username = req.query.username;
     var email = req.query.email;
 
-    console.log(email);
-
     if (email == undefined) {
-        console.log('in the if');
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
@@ -61,13 +58,11 @@ exports.sendConfirmEmail = async (req, res) => {
                     email = result[0]['user_email'];
                     sendEmail(username, email, res);
                 } else {
-                    console.log('in the vendor query');
                     mysqlConnection.query('select vendor_email from vendor_t where vendor_username = ?', [username], (err, result) => {
                         if (err) throw err;
                         else {
                             if (result.length > 0) {
                                 email = result[0]['vendor_email'];
-                                console.log(email)
                                 sendEmail(username, email, res);
                             } else {
                                 res.status(404).send('Something Unexpected Happend');
@@ -140,6 +135,60 @@ exports.getUsernamesEmails = (req, res) => {
                     });
                 }
             })
+        }
+    })
+}
+
+exports.sendReceiptEmail = async (req, res) => {
+    const username = req.query.username;
+    const vendorUsername = req.query.vendorUsername;
+    const productId = req.query.productId;
+    const txHash = req.query.txHash;
+    var email = req.query.email;
+
+    mysqlConnection.query('select * from product_t where product_id = ?', [productId] , (err, result) => {
+        if (err) throw err;
+        else {
+            if (email == undefined) {
+                mysqlConnection.query('select user_email from user_t where user_username = ?', [username], async (err, newResult) => {
+                    if (err) throw err;
+                    else {
+                        email = newResult[0]['user_email'];
+                        const transporter = nodeMailer.createTransport({
+                            service: 'Gmail',
+                            auth: {
+                                user: 'Loyalty.Cocoon',
+                                pass: 'Loyalty11Cocoon'
+                            },
+                        });
+
+                        try {
+                            const url = `https://rinkeby.etherscan.io/tx/${txHash}`;
+
+                            const info = await transporter.sendMail({
+                                to: email,
+                                subject: 'Thank You for Shopping @LoyaltyCocoon',
+                                html: `
+                                <div>
+                                <h1>Here is your purchase from ${vendorUsername}</h1>
+                                <h4>Product Details</h4>
+                                <p>Product ID: ${productId} <br />
+                                Name: ${result[0]['product_name']} <br />
+                                Price: ${result[0]['product_loco']} LOCO
+                                </p>
+                                <h5>You can track your transaction at <a href="${url}">${url}</a></h5>
+                                </div>
+                                `
+                            })
+                            console.log("sent the email");
+                            console.log(info);
+                            res.status(200).send('sent');
+                        } catch (e) {
+                            throw e;
+                        }
+                    }
+                })
+            }
         }
     })
 }

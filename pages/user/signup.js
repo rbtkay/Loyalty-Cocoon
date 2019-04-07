@@ -291,7 +291,7 @@ class SignUp extends Component {
                 }
             }
         } else {
-            this.setState({ errorMessage: 'Some Field are Empty' });
+            this.setState({ errorMessage: 'Some Fields are Empty' });
         }
         this.setState({ loading: false });
     }

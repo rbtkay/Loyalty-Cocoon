@@ -22,8 +22,7 @@ class SignIn extends Component {
 
         try {
             const confirmation = req.path;
-            const token = confirmation.slice(1);
-            // console.log(token);
+            const token = confirmation.slice(6);
 
             const jwt = require('jsonwebtoken');
             const decodedToken = jwt.decode(token);
@@ -186,11 +185,11 @@ class SignIn extends Component {
                         throw e;
                     } finally {
                         localStorage.setItem('balance', balance);
-                        Router.pushRoute("/user/index");
+                        Router.pushRoute("/user/");
                     }
                 } else if (response.status === 403) {
-                    const errorMessage = 'Your Need to Verify your Email to Continue...';
-                    this.setState({ errorMessage, loading: false });
+                    // const needConfirm = 'Please Verify your Email to Continue...';
+                    this.setState({ errorMessage: '', loading: false, needConfirm: true });
                 } else if (response.status === 401) {
 
                     response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
@@ -202,9 +201,8 @@ class SignIn extends Component {
                     } else if (response.status === 200) {
                         const data = await response.json();
                         this.createLocalStorage(data, "vendor");
-                        Router.pushRoute("/vendor/index");
+                        Router.pushRoute("/vendor");
                     } else if (response.status === 403) {
-                        // const needConfirm = 'Please Verify your Email to Continue...';
                         this.setState({ errorMessage: '', loading: false, needConfirm: true });
                     }
                 }
@@ -229,6 +227,7 @@ class SignIn extends Component {
         localStorage.setItem('authorization', data.token);
         localStorage.setItem('username', data.result[0][type + "_username"]);
         localStorage.setItem('address', data.result[0][type + "_address"]);
+        localStorage.setItem('isVerified', sha256('1'));
     }
 }
 
