@@ -108,6 +108,7 @@ class VendorNavBar extends Component {
         if (this.state.submission['error']) {
             return (
                 <div>
+
                     <Input
                         fluid
                         error
@@ -120,6 +121,7 @@ class VendorNavBar extends Component {
                     />
 
                     <br />
+
                     <Input
                         type="password"
                         fluid
@@ -128,7 +130,6 @@ class VendorNavBar extends Component {
                         value={this.state.modalPassword}
                         onChange={event => this.setState({ modalPassword: event.target.value })}
                     />
-
                     <Message error header='Oops!' content={this.state.submission['msg']} ></Message>
                 </div>
             )
@@ -151,6 +152,7 @@ class VendorNavBar extends Component {
                         fluid
                         name="modalPassword"
                         placeholder="Password"
+                        type="password"
                         value={this.state.modalPassword}
                         onChange={event => this.setState({ modalPassword: event.target.value })}
                     />
