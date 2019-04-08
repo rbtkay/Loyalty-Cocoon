@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 06, 2019 at 07:14 PM
--- Server version: 5.7.14
--- PHP Version: 5.6.25
+-- Host: 127.0.0.1:3306
+-- Generation Time: Apr 08, 2019 at 01:53 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -26,8 +28,9 @@ SET time_zone = "+00:00";
 -- Table structure for table `product_t`
 --
 
-CREATE TABLE `product_t` (
-  `product_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `product_t`;
+CREATE TABLE IF NOT EXISTS `product_t` (
+  `product_id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(200) NOT NULL,
   `product_category` varchar(100) NOT NULL,
   `product_price` int(11) NOT NULL,
@@ -36,8 +39,12 @@ CREATE TABLE `product_t` (
   `product_description` varchar(1000) DEFAULT NULL,
   `vendor_username` varchar(200) NOT NULL,
   `product_offered` bit(1) DEFAULT b'0',
-  `product_image` varchar(512) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `product_image` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`product_id`),
+  UNIQUE KEY `product_id_UNIQUE` (`product_id`),
+  UNIQUE KEY `product_name_UNIQUE` (`product_name`),
+  KEY `fk_Product_T_Vendor_T_idx` (`vendor_username`)
+) ENGINE=InnoDB AUTO_INCREMENT=313 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `product_t`
@@ -109,14 +116,20 @@ INSERT INTO `product_t` (`product_id`, `product_name`, `product_category`, `prod
 -- Table structure for table `purchase_t`
 --
 
-CREATE TABLE `purchase_t` (
-  `purchase_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `purchase_t`;
+CREATE TABLE IF NOT EXISTS `purchase_t` (
+  `purchase_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_username` varchar(200) NOT NULL,
   `product_id` int(11) NOT NULL,
   `vendor_username` varchar(200) NOT NULL,
   `purchase_time` datetime NOT NULL,
-  `purchase_finalized` bit(1) NOT NULL DEFAULT b'0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `purchase_finalized` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`purchase_id`),
+  UNIQUE KEY `purchase_id_UNIQUE` (`purchase_id`),
+  KEY `fk_Purchase_T_User_T1_idx` (`user_username`),
+  KEY `fk_Purchase_T_Product_T1_idx` (`product_id`),
+  KEY `vendor_username` (`vendor_username`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `purchase_t`
@@ -143,7 +156,11 @@ INSERT INTO `purchase_t` (`purchase_id`, `user_username`, `product_id`, `vendor_
 (25, 'rbtkay', 255, 'Starbucks', '2019-04-01 01:23:14', b'0'),
 (26, 'rbtkay', 255, 'Starbucks', '2019-04-01 01:45:16', b'0'),
 (27, 'rbtkay', 255, 'Starbucks', '2019-04-01 01:00:20', b'0'),
-(28, 'rbtkay', 267, 'Starbucks', '2019-04-04 18:45:47', b'0');
+(28, 'rbtkay', 267, 'Starbucks', '2019-04-04 18:45:47', b'0'),
+(29, 'kvnbog', 268, 'AUST', '2019-04-07 19:22:05', b'0'),
+(30, 'kvnbog', 268, 'AUST', '2019-04-07 19:13:09', b'0'),
+(31, 'bob', 264, 'AUST', '2019-04-07 19:11:11', b'0'),
+(32, 'bob', 264, 'AUST', '2019-04-07 19:57:11', b'0');
 
 -- --------------------------------------------------------
 
@@ -151,7 +168,8 @@ INSERT INTO `purchase_t` (`purchase_id`, `user_username`, `product_id`, `vendor_
 -- Table structure for table `user_t`
 --
 
-CREATE TABLE `user_t` (
+DROP TABLE IF EXISTS `user_t`;
+CREATE TABLE IF NOT EXISTS `user_t` (
   `user_username` varchar(200) NOT NULL,
   `user_email` varchar(200) NOT NULL,
   `user_password` varchar(200) NOT NULL,
@@ -164,7 +182,9 @@ CREATE TABLE `user_t` (
   `user_country` varchar(45) NOT NULL,
   `user_profession` varchar(45) DEFAULT NULL,
   `user_organization` varchar(200) DEFAULT NULL,
-  `user_verified` bit(1) NOT NULL DEFAULT b'0'
+  `user_verified` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`user_username`),
+  UNIQUE KEY `user_email_UNIQUE` (`user_email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -174,6 +194,7 @@ CREATE TABLE `user_t` (
 INSERT INTO `user_t` (`user_username`, `user_email`, `user_password`, `user_name`, `user_dob`, `user_gender`, `user_phone`, `user_prefs`, `user_address`, `user_country`, `user_profession`, `user_organization`, `user_verified`) VALUES
 ('bob', 'robert.g.khayat@gmail.com', 'be178c0543eb17f5f3043021c9e5fcf30285e557a4fc309cce97ff9ca6182912', 'robert', '2019-04-20', 'M', '03060933', '', '0x6925e5359D79ad3c7FC2B6D1758D2EC9ecdc7C50', 'Algeria', 'student', 'Mr. Green', b'1'),
 ('caro', 'caroline.bergqvist11@gmail.com', 'be178c0543eb17f5f3043021c9e5fcf30285e557a4fc309cce97ff9ca6182912', 'caroline', '2019-04-16', 'F', '03060933', '', '0x716De529C052fc9E0730c77929325665a2fecdC1', 'Algeria', 'designer', 'My Easy Prints', b'0'),
+('kvnbog', 'kevin.boghossian@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'Kevin Boghossian', '1993-09-29', 'M', '70-140296', '', '0x4fC91B1d7901E2981dC7E624867dc85815EFF7b3', 'United States of America', 'Student', 'LOCO', b'1'),
 ('lola', 'lola@gmail.com', 'lalala', 'lolita', '2019-03-01', 'F', '030303033', 'Groceries', '0v0sz0dvrserv0aerbaerb', 'France', 'doctor', 'AUB', b'0'),
 ('rbtkay', 'robert@gmail.com', 'be178c0543eb17f5f3043021c9e5fcf30285e557a4fc309cce97ff9ca6182912', 'robert', '2019-03-02', 'M', '70657300', 'electronics, food', '0x3b06F9c9968A2f4CAAA87012D923748d3324BEd8', 'Lebanon', 'Doctor', 'Hotel Dieu', b'1');
 
@@ -183,7 +204,8 @@ INSERT INTO `user_t` (`user_username`, `user_email`, `user_password`, `user_name
 -- Table structure for table `vendor_t`
 --
 
-CREATE TABLE `vendor_t` (
+DROP TABLE IF EXISTS `vendor_t`;
+CREATE TABLE IF NOT EXISTS `vendor_t` (
   `vendor_username` varchar(200) NOT NULL,
   `vendor_email` varchar(200) NOT NULL,
   `vendor_password` varchar(200) NOT NULL,
@@ -192,7 +214,9 @@ CREATE TABLE `vendor_t` (
   `vendor_location` varchar(200) DEFAULT NULL,
   `vendor_tag` varchar(200) DEFAULT NULL,
   `vendor_address` varchar(45) DEFAULT NULL,
-  `vendor_verified` bit(1) NOT NULL DEFAULT b'0'
+  `vendor_verified` bit(1) NOT NULL DEFAULT b'0',
+  PRIMARY KEY (`vendor_username`),
+  UNIQUE KEY `vendor_email_UNIQUE` (`vendor_username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -200,67 +224,15 @@ CREATE TABLE `vendor_t` (
 --
 
 INSERT INTO `vendor_t` (`vendor_username`, `vendor_email`, `vendor_password`, `vendor_name`, `vendor_phone`, `vendor_location`, `vendor_tag`, `vendor_address`, `vendor_verified`) VALUES
-('AUST', 'Aust@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'AUST', '0306030', NULL, NULL, NULL, b'1'),
-('Booster', 'Booster@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', NULL, NULL, NULL, NULL, NULL, b'1'),
-('Grab & Go', 'Gng@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'Grab and Go', '352342234', NULL, NULL, NULL, b'1'),
-('Hibou', 'hibou@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'Hibou', '03060908', 'Achrafieh', 'Groceries', '0x9a324F0EBeA49b30Eb504e2cBE6B32f778c96Bcd', b'1'),
-('hndth', 'dntrh', '404f99af88894ff900409250462b3c2110a3eb9bfd3aaaa031fd78458fa490f9', 'tnhdfthd', 'dhnt', 'dnyj', NULL, '0x88A941da2DD95486ed3E92271aC838E736A0ae1E', b'1'),
-('kvn', 'kevin@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'kevin', '03060933', 'beyrouth', NULL, '0xAAb21441521fC2e6c0982Dd389caFD504e834c22', b'1'),
-('kvnBog', 'kevin.boghossian@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'kevin', '03060933', 'beyrouth', NULL, '0xfd19967DE467Dd14A8913973dA3fbeB6b0a84E0A', b'1'),
-('Spinneys', 'Spinneys@gmail', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', 'Spinneys Supermarket', '265452', NULL, NULL, NULL, b'1'),
-('Starbucks', 'Starbucks@gmail.com', '49de5b57c70636e66021650e776632a27c8ef705a56c31fc03d29c42af529263', NULL, NULL, NULL, NULL, NULL, b'1');
+('AUST', 'Aust@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'AUST', '0306030', NULL, NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('Booster', 'Booster@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', NULL, NULL, NULL, NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('Grab & Go', 'Gng@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'Grab and Go', '352342234', NULL, NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('Hibou', 'hibou@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'Hibou', '03060908', 'Achrafieh', 'Groceries', '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('hndth', 'dntrh', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'tnhdfthd', 'dhnt', 'dnyj', NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('kvn', 'kevin@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'kevin', '03060933', 'beyrouth', NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('Spinneys', 'Spinneys@gmail', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'Spinneys Supermarket', '265452', NULL, NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1'),
+('Starbucks', 'Starbucks@gmail.com', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', NULL, NULL, NULL, NULL, '0xea921F03887d1ADDd0f4e19056A70ABC5BfFC900', b'1');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `product_t`
---
-ALTER TABLE `product_t`
-  ADD PRIMARY KEY (`product_id`),
-  ADD UNIQUE KEY `product_id_UNIQUE` (`product_id`),
-  ADD UNIQUE KEY `product_name_UNIQUE` (`product_name`),
-  ADD KEY `fk_Product_T_Vendor_T_idx` (`vendor_username`);
-
---
--- Indexes for table `purchase_t`
---
-ALTER TABLE `purchase_t`
-  ADD PRIMARY KEY (`purchase_id`),
-  ADD UNIQUE KEY `purchase_id_UNIQUE` (`purchase_id`),
-  ADD KEY `fk_Purchase_T_User_T1_idx` (`user_username`),
-  ADD KEY `fk_Purchase_T_Product_T1_idx` (`product_id`),
-  ADD KEY `vendor_username` (`vendor_username`);
-
---
--- Indexes for table `user_t`
---
-ALTER TABLE `user_t`
-  ADD PRIMARY KEY (`user_username`),
-  ADD UNIQUE KEY `user_email_UNIQUE` (`user_email`);
-
---
--- Indexes for table `vendor_t`
---
-ALTER TABLE `vendor_t`
-  ADD PRIMARY KEY (`vendor_username`),
-  ADD UNIQUE KEY `vendor_email_UNIQUE` (`vendor_username`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `product_t`
---
-ALTER TABLE `product_t`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=313;
---
--- AUTO_INCREMENT for table `purchase_t`
---
-ALTER TABLE `purchase_t`
-  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- Constraints for dumped tables
 --
@@ -278,6 +250,7 @@ ALTER TABLE `purchase_t`
   ADD CONSTRAINT `fk_Purchase_T_Product_T1` FOREIGN KEY (`product_id`) REFERENCES `product_t` (`product_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Purchase_T_User_T` FOREIGN KEY (`user_username`) REFERENCES `user_t` (`user_username`),
   ADD CONSTRAINT `fk_Purchase_T_Vendor_T` FOREIGN KEY (`vendor_username`) REFERENCES `vendor_t` (`vendor_username`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
