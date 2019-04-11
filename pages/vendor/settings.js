@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NavigationBar from '../../components/VendorNavBar';
 import Layout from '../../components/Layout';
+import { Segment } from 'semantic-ui-react';
 
 class Settings extends Component {
 

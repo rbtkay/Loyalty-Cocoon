@@ -8,10 +8,10 @@ exports.getAllVendors = (req, res, next) => {
     });
 }
 
-exports.getUserAddress = (req, res, next) => {
+exports.getCustomerAddress = (req, res, next) => {
     var username = req.query.username;
 
-    mysqlConnection.query('select user_address from user_t where user_username = ?', [username], (err, result, fields) => {
+    mysqlConnection.query('select user_ethAddress from user_t where user_username = ?', [username], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     });

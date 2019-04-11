@@ -177,7 +177,7 @@ class SignIn extends Component {
 
                 if (response.status === 200) {
                     const data = await response.json();
-                    this.createLocalStorage(data, "user");
+                    this.createLocalStorage(data);
                     const address = localStorage.getItem('address');
                     let balance = 0;
                     console.log(address);
@@ -187,26 +187,20 @@ class SignIn extends Component {
                         throw e;
                     } finally {
                         localStorage.setItem('balance', balance);
-                        Router.pushRoute("/user/");
+                        const isVendor = data['result'][0]['user_isVendor'].data[0];
+                        if (isVendor == 1) {
+                            Router.pushRoute("/vendor/");
+                        } else {
+                            Router.pushRoute("/user/");
+                        }
+                        //FIXME: check if user is customer or vendor
                     }
                 } else if (response.status === 403) {
                     // const needConfirm = 'Please Verify your Email to Continue...';
                     this.setState({ errorMessage: '', loading: false, needConfirm: true });
                 } else if (response.status === 401) {
-
-                    response = await fetch(`/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
-
-                    if (response.status === 401) {
-                        const errorMessage = 'Invalid Username/Password';
-                        this.setState({ errorMessage, loading: false, needConfirm: false });
-                        console.log(this.state.errorMessage);
-                    } else if (response.status === 200) {
-                        const data = await response.json();
-                        this.createLocalStorage(data, "vendor");
-                        Router.pushRoute("/vendor");
-                    } else if (response.status === 403) {
-                        this.setState({ errorMessage: '', loading: false, needConfirm: true });
-                    }
+                    const errorMessage = 'Invalid Username/Password';
+                    this.setState({ errorMessage, loading: false, needConfirm: false });
                 }
             } catch (err) {
                 this.setState({ loading: false });
@@ -227,8 +221,8 @@ class SignIn extends Component {
 
     createLocalStorage(data, type) {
         localStorage.setItem('authorization', data.token);
-        localStorage.setItem('username', data.result[0][type + "_username"]);
-        localStorage.setItem('address', data.result[0][type + "_address"]);
+        localStorage.setItem('username', data.result[0]["user_username"]);
+        localStorage.setItem('address', data.result[0]["user_ethAddress"]);
         localStorage.setItem('isVerified', sha256('1'));
     }
 }

@@ -18,7 +18,7 @@ exports.vendorSignUp = (req, res) => {
                 if (result.length > 0) {
                     res.send('Username Already Exists');
                 } else {
-                    mysqlConnection.query('insert into user_t (user_username, user_email, user_password, user_name, user_ethAddress) values (?, ?, ?, ?, ?)', [
+                    mysqlConnection.query('insert into user_t (user_username, user_email, user_password, user_name, user_ethAddress, user_isVendor) values (?, ?, ?, ?, ?, 1)', [
                         username,
                         email,
                         password,
@@ -31,7 +31,7 @@ exports.vendorSignUp = (req, res) => {
                             jwt.sign({
                                 username: username,
                                 email: email,
-                                type: "vendor"
+                                type: 'vendor'
                             }, process.env.JWT_KEY, (err, token) => {
                                 res.json({
                                     token
@@ -102,12 +102,15 @@ exports.login = (req, res, next) => {
                 if (isverified === 0) {
                     res.status(403).send('Email Confirmation Needed');
                 } else {
+                    const isVendor = result[0]['user_isVendor'].toJSON();
+                    const type = isVendor.data[0] === 0 ? 'user' : 'vendor' ;
+                    console.log(type);
                     const token = jwt.sign({
                         username: result[0].user_username,
                         email: result[0].user_email,
-                        type: "user"
+                        type: type
                     },
-                    process.env.JWT_USER);
+                    process.env.JWT_KEY);
 
                     res.status(200).json({
                         token,
@@ -154,7 +157,7 @@ exports.userSignUp = (req, res) => {
                         password,
                         name,
                         address,
-                    ], (err, result) => {
+                    ], (err) => {
                         if (err) throw err;
                         else {
                             mysqlConnection.query('insert into customer_t (user_username, cust_gender, cust_phone, cust_country, cust_prefs, cust_dob, cust_profession, cust_organization) values (?,?,?,?,?,?,?,?)',[
@@ -166,17 +169,16 @@ exports.userSignUp = (req, res) => {
                                 dob,
                                 profession,
                                 organization
-                            ], (err, result)=>{
+                            ], (err)=>{
                                 if(err)throw err;
                                 else{
                                     jwt.sign({
                                         username: username,
                                         email: email,
-                                        type: "user"
+                                        type: 'user'
                                     }, process.env.JWT_KEY, (err, token) => {
                                         res.json({
-                                            token,
-                                            result
+                                            token
                                         });
                                     });
                                 }

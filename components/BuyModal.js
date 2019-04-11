@@ -121,7 +121,7 @@ class BuyModal extends Component {
                 const receiver = await response.json();
                 console.log('price', this.props.price);
 
-                const res = await fetch(`/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].vendor_address}`);
+                const res = await fetch(`/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].user_ethAddress}`);
 
                 const result = await res.json();
                 console.log(result.transactionHash);

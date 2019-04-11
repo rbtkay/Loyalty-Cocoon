@@ -25,7 +25,7 @@ exports.getProductSearch = (req, res, next) => {
         if (err) throw err;
         result.map((object) => {
             const name = object['product_name'].toLowerCase();
-            const vendor = object['vendor_username'].toLowerCase();
+            const vendor = object['user_username'].toLowerCase();
             if (name.includes(searchRequest) || vendor.includes(searchRequest)) {
                 filteredResult.push(object);
             }
@@ -42,7 +42,7 @@ exports.getProductSearch = (req, res, next) => {
 exports.getProductByCategory = (req, res) => {
     const category = req.query.category;
 
-    mysqlConnection.query('select * from product_t where product_category = ?', [category], (err, result, fields) => {
+    mysqlConnection.query('select * from product_t where product_category = ? and product_offered = 1', [category], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     })
@@ -61,7 +61,7 @@ exports.getTopDeals = (req, res) => {
 exports.getProductsByVendor = (req, res) => {
     const vendor = req.query.username;
 
-    mysqlConnection.query('select * from product_t where vendor_username = ?', [vendor], (err, result) => {
+    mysqlConnection.query('select * from product_t where user_username = ?', [vendor], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
     });
@@ -76,7 +76,7 @@ exports.insertProduct = (req, res) => {
     var username = req.query.username;
 
     if (name && category && price && loco && description && username) {
-        mysqlConnection.query('insert into product_t (product_name, product_category, product_price, product_loco, product_description, vendor_username) values (?, ?, ?, ?, ?, ?)', [
+        mysqlConnection.query('insert into product_t (product_name, product_category, product_price, product_loco, product_description, user_username) values (?, ?, ?, ?, ?, ?)', [
             name,
             category,
             price,

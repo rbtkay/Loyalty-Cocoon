@@ -216,7 +216,7 @@ class Transaction extends Component {
                                 productName={object['product_name']}
                                 username={object['user_username']}
                                 vendor={object['vendor_username']}
-                                time={object['purchase_time']}
+                                time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
                                 finalize={this.finalizePurchase}
                                 type={'vendor'}
@@ -257,7 +257,7 @@ class Transaction extends Component {
                 const receiver = await response.json();
                 const manager = await loco.methods.manager().call();
 
-                const res = await fetch(`/api/contract/grant?address=${receiver[0].user_address}&amount=${amount}`);
+                const res = await fetch(`/api/contract/grant?address=${receiver[0].user_ethAddress}&amount=${amount}`);
 
                 const result = await res.json();
                 console.log(result);

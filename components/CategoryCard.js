@@ -44,7 +44,7 @@ class CategoryCard extends Component {
                         id={object["product_id"]}
                         name={object["product_name"]}
                         description={object["product_description"]}
-                        vendor={object["vendor_username"]}
+                        vendor={object["user_username"]}
                         priceLoco={object["product_loco"] + " Loco"}
                         category={object["product_category"]}
                     />

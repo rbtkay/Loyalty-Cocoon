@@ -26,7 +26,7 @@ class ProductRow extends Component {
                             {this.renderProducts(this.state.topDeals)}
                         </Grid>
                     </Segment>
-      
+
                     <Grid.Row>
                         <h1>Recommended for You</h1>
                     </Grid.Row>
@@ -66,7 +66,7 @@ class ProductRow extends Component {
                             id={object["product_id"]}
                             name={object["product_name"]}
                             description={object["product_description"]}
-                            vendor={object["vendor_username"]}
+                            vendor={object["user_username"]}
                             priceLoco={object["product_loco"] + " Loco"}
                             category={object["product_category"]}
                         />
