@@ -173,7 +173,7 @@ class SignIn extends Component {
         } else {
             const hashedPassword = sha256(password);
             try {
-                let response = await fetch(`/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
+                let response = await fetch(`/api/auth/login?username=${username}&password=${hashedPassword}`);
 
                 if (response.status === 200) {
                     const data = await response.json();

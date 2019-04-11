@@ -14,7 +14,7 @@ if (process.env.NODE_ENV == 'production') {
     });
 } else {
     connection = mysql.createConnection({
-        host: "34.65.77.182",
+        host: "localhost",
         user: "root",
         password: "",
         database: "locodb",
