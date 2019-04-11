@@ -17,7 +17,7 @@ sendEmail = async (username, email, res, type) => {
             username: username
         }, 'emailKey');
 
-        const url = `http://localhost:8000/auth/${emailToken}`;
+        const url = `/auth/${emailToken}`;
 
         var content;
         var code = 0;
@@ -31,14 +31,14 @@ sendEmail = async (username, email, res, type) => {
             <head>
             </head>
             <body>
-            
+
             <div class="container">
               <h2>Confirm Your Email!</h2>
-              <p>Welcome to the Cocoon</p>      
+              <p>Welcome to the Cocoon</p>
               <a href='${url}'>www.Loyalty-Cocoon.com</a>
-              
+
             </div>
-            
+
             </body>
             </html>`
             }
@@ -51,14 +51,14 @@ sendEmail = async (username, email, res, type) => {
             <head>
             </head>
             <body>
-            
+
             <div class="container">
               <h2>Forgot Password!</h2>
-              <p>Here is Your verification Code</p>      
+              <p>Here is Your verification Code</p>
               <h3>Code: ${code}</h3>
-              
+
             </div>
-            
+
             </body>
             </html>`
             }
@@ -89,18 +89,7 @@ exports.sendConfirmEmail = async (req, res) => {
                     email = result[0]['user_email'];
                     sendEmail(username, email, res);
                 } else {
-                    mysqlConnection.query('select vendor_email from vendor_t where vendor_username = ?', [username], (err, result) => {
-                        if (err) throw err;
-                        else {
-                            if (result.length > 0) {
-                                email = result[0]['vendor_email'];
-                                sendEmail(username, email, res, type);
-
-                            } else {
-                                res.status(404).send('Something Unexpected Happend');
-                            }
-                        }
-                    })
+                    res.status(404).send('Something Unexpected Happened...');
                 }
             }
         })
@@ -123,47 +112,28 @@ exports.verifyEmail = (req, res) => {
                     }
                 })
             } else {
-                mysqlConnection.query('update vendor_t set vendor_verified = 1 where vendor_username = ?', [username], (err, result) => {
-                    if (err) throw err;
-                    else {
-                        res.status(200).send('Vendor is verified');
-                    }
-                })
+                res.status(404).send('Something Unexpected Happened...');
             }
         }
     })
 }
 
 exports.getUsernamesEmails = (req, res) => {
-    mysqlConnection.query('select user_t.user_username, vendor_t.vendor_username from user_t, vendor_t', (err, result) => {
+    mysqlConnection.query('select user_username, user_email from user_t', (err, result) => {
         if (err) throw err;
         else {
-            let usernames = [];
-            result.forEach(element => {
-                if (!usernames.includes(element['user_username']))
-                    usernames.push(element['user_username']);
-                if (!usernames.includes(element['vendor_username']))
-                    usernames.push(element['vendor_username']);
-            });
-            console.log(usernames);
-
-            mysqlConnection.query('select user_t.user_email, vendor_t.vendor_email from user_t, vendor_t', (err, result) => {
-                if (err) throw err;
-                else {
-                    let emails = [];
-                    result.forEach(element => {
-                        if (!emails.includes(element['user_email']))
-                            emails.push(element['user_email']);
-                        if (!emails.includes(element['vendor_email']))
-                            emails.push(element['vendor_email']);
-                    });
-
-                    console.log(emails);
-                    res.status(200).send({
-                        usernames, emails
-                    });
-                }
-            })
+            if(result.length > 0){
+                let usernames = [];
+                let emails = [];
+                result.forEach(element => {
+                        usernames.push(element['user_username']);
+                        emails.push(element['user_email']);
+                });
+                console.log(usernames);
+                res.status(200).send({usernames, emails});
+            }else{
+                res.status(404).send('Something Unexpected Happened...');
+            }
         }
     })
 }
@@ -172,24 +142,14 @@ exports.sendCode = (req, res) => {
     const email = req.query.email;
     const type = 'forgot';
 
-    mysqlConnection.query('select * from user_t where user_t.user_email = ?', [email], (err, userResult) => {
+    mysqlConnection.query('select * from user_t where user_email = ?', [email], (err, result) => {
         if (err) throw err;
         else {
-            if (userResult.length > 0) {
-                const username = userResult[0]['user_username'];
+            if (result.length > 0) {
+                const username = result[0]['user_username'];
                 sendEmail(username, email, res, type);
             } else {
-                mysqlConnection.query('select * from vendor_t where vendor_t.vendor_email = ?', [email], (err, vendorResult) => {
-                    if (err) throw err;
-                    else {
-                        if (vendorResult.length > 0) {
-                            const username = vendorResult[0]['vendor_username'];
-                            sendEmail(username, email, res, type);
-                        } else {
-                            res.status(404).send('Not Found');
-                        }
-                    }
-                });
+                res.status(404).send('Something Unexpected Happened...');
             }
         }
     })
@@ -205,16 +165,7 @@ exports.changePassword = (req, res) => {
             if (userResult['affectedRows'] > 0) {
                 res.status(200).send(userResult);
             } else {
-                mysqlConnection.query('update vendor_t set vendor_password = ? where vendor_email = ?', [password, email], (err, vendorResult) => {
-                    if (err) throw err;
-                    else {
-                        if (vendorResult['affectedRows'] > 0) {
-                            res.status(200).send(vendorResult);
-                        } else {
-                            res.status(401).send(vendorResult);
-                        }
-                    }
-                });
+                res.status(404).send('Something Unexpected Happened...');
             }
         }
     })
@@ -273,4 +224,3 @@ exports.sendReceiptEmail = async (req, res) => {
         }
     })
 }
-

@@ -112,7 +112,7 @@ class BuyModal extends Component {
             this.props.errorMessage('Your transaction is being processed...');
             try {
                 const sender = localStorage.getItem('address');
-                const response = await fetch(`http://localhost:8000/api/user/address?username=${this.props.vendor}`, {
+                const response = await fetch(`/api/user/address?username=${this.props.vendor}`, {
                     headers: new Headers({
                         'authorization': localStorage.getItem('authorization')
                     })
@@ -121,12 +121,12 @@ class BuyModal extends Component {
                 const receiver = await response.json();
                 console.log('price', this.props.price);
 
-                const res = await fetch(`http://localhost:8000/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].vendor_address}`);
+                const res = await fetch(`/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].user_ethAddress}`);
 
                 const result = await res.json();
                 console.log(result.transactionHash);
 
-                const send = await fetch(`http://localhost:8000/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
+                const send = await fetch(`/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
 
 
                 // TODO: Update user's balance in navbar
@@ -134,7 +134,7 @@ class BuyModal extends Component {
                 let balance = localStorage.getItem('balance');
                 balance -= this.props.price;
 
-                const insertPurchase = await fetch(`http://localhost:8000/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
+                const insertPurchase = await fetch(`/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
                     headers: new Headers({
                         'authorization': localStorage.getItem('authorization')
                     })

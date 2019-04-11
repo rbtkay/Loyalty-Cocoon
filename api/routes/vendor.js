@@ -8,6 +8,6 @@ router.use('/product', productRoutes);
 router.use('/purchase', purchaseRoutes);
 
 router.get('/all', Vendor.getAllVendors);
-router.get('/address', Vendor.getUserAddress);
+router.get('/address', Vendor.getCustomerAddress);
 
 module.exports = router;

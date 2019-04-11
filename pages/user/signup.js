@@ -210,7 +210,7 @@ class SignUp extends Component {
     }
 
     async componentDidMount() {
-        const response = await fetch(`http://localhost:8000/api/lib/usernamesEmails`);
+        const response = await fetch(`/api/lib/usernamesEmails`);
         const result = await response.json();
 
         await this.setState({ takenUsernames: result['usernames'], takenEmails: result['emails'] });
@@ -272,7 +272,7 @@ class SignUp extends Component {
 
                 try {
                     const newAccount = web3.eth.accounts.create();
-                    var response = await fetch(`http://localhost:8000/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
+                    var response = await fetch(`/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
                     var data = await response.json();
 
                     if (data.token) {
@@ -305,7 +305,7 @@ class SignUp extends Component {
         console.log(email)
 
         try {
-            var response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}&email=${email}`);
+            var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);
 
         } catch (err) {
             throw err;

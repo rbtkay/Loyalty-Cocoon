@@ -34,7 +34,7 @@ class Purchases extends Component {
         const username = localStorage.getItem('username');
 
         try {
-            const response = await fetch(`http://localhost:8000/api/user/purchase/byUser?username=${username}`, {
+            const response = await fetch(`/api/user/purchase/byUser?username=${username}`, {
                 headers: new Headers({
                     authorization: localStorage.getItem('authorization')
                 })
@@ -77,7 +77,7 @@ class Purchases extends Component {
                                 productName={object['product_name']}
                                 username={object['user_email']}
                                 vendor={object['vendor_username']}
-                                time={object['purchase_time']}
+                                time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
                                 type={'regular'}
                             />

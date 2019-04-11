@@ -145,7 +145,7 @@ class ResetPassword extends Component {
             await this.setState({ emailErr: 'You need to Provide your Email', isNextLoading: false });
         } else {
             try {
-                const response = await fetch(`http://localhost:8000/api/lib/code?email=${email}`);
+                const response = await fetch(`/api/lib/code?email=${email}`);
                 if (response.status === 404) {
                     await this.setState({ emailErr: 'Invalid Email!', isNextLoading: false });
                 } else {
@@ -266,7 +266,7 @@ class ResetPassword extends Component {
         } else {
             const securePass = sha256(password);
             try {
-                const response = await fetch(`http://localhost:8000/api/lib/changePassword?email=${email}&password=${securePass}`);
+                const response = await fetch(`/api/lib/changePassword?email=${email}&password=${securePass}`);
 
                 if (response.status === 200) {
                     Router.pushRoute('/');

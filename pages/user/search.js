@@ -25,7 +25,7 @@ class search extends Component {
         // console.log("the search:" + search);
 
         // try {
-        //     const response = await fetch(`http://localhost:8000/api/user/product/search?search=${search}`, {
+        //     const response = await fetch(`/api/user/product/search?search=${search}`, {
         //         headers: new Headers({
         //             'authorization': localStorage.getItem('authorization')
         //         })
@@ -90,7 +90,7 @@ class search extends Component {
         console.log(this.props);
         
         try {
-            const response = await fetch(`http://localhost:8000/api/user/product/search?search=${this.props.search}`, {
+            const response = await fetch(`/api/user/product/search?search=${this.props.search}`, {
                 headers: new Headers({
                     'authorization': localStorage.getItem('authorization')
                 })

@@ -26,7 +26,7 @@ class ProductRow extends Component {
                             {this.renderProducts(this.state.topDeals)}
                         </Grid>
                     </Segment>
-      
+
                     <Grid.Row>
                         <h1>Recommended for You</h1>
                     </Grid.Row>
@@ -66,7 +66,7 @@ class ProductRow extends Component {
                             id={object["product_id"]}
                             name={object["product_name"]}
                             description={object["product_description"]}
-                            vendor={object["vendor_username"]}
+                            vendor={object["user_username"]}
                             priceLoco={object["product_loco"] + " Loco"}
                             category={object["product_category"]}
                         />
@@ -79,14 +79,14 @@ class ProductRow extends Component {
     async componentDidMount() {
         const filter = this.state.filter;
 
-        const response = await fetch(`http://localhost:8000/api/user/product/offered`, {
+        const response = await fetch(`/api/user/product/offered`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
             })
         });
         const products = await response.json();
 
-        const responseTopDeals = await fetch(`http://localhost:8000/api/user/product/topDeals`, {
+        const responseTopDeals = await fetch(`/api/user/product/topDeals`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
             })

@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `purchase_t` (
   `user_username` varchar(200) NOT NULL,
   `product_id` int(11) NOT NULL,
   `vendor_username` varchar(200) NOT NULL,
-  `purchase_time` datetime NOT NULL,
+  `purchase_date` datetime NOT NULL,
   `purchase_finalized` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`purchase_id`),
   UNIQUE KEY `purchase_id_UNIQUE` (`purchase_id`),
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `purchase_t` (
 -- Dumping data for table `purchase_t`
 --
 
-INSERT INTO `purchase_t` (`purchase_id`, `user_username`, `product_id`, `vendor_username`, `purchase_time`, `purchase_finalized`) VALUES
+INSERT INTO `purchase_t` (`purchase_id`, `user_username`, `product_id`, `vendor_username`, `purchase_date`, `purchase_finalized`) VALUES
 (5, 'rbtkay', 254, 'Hibou', '2019-03-07 00:00:00', b'1'),
 (9, 'lola', 256, 'Hibou', '2019-03-06 00:00:00', b'1'),
 (10, 'rbtkay', 260, 'AUST', '2019-03-07 00:00:00', b'0'),

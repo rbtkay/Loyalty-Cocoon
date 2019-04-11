@@ -89,10 +89,10 @@ class VendorNavBar extends Component {
         if (modalUsername !== '' && modalPassword !== '') {
 
             const hashedPassword = sha256(modalPassword);
-            const response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${modalUsername}&password=${hashedPassword}`);
+            const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
             const res = await response.json();
 
-            const username = res['result'][0].vendor_username;
+            const username = res['result'][0].user_username;
 
             if (response.status === 200) {
                 Router.pushRoute(`/vendor/manage/${modalUsername}`);
@@ -103,7 +103,7 @@ class VendorNavBar extends Component {
             this.setState({ submission: { msg: 'Fields Required', error: true } });
         }
     }
-
+    //TODO: make manage Product HyperLink Model a form!
     renderModal() {
         if (this.state.submission['error']) {
             return (
