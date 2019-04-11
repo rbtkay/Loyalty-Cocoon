@@ -79,14 +79,14 @@ class ProductRow extends Component {
     async componentDidMount() {
         const filter = this.state.filter;
 
-        const response = await fetch(`http://localhost:8000/api/user/product/offered`, {
+        const response = await fetch(`/api/user/product/offered`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
             })
         });
         const products = await response.json();
 
-        const responseTopDeals = await fetch(`http://localhost:8000/api/user/product/topDeals`, {
+        const responseTopDeals = await fetch(`/api/user/product/topDeals`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
             })

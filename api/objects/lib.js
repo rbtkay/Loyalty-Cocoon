@@ -17,7 +17,7 @@ sendEmail = async (username, email, res, type) => {
             username: username
         }, 'emailKey');
 
-        const url = `http://localhost:8000/auth/${emailToken}`;
+        const url = `/auth/${emailToken}`;
 
         var content;
         var code = 0;
@@ -31,14 +31,14 @@ sendEmail = async (username, email, res, type) => {
             <head>
             </head>
             <body>
-            
+
             <div class="container">
               <h2>Confirm Your Email!</h2>
-              <p>Welcome to the Cocoon</p>      
+              <p>Welcome to the Cocoon</p>
               <a href='${url}'>www.Loyalty-Cocoon.com</a>
-              
+
             </div>
-            
+
             </body>
             </html>`
             }
@@ -51,14 +51,14 @@ sendEmail = async (username, email, res, type) => {
             <head>
             </head>
             <body>
-            
+
             <div class="container">
               <h2>Forgot Password!</h2>
-              <p>Here is Your verification Code</p>      
+              <p>Here is Your verification Code</p>
               <h3>Code: ${code}</h3>
-              
+
             </div>
-            
+
             </body>
             </html>`
             }
@@ -273,4 +273,3 @@ exports.sendReceiptEmail = async (req, res) => {
         }
     })
 }
-

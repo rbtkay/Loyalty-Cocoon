@@ -30,7 +30,7 @@ class SignIn extends Component {
 
             console.log(username);
 
-            const response = await fetch(`http://localhost:8000/api/lib/verify?username=${username}`);
+            const response = await fetch(`/api/lib/verify?username=${username}`);
 
             console.log(decodedToken.username);
         } catch (e) {
@@ -122,7 +122,7 @@ class SignIn extends Component {
                                 </Link>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
-                                <Image src='../static/default_product_image.jpg' centered rounded size='large' />
+                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
                             </Grid.Column>
                         </Grid>
 
@@ -131,7 +131,7 @@ class SignIn extends Component {
                     <Segment inverted color='violet'>
                         <Grid columns={2} >
                             <Grid.Column>
-                                <Image src='https://lh3.googleusercontent.com/h90_vjGvmqCHw8yAFiRkDJOf5z68ROM85TeFqcWE84Jd62mbNKGHvgAkwGLPGKR0fMj3ZHzPakL_XtEkpXdewg=rw' centered rounded size='large' />
+                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
                                 <h3>
@@ -173,7 +173,7 @@ class SignIn extends Component {
         } else {
             const hashedPassword = sha256(password);
             try {
-                let response = await fetch(`http://localhost:8000/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
+                let response = await fetch(`/api/auth/userLogin?username=${username}&password=${hashedPassword}`);
 
                 if (response.status === 200) {
                     const data = await response.json();
@@ -194,7 +194,7 @@ class SignIn extends Component {
                     this.setState({ errorMessage: '', loading: false, needConfirm: true });
                 } else if (response.status === 401) {
 
-                    response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
+                    response = await fetch(`/api/auth/vendorLogin?username=${username}&password=${hashedPassword}`);
 
                     if (response.status === 401) {
                         const errorMessage = 'Invalid Username/Password';
@@ -218,7 +218,7 @@ class SignIn extends Component {
     sendEmail = async () => {
         const { username } = this.state;
         try {
-            const response = await fetch(`http://localhost:8000/api/lib/confirmEmail?username=${username}`);
+            const response = await fetch(`/api/lib/confirmEmail?username=${username}`);
         } catch (e) {
             throw e;
         }

@@ -17,7 +17,7 @@ try {
 
     // const emailToken = "wefd";
 
-    const url = `http://localhost:8000/${emailToken}`;
+    const url = `/${emailToken}`;
 
     transporter.sendMail({
         to: 'kevin.boghossian@gmail.com',

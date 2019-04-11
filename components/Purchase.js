@@ -7,7 +7,7 @@ class Purchase extends Component {
     state = {
         isOpen: false
     }
-    
+
     render() {
         const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
@@ -90,8 +90,7 @@ class Purchase extends Component {
                     </div>
                 )
             }
-        }
-        else {
+        } else {
             if (finalized.data[0] === 0) {
                 finalized = 'Pending';
                 return (
@@ -127,7 +126,7 @@ class Purchase extends Component {
     finalize = async () => {
         const { purchaseId } = this.props;
 
-        const response = await fetch(`http://localhost:8000/api/vendor/purchase/finalize?id=${purchaseId}`, {
+        const response = await fetch(`/api/vendor/purchase/finalize?id=${purchaseId}`, {
             headers: new Headers({
                 'authorization': localStorage.getItem('authorization')
             })

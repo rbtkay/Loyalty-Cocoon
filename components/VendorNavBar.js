@@ -89,7 +89,7 @@ class VendorNavBar extends Component {
         if (modalUsername !== '' && modalPassword !== '') {
 
             const hashedPassword = sha256(modalPassword);
-            const response = await fetch(`http://localhost:8000/api/auth/vendorLogin?username=${modalUsername}&password=${hashedPassword}`);
+            const response = await fetch(`/api/auth/vendorLogin?username=${modalUsername}&password=${hashedPassword}`);
             const res = await response.json();
 
             const username = res['result'][0].vendor_username;

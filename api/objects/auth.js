@@ -55,7 +55,7 @@ exports.vendorAuth = (req, res, next) => {
     var password = req.query.password;
 
     if (username && password) {
-        mysqlConnection.query('select * from Vendor_T where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
+        mysqlConnection.query('select * from vendor_t where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
                 const verifyResult = result[0]['vendor_verified'].toJSON();
@@ -95,7 +95,7 @@ exports.userAuth = (req, res, next) => {
     var password = req.query.password;
 
     if (username && password) {
-        mysqlConnection.query('select * from User_T where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
+        mysqlConnection.query('select * from user_t where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
                 const verifyResult = result[0]['user_verified'].toJSON();

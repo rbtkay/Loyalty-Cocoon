@@ -50,7 +50,7 @@ class Categories extends Component {
     async componentDidMount() {
         const { category } = this.props;
         try {
-            const response = await fetch(`http://localhost:8000/api/user/product/category?category=${category}`, {
+            const response = await fetch(`/api/user/product/category?category=${category}`, {
                 headers: new Headers({
                     'authorization': localStorage.getItem('authorization')
                 })
