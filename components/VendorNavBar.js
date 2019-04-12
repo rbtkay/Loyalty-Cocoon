@@ -38,6 +38,12 @@ class VendorNavBar extends Component {
                         onClick={this.show}
                     />
 
+                    <MenuItem
+                        name='Dashboards'
+                        color='red'
+                        onClick={this.dashboard}
+                    />
+
                     <Menu.Menu position="right">
 
                         <Dropdown text={`Welcome ${this.state.username}`} className='item' pointing >
@@ -77,6 +83,10 @@ class VendorNavBar extends Component {
     logout = () => {
         cookie.deleteCookie();
         Router.pushRoute('/');
+    }
+
+    dashboard = () =>{
+        Router.pushRoute('/vendor/dashboard');
     }
 
     settings = () => {
