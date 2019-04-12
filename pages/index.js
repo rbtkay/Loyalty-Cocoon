@@ -82,7 +82,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify Email</h5><p>Confirm Email <a onClick={this.sendEmail}>here</a></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a onClick={this.sendEmail}>here</a></p></Message>
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
                                     <br />
