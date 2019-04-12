@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Item, Button, Label, Modal, Header, Icon } from 'semantic-ui-react';
 import Router from '../routes';
+let cookie = require('../cookie');
 
 class Purchase extends Component {
 
@@ -12,8 +13,7 @@ class Purchase extends Component {
         const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
         if (type === 'vendor') {
-            console.log('isFinalized');
-            console.log(isFinalized);
+            console.log('isFinalized', isFinalized);
             return (
                 <div>
                     <Item.Group divided>
@@ -23,10 +23,10 @@ class Purchase extends Component {
                             <Item.Content>
                                 <Item.Header>{productName}</Item.Header>
                                 <Item.Meta>{productId}</Item.Meta>
-                                <Item.Description>Bought By: {username}</Item.Description>
+                                <Item.Description>Bought by: {username}</Item.Description>
 
                                 <Item.Extra>
-                                    <Label>id: {purchaseId}</Label>
+                                    <Label>Tx ID: {purchaseId}</Label>
                                     {this.renderExtra(isFinalized, time, type)}
                                 </Item.Extra>
                             </Item.Content>
@@ -128,7 +128,7 @@ class Purchase extends Component {
 
         const response = await fetch(`/api/vendor/purchase/finalize?id=${purchaseId}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
 

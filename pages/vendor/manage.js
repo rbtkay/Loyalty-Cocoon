@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import VendorNavBar from '../../components/VendorNavBar';
 import ManageTable from '../../components/ManageTable';
+let cookie = require('../../cookie');
 
 class Manage extends Component {
     state = {
@@ -24,30 +25,30 @@ class Manage extends Component {
 
     render() {
         const options = [{
-            key: 'Clothing',
-            text: 'Clothing',
-            value: 'Clothing'
-        },
-        {
-            key: 'Electronics',
-            text: 'Electronics',
-            value: 'Electronics'
-        },
-        {
-            key: 'Food',
-            text: 'Food',
-            value: 'Food'
-        },
-        {
-            key: 'Groceries',
-            text: 'Groceries',
-            value: 'Groceries'
-        },
-        {
-            key: 'Toys',
-            text: 'Toys',
-            value: 'Toys'
-        }
+                key: 'Clothing',
+                text: 'Clothing',
+                value: 'Clothing'
+            },
+            {
+                key: 'Electronics',
+                text: 'Electronics',
+                value: 'Electronics'
+            },
+            {
+                key: 'Food',
+                text: 'Food',
+                value: 'Food'
+            },
+            {
+                key: 'Groceries',
+                text: 'Groceries',
+                value: 'Groceries'
+            },
+            {
+                key: 'Toys',
+                text: 'Toys',
+                value: 'Toys'
+            }
         ]
 
 
@@ -197,10 +198,10 @@ class Manage extends Component {
     }
 
     async componentDidMount() {
-        const username = localStorage.getItem('username');
+        const username = cookie.getCookie('username');
         const response = await fetch(`/api/vendor/product/vendor?username=${username}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
 
@@ -234,7 +235,7 @@ class Manage extends Component {
         const { username, name, category, price, loco, description, products } = this.state;
         const response = await fetch(`/api/vendor/product/add?name=${name}&category=${category}&price=${price}&loco=${loco}&description=${description}&username=${username}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         const result = await response.json();
@@ -255,7 +256,7 @@ class Manage extends Component {
         const id = temp.join(',');
         const response = await fetch(`/api/vendor/product/delete?id=${id}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         this.setState({ active: [], isConfirmOpen: false });
@@ -271,7 +272,7 @@ class Manage extends Component {
         const id = temp.join(',');
         const response = await fetch(`/api/vendor/product/addOffer?id=${id}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         this.setState({ active: [] });
@@ -287,7 +288,7 @@ class Manage extends Component {
         const id = temp.join(',');
         const response = await fetch(`/api/vendor/product/removeOffer?id=${id}`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         this.setState({ activeOffered: [] });

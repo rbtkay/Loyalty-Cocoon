@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ProductCard from './ProductCard';
 import { Card, CardGroup, Grid, GridColumn, Segment, Container } from 'semantic-ui-react';
 import { Router } from '../routes';
+let cookie = require('../cookie');
 
 class ProductRow extends Component {
     state = {
@@ -81,14 +82,14 @@ class ProductRow extends Component {
 
         const response = await fetch(`/api/user/product/offered`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         const products = await response.json();
 
         const responseTopDeals = await fetch(`/api/user/product/topDeals`, {
             headers: new Headers({
-                'authorization': localStorage.getItem('authorization')
+                'authorization': cookie.getCookie('authorization')
             })
         });
         const topDealsArray = await responseTopDeals.json();

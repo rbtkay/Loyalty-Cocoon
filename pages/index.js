@@ -7,6 +7,8 @@ import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
 import loco from '../ethereum/loco';
 import fetch from 'isomorphic-fetch';
+let cookie = require('../cookie');
+
 
 class SignIn extends Component {
     state = {
@@ -177,8 +179,8 @@ class SignIn extends Component {
 
                 if (response.status === 200) {
                     const data = await response.json();
-                    this.createLocalStorage(data);
-                    const address = localStorage.getItem('address');
+                    this.setCookies(data);
+                    const address = cookie.getCookie('address');
                     let balance = 0;
                     console.log(address);
                     try {
@@ -186,17 +188,15 @@ class SignIn extends Component {
                     } catch (e) {
                         throw e;
                     } finally {
-                        localStorage.setItem('balance', balance);
+                        cookie.setCookie('balance', balance, 100);
                         const isVendor = data['result'][0]['user_isVendor'].data[0];
                         if (isVendor == 1) {
                             Router.pushRoute("/vendor/");
                         } else {
                             Router.pushRoute("/user/");
                         }
-                        //FIXME: check if user is customer or vendor
                     }
                 } else if (response.status === 403) {
-                    // const needConfirm = 'Please Verify your Email to Continue...';
                     this.setState({ errorMessage: '', loading: false, needConfirm: true });
                 } else if (response.status === 401) {
                     const errorMessage = 'Invalid Username/Password';
@@ -219,11 +219,11 @@ class SignIn extends Component {
         console.log('hehey');
     }
 
-    createLocalStorage(data, type) {
-        localStorage.setItem('authorization', data.token);
-        localStorage.setItem('username', data.result[0]["user_username"]);
-        localStorage.setItem('address', data.result[0]["user_ethAddress"]);
-        localStorage.setItem('isVerified', sha256('1'));
+    setCookies(data) {
+        cookie.setCookie('authorization', data.token, 100);
+        cookie.setCookie('username', data.result[0]["user_username"], 100);
+        cookie.setCookie('address', data.result[0]["user_ethAddress"], 100);
+        cookie.setCookie('isVerified', sha256('1'), 100);
     }
 }
 

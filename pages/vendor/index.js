@@ -6,7 +6,7 @@ import Purchase from '../../components/Purchase'
 import { Container, Segment, Search, Grid, Statistic, Popup, Input, Button, Form } from 'semantic-ui-react';
 import _ from 'lodash';
 import loco from '../../ethereum/loco';
-
+let cookie = require('../../cookie');
 
 class Transaction extends Component {
 
@@ -150,9 +150,9 @@ class Transaction extends Component {
             const source = purchases.map(object => {
                 return {
                     key: object['purchase_id'],
-                    title: object['user_username'],
-                    name: object['user_username'],
-                    description: object['user_username']
+                    title: object['cust_username'],
+                    name: object['cust_username'],
+                    description: 'TxID: ' + object['purchase_id']
                 }
             })
 
@@ -164,20 +164,20 @@ class Transaction extends Component {
     }
 
     async componentDidMount() {
-        const username = localStorage.getItem('username');
+        const username = cookie.getCookie('username');
         const { searchValue } = this.state;
         let response;
 
         if (searchValue.length > 0) {
             response = await fetch(`/api/vendor/purchase/byVendorUser?vendorUsername=${username}&userUsername=${searchValue}`, {
                 headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
+                    'authorization': cookie.getCookie('authorization')
                 })
             });
         } else {
             response = await fetch(`/api/vendor/purchase/byVendor?username=${username}`, {
                 headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
+                    'authorization': cookie.getCookie('authorization')
                 })
             });
         }
@@ -214,7 +214,7 @@ class Transaction extends Component {
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}
                                 productName={object['product_name']}
-                                username={object['user_username']}
+                                username={object['cust_username']}
                                 vendor={object['vendor_username']}
                                 time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
@@ -243,14 +243,13 @@ class Transaction extends Component {
     grantPoints = async (event) => {
         event.preventDefault();
 
-
         if (!this.state.loading) {
             this.setState({ loading: true });
             try {
                 const { username, amount } = this.state;
                 const response = await fetch(`/api/vendor/address?username=${this.state.username}`, {
                     headers: new Headers({
-                        'authorization': localStorage.getItem('authorization')
+                        'authorization': cookie.getCookie('authorization')
                     })
                 });
 
@@ -271,4 +270,4 @@ class Transaction extends Component {
     }
 }
 
-export default Transaction
+export default Transaction;

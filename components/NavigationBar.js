@@ -5,6 +5,7 @@ import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { throws } from 'assert';
 import { Link } from '../routes';
+let cookie = require('../cookie');
 
 class NavigationBar extends Component {
     state = {
@@ -68,12 +69,13 @@ class NavigationBar extends Component {
     }
 
     async componentDidMount() {
-        const auth = localStorage.getItem('authorization');
+        const auth = cookie.getCookie('authorization');
         if (auth === null) {
             Router.pushRoute("/");
         } else {
-            const account = localStorage.getItem('address');
-            const username = localStorage.getItem('username');
+            const account = cookie.getCookie('address');
+            const username = cookie.getCookie('username');
+
             try {
                 const balance = await loco.methods.balances(account).call();
                 this.setState({ username, balance });
@@ -98,7 +100,7 @@ class NavigationBar extends Component {
     }
 
     logout = () => {
-        localStorage.clear();
+        cookie.deleteCookie();
         Router.pushRoute(`/`);
     }
 

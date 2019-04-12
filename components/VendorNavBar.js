@@ -4,6 +4,7 @@ import { Router } from '../routes';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
+let cookie = require('../cookie');
 
 class VendorNavBar extends Component {
 
@@ -39,7 +40,7 @@ class VendorNavBar extends Component {
 
                     <Menu.Menu position="right">
 
-                        <Dropdown text={`Welcome, ${this.state.username}`} className='item' pointing >
+                        <Dropdown text={`Welcome ${this.state.username}`} className='item' pointing >
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
                                 <Dropdown.Item onClick={this.logout}>Logout</Dropdown.Item>
@@ -74,7 +75,7 @@ class VendorNavBar extends Component {
     }
 
     logout = () => {
-        localStorage.clear();
+        cookie.deleteCookie();
         Router.pushRoute('/');
     }
 
@@ -162,13 +163,13 @@ class VendorNavBar extends Component {
     }
 
     async componentDidMount() {
-        const auth = localStorage.getItem('authorization');
+        const auth = cookie.getCookie('authorization');
 
         if (auth === null) {
             Router.pushRoute('/');
         } else {
-            const account = localStorage.getItem('address');
-            const username = localStorage.getItem('username');
+            const account = cookie.getCookie('address');
+            const username = cookie.getCookie('username');
             this.setState({ username });
         }
     }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Icon, Button, Message, Form } from 'semantic-ui-react';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
+let cookie = require('../cookie');
 
 class BuyModal extends Component {
 
@@ -10,7 +11,7 @@ class BuyModal extends Component {
     };
 
     render() {
-        if (localStorage.getItem('isVerified') == sha256('1')) {
+        if (cookie.getCookie('isVerified') == sha256('1')) {
             if (!this.props.affordable) {
                 return (
                     <Modal
@@ -111,10 +112,10 @@ class BuyModal extends Component {
             this.setState({ loading: true });
             this.props.errorMessage('Your transaction is being processed...');
             try {
-                const sender = localStorage.getItem('address');
+                const sender = cookie.getCookie('address');
                 const response = await fetch(`/api/user/address?username=${this.props.vendor}`, {
                     headers: new Headers({
-                        'authorization': localStorage.getItem('authorization')
+                        'authorization': cookie.getCookie('authorization')
                     })
                 });
 
@@ -131,16 +132,16 @@ class BuyModal extends Component {
 
                 // TODO: Update user's balance in navbar
 
-                let balance = localStorage.getItem('balance');
+                let balance = cookie.getCookie('balance');
                 balance -= this.props.price;
 
                 const insertPurchase = await fetch(`/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
                     headers: new Headers({
-                        'authorization': localStorage.getItem('authorization')
+                        'authorization': cookie.getCookie('authorization')
                     })
                 });
 
-                localStorage.setItem('balance', balance);
+                cookie.setCookie('balance', balance, 100);
                 this.props.handleSuccess();
                 this.props.confirmClose();
 
