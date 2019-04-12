@@ -3,12 +3,12 @@ const dotenv = require('dotenv').config();
 
 let connection;
 
-if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV) {
     connection = mysql.createConnection({
         host: "34.65.77.182",
         user: "root",
         password: "",
-        database: "locodb",
+        database: "cocoondb",
         port: 3306,
         socketPath: `/cloudsql/loyalty-cocoon:europe-west6:loco-db`
     });

@@ -7,9 +7,7 @@ var compression = require('compression');
 const path = require('path');
 require('dotenv').config();
 
-const app = next({
-    dev: process.env.NODE_ENV !== 'production'
-});
+const app = next({ dev: process.env.NODE_ENV !== 'production' });
 
 const port = process.env.PORT ? process.env.PORT : 3000;
 
