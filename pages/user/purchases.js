@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import Purchase from '../../components/Purchase';
 import { Segment } from 'semantic-ui-react';
 import Router from '../../routes';
+let cookie = require('../../cookie');
 
 class Purchases extends Component {
 
@@ -14,7 +15,6 @@ class Purchases extends Component {
     }
 
     render() {
-        // const { username } = localStorage.getItem('username');
         return (
             <div>
                 <Layout />
@@ -31,12 +31,12 @@ class Purchases extends Component {
     }
 
     async componentDidMount() {
-        const username = localStorage.getItem('username');
+        const username = cookie.getCookie('username');
 
         try {
             const response = await fetch(`/api/user/purchase/byUser?username=${username}`, {
                 headers: new Headers({
-                    authorization: localStorage.getItem('authorization')
+                    authorization: cookie.getCookie('authorization')
                 })
             })
             if (response.status === 401) {

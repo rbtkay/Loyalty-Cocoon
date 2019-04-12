@@ -9,7 +9,7 @@ import { Router } from '../../routes';
 import { sha256 } from 'js-sha256';
 import web3 from '../../ethereum/web3';
 import NavBar from '../../components/NavBar';
-
+let cookie = require('../../cookie');
 
 const countryOptions = _.map(faker.definitions.address.country, country => ({
     key: country,
@@ -276,9 +276,9 @@ class SignUp extends Component {
                     var data = await response.json();
 
                     if (data.token) {
-                        localStorage.setItem('username', username);
-                        localStorage.setItem('address', newAccount["address"]);
-                        localStorage.setItem('authorization', data.token);
+                        cookie.setCookie('username', username, 100);
+                        cookie.setCookie('address', newAccount["address"], 100);
+                        cookie.setCookie('authorization', data.token, 100);
 
                         this.sendConfirmation();
                         this.setState(({ successMessage: "We've sent you a Confirmation Email" }), () => {

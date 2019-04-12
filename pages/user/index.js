@@ -14,7 +14,6 @@ class Loyalty extends Component {
         successful: false
     };
 
-
     render() {
         return (
             <div>

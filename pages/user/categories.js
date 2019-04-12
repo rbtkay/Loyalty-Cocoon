@@ -5,6 +5,7 @@ import { Segment, Card } from 'semantic-ui-react';
 import CategoryCard from '../../components/CategoryCard';
 import { Router } from '../../routes';
 import { SemanticToastContainer, toast } from "react-semantic-toasts";
+let cookie = require('../../cookie');
 
 class Categories extends Component {
 
@@ -52,7 +53,7 @@ class Categories extends Component {
         try {
             const response = await fetch(`/api/user/product/category?category=${category}`, {
                 headers: new Headers({
-                    'authorization': localStorage.getItem('authorization')
+                    'authorization': cookie.getCookie('authorization')
                 })
             });
 

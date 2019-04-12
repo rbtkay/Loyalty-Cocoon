@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Modal, Image, Header } from 'semantic-ui-react';
 import Layout from './Layout';
 import BuyModal from './BuyModal';
+let cookie = require('../cookie');
 
 class ProductCard extends Component {
 
@@ -73,15 +74,15 @@ class ProductCard extends Component {
     }
 
     appendBuyModal = () => {
-        const balance = localStorage.getItem('balance');
+        const balance = cookie.getCookie('balance');
 
         const { priceLoco } = this.props;
         const temp = priceLoco.split(' ');
         let val = parseInt(temp[0]);
-        
+
         if (balance > val) {
 
-            const username = localStorage.getItem('username');
+            const username = cookie.getCookie('username');
             const vendorUsername = this.props.vendor;
             const productId = this.props.id;
 
