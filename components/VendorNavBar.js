@@ -85,7 +85,7 @@ class VendorNavBar extends Component {
         Router.pushRoute('/');
     }
 
-    dashboard = () =>{
+    dashboard = () => {
         Router.pushRoute('/vendor/dashboard');
     }
 
@@ -95,18 +95,21 @@ class VendorNavBar extends Component {
 
     onClick = async () => {
         const { modalUsername, modalPassword } = this.state;
+        this.setState({ submission: { msg: '', error: false } });
 
         console.log("alo?")
         if (modalUsername !== '' && modalPassword !== '') {
+            if (modalUsername === cookie.getCookie('username')) {
 
-            const hashedPassword = sha256(modalPassword);
-            const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
-            const res = await response.json();
+                const hashedPassword = sha256(modalPassword);
+                const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
+                const res = await response.json();
 
-            const username = res['result'][0].user_username;
+                const username = res['result'][0].user_username;
 
-            if (response.status === 200) {
-                Router.pushRoute(`/vendor/manage/${modalUsername}`);
+                if (response.status === 200) {
+                    Router.pushRoute(`/vendor/manage/${modalUsername}`);
+                }
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
             }
