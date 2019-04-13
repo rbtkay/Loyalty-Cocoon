@@ -36,7 +36,7 @@ class SignUp extends Component {
     };
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: '' });
+        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: false });
 
         const { username, email, password, name, phone, location, tag } = this.state;
 
@@ -94,6 +94,8 @@ class SignUp extends Component {
                 } catch (err) {
                     throw err;
                 }
+            } else {
+                await this.setState({ isFormValid: false, errorMessage: 'Some Fields are Invalid' });
             }
         } else {
             console.log("the form is not valid");
@@ -121,7 +123,7 @@ class SignUp extends Component {
                                         fluid
                                         name='name'
                                         value={this.state.name}
-                                        onChange={event => this.setState({ name: event.target.value })}
+                                        onChange={event => this.setState({ name: event.target.value, nameError: false })}
                                         placeholder="Full Name"
                                     />
                                 </Form.Field>
@@ -161,7 +163,7 @@ class SignUp extends Component {
                                         fluid
                                         name="password"
                                         value={this.state.password}
-                                        onChange={event => this.setState({ password: event.target.value })}
+                                        onChange={event => this.setState({ password: event.target.value, passwordError: false })}
                                         placeholder="Password"
                                         type="password"
                                     />
@@ -174,7 +176,7 @@ class SignUp extends Component {
                                         fluid
                                         name="phone"
                                         value={this.state.phone}
-                                        onChange={event => this.setState({ phone: event.target.value })}
+                                        onChange={event => this.setState({ phone: event.target.value, phoneError: false })}
                                         placeholder="Phone"
                                     />
                                 </Form.Field>
@@ -184,7 +186,7 @@ class SignUp extends Component {
                                         fluid
                                         name="location"
                                         value={this.state.location}
-                                        onChange={event => this.setState({ location: event.target.value })}
+                                        onChange={event => this.setState({ location: event.target.value, locationError: false })}
                                         placeholder="Location"
                                     />
                                 </Form.Field>
