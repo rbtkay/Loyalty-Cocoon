@@ -65,7 +65,7 @@ class SignUp extends Component {
                                         fluid
                                         name="name"
                                         value={this.state.name}
-                                        onChange={event => this.setState({ name: event.target.value })}
+                                        onChange={event => this.setState({ name: event.target.value, nameError: false })}
                                         placeholder="Full Name"
                                     />
                                 </Form.Field>
@@ -105,7 +105,7 @@ class SignUp extends Component {
                                         fluid
                                         name="password"
                                         value={this.state.password}
-                                        onChange={event => this.setState({ password: event.target.value })}
+                                        onChange={event => this.setState({ password: event.target.value, passwordError: false })}
                                         placeholder="Password"
                                         type='password'
                                     />
@@ -223,9 +223,9 @@ class SignUp extends Component {
         await this.setState({ username });
 
         if (this.state.takenUsernames.includes(username)) {
-            this.setState({ usernameError: true, isUsernameOpen: true });
+            this.setState({ usernameError: true, isUsernameOpen: true, isFormValid: true });
         } else {
-            this.setState({ usernameError: false, isUsernameOpen: false });
+            this.setState({ usernameError: false, isUsernameOpen: false, isFormValid: true });
         }
     }
 
@@ -241,7 +241,7 @@ class SignUp extends Component {
     }
 
     onSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: '' });
+        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: false });
 
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
@@ -267,7 +267,7 @@ class SignUp extends Component {
                 await this.setState({ isFormValid: false });
             }
 
-            if (this.state.isFormValid) {
+            if (this.state.isFormValid === true) {
                 const hashedPassword = sha256(password);
 
                 try {
@@ -284,13 +284,14 @@ class SignUp extends Component {
                         this.setState(({ successMessage: "We've sent you a Confirmation Email" }), () => {
                             Router.pushRoute('/user/index');
                         });
-                        //TODO: make sure user can't buy if he/she is not verified.
                     } else {
                         this.setState({ errorMessage: data['message'] });
                     }
                 } catch (err) {
                     throw err;
                 }
+            } else {
+                this.setState({ errorMessage: 'Some Fields are Invalid' });
             }
         } else {
             this.setState({ errorMessage: 'Some Fields are Empty' });
