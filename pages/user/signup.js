@@ -307,7 +307,6 @@ class SignUp extends Component {
 
         try {
             var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);
-
         } catch (err) {
             throw err;
         }
