@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Layout from '../../components/Layout';
 import NavigationBar from '../../components/VendorNavBar';
-import { Segment, Button } from 'semantic-ui-react';
+import { Segment, Button, Grid, Container } from 'semantic-ui-react';
 import { Bar, Line, Pie, Radar, Bubble } from 'react-chartjs-2';
 
 class Dashboard extends Component {
@@ -42,19 +42,15 @@ class Dashboard extends Component {
                 <br />
                 <br />
                 <br />
-                {/* <Segment>
-                    <h3>Dashboard</h3>
-                </Segment> */}
+                <br />
                 <Segment color='violet' inverted>
-                    {/* <divs className='chart'> */}
-                    <Segment>
-                        {this.renderChart()}
-                    </Segment>
-
-                    <Button onClick={this.back}>Back</Button>
-                    <Button onClick={this.next}>Next</Button>
-                    {/* <Pie data={this.state.chartData} /> */}
-                    {/* </divs> */}
+                    <Container>
+                        <Segment>
+                            {this.renderChart()}
+                        </Segment>
+                        <Button basic inverted onClick={this.back}>Back</Button>
+                        <Button basic inverted onClick={this.next}>Next</Button>
+                    </Container>
                 </Segment>
             </div>
         )
@@ -68,6 +64,18 @@ class Dashboard extends Component {
     back = () => {
         const chartNumber = this.state.currentChart === 1 ? 4 : this.state.currentChart - 1;
         this.setState({ currentChart: chartNumber });
+    }
+
+    async componentDidMount(){
+        //TODO: Call api to get stats.
+        /**
+         * Number of Products bought per month
+         * Items most Viewed
+         * Amount of Point Generated on the Site and its Distribution
+         * Distribution of Product Bought (Pie Chart with Count and # of loco generated)
+         * 
+         */
+
     }
 
     renderChart() {

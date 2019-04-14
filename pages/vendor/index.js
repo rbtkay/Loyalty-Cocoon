@@ -6,6 +6,7 @@ import Purchase from '../../components/Purchase'
 import { Container, Segment, Search, Grid, Statistic, Popup, Input, Button, Form } from 'semantic-ui-react';
 import _ from 'lodash';
 import loco from '../../ethereum/loco';
+import { createCipher } from 'crypto';
 let cookie = require('../../cookie');
 
 class Transaction extends Component {
@@ -20,7 +21,9 @@ class Transaction extends Component {
         username: '',
         amount: '',
         loading: false,
-        isOpen: false
+        isOpen: false,
+        countProduct: '',
+        countPurchase: ''
     }
 
     render() {
@@ -44,7 +47,7 @@ class Transaction extends Component {
                                 trigger={<Button
                                     color='violet'
                                     icon='gift'
-                                    content='Grant Points' />}
+                                    content='Reward Customer' />}
                                 header='Give Customer LOCO'
                                 open={this.state.isOpen}
                                 onOpen={this.handleOpen}
@@ -104,12 +107,12 @@ class Transaction extends Component {
                 <Segment>
                     <Statistic.Group widths='2' color='violet' size='small'>
                         <Statistic>
-                            <Statistic.Value>100</Statistic.Value>
+                            <Statistic.Value>{this.state.countProduct}</Statistic.Value>
                             <Statistic.Label>Items Currently Offered</Statistic.Label>
                         </Statistic>
 
                         <Statistic>
-                            <Statistic.Value>200</Statistic.Value>
+                            <Statistic.Value>{this.state.countPurchase}</Statistic.Value>
                             <Statistic.Label>Items Sold This Month</Statistic.Label>
                         </Statistic>
                     </Statistic.Group>
@@ -168,6 +171,7 @@ class Transaction extends Component {
         const { searchValue } = this.state;
         let response;
 
+
         if (searchValue.length > 0) {
             response = await fetch(`/api/vendor/purchase/byVendorUser?vendorUsername=${username}&userUsername=${searchValue}`, {
                 headers: new Headers({
@@ -192,6 +196,27 @@ class Transaction extends Component {
                 purchases: purchases,
                 purchaseLength: purchases.length
             })
+        }
+        this.setStatValues(username);
+    }
+
+    async setStatValues(username) {
+
+        console.log(username);
+
+        try {
+            const responseProduct = await fetch(`/api/stats/countProductOfferedVender?username=${username}`);
+            const resultProduct = await responseProduct.json();
+
+            const responsePurchase = await fetch(`/api/stats/countPurchaseVendorPerMonth?username=${username}`);
+            const resultPurchase = await responsePurchase.json();
+
+            const countProduct = resultProduct[0]['productsCount'].toString();
+            const countPurchase = resultPurchase.toString();
+
+            this.setState({ countProduct: countProduct, countPurchase: countPurchase });
+        } catch (err) {
+            throw err;
         }
     }
 
