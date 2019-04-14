@@ -28,7 +28,7 @@ exports.countPurchasePerMonth = (req, res) => {
                     countPurchase++;
                 }
                 // console.log(currentMonth);
-            })
+            });
             res.status(202).json(countPurchase);
-        })
+        });
 }
