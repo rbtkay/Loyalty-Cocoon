@@ -47,7 +47,7 @@ class Transaction extends Component {
                                 trigger={<Button
                                     color='violet'
                                     icon='gift'
-                                    content='Grant Points' />}
+                                    content='Reward Customer' />}
                                 header='Give Customer LOCO'
                                 open={this.state.isOpen}
                                 onOpen={this.handleOpen}
