@@ -3,3 +3,4 @@
 .gitignore
 .next
 node_modules/
+auth.json

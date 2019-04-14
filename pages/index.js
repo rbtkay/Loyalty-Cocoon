@@ -8,6 +8,7 @@ import { Link } from '../routes';
 import loco from '../ethereum/loco';
 import fetch from 'isomorphic-fetch';
 let cookie = require('../cookie');
+import ReactGA from 'react-ga';
 
 
 class SignIn extends Component {
@@ -19,6 +20,12 @@ class SignIn extends Component {
         data: {},
         needConfirm: false
     };
+
+    constructor(props) {
+        super(props);
+
+        this.initializeReactGA();
+    }
 
     static async getInitialProps({ req }) {
 
@@ -119,9 +126,10 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Link href='/user/signup'>
-                                    <Button size="big" color='violet'>Sign Up</Button>
-                                </Link>
+                                <Button
+                                    size="big"
+                                    color='violet'
+                                    onClick={this.triggerEvent} >Sign Up</Button>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
                                 <Image src='/static/default_product_image.jpg' centered rounded size='large' />
@@ -224,6 +232,20 @@ class SignIn extends Component {
         cookie.setCookie('username', data.result[0]["user_username"], 100);
         cookie.setCookie('address', data.result[0]["user_ethAddress"], 100);
         cookie.setCookie('isVerified', sha256('1'), 100);
+    }
+
+    initializeReactGA = () => {
+        ReactGA.initialize('UA-138219487-1');
+        ReactGA.pageview('/index');
+    }
+
+    triggerEvent = () => {
+        console.log('CLICKME');
+        ReactGA.event({
+            category: 'User',
+            action: `SignUp`
+        });
+        Router.pushRoute('/user/signup');
     }
 }
 
