@@ -66,6 +66,18 @@ class Dashboard extends Component {
         this.setState({ currentChart: chartNumber });
     }
 
+    async componentDidMount(){
+        //TODO: Call api to get stats.
+        /**
+         * Number of Products bought per month
+         * Items most Viewed
+         * Amount of Point Generated on the Site and its Distribution
+         * Distribution of Product Bought (Pie Chart with Count and # of loco generated)
+         * 
+         */
+
+    }
+
     renderChart() {
         if (this.state.currentChart === 1) {
             return (
