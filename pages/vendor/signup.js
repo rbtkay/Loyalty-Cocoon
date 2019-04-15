@@ -62,9 +62,6 @@ class SignUp extends Component {
         if (this.state.isFormEmpty === false) {
             const emailRegEx = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
 
-            console.log('email');
-            console.log(email);
-
             if (!emailRegEx.test(email)) {
                 await this.setState({ isFormValid: false, emailError: true, errorMessage: 'Email is Invalid' });
             } else if (this.state.isEmailOpen === true || this.state.isUsernameOpen === true) {
@@ -73,7 +70,6 @@ class SignUp extends Component {
 
             if (this.state.isFormValid === true) {
                 const hashedPassword = sha256(password);
-                console.log("in the signUp");
                 try {
                     const newAccount = web3.eth.accounts.create();
 
@@ -98,7 +94,6 @@ class SignUp extends Component {
                 await this.setState({ isFormValid: false, errorMessage: 'Some Fields are Invalid' });
             }
         } else {
-            console.log("the form is not valid");
             this.setState({ errorMessage: 'Some Fields are Empty' });
         }
         this.setState({ loading: false });
@@ -218,15 +213,12 @@ class SignUp extends Component {
         const result = await response.json();
 
         await this.setState({ takenUsernames: result['usernames'], takenEmails: result['emails'] });
-        console.log('this.state.takenUsernames');
-        console.log(this.state.takenUsernames);
     }
 
     usernameEvaluation = async (username) => {
-        console.log(username);
         await this.setState({ username });
 
-        if (this.state.takenUsernames.includes(username)) {
+        if (this.state.takenUsernames.includes(username.toLowerCase())) {
             this.setState({ usernameError: true, isUsernameOpen: true });
         } else {
             this.setState({ usernameError: false, isUsernameOpen: false });
@@ -234,10 +226,9 @@ class SignUp extends Component {
     }
 
     emailEvaluation = async (email) => {
-        console.log(email);
         await this.setState({ email });
 
-        if (this.state.takenEmails.includes(email)) {
+        if (this.state.takenEmails.includes(email.toLowerCase())) {
             this.setState({ emailError: true, isEmailOpen: true });
         } else {
             this.setState({ emailError: false, isEmailOpen: false });
@@ -246,9 +237,6 @@ class SignUp extends Component {
 
     async sendConfirmation() {
         const { username, email } = this.state;
-
-        console.log(username)
-        console.log(email)
 
         try {
             var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);

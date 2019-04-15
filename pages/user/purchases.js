@@ -44,7 +44,6 @@ class Purchases extends Component {
             } else {
 
                 const purchases = await response.json();
-                console.log(purchases);
                 this.setState({
                     username,
                     purchases,

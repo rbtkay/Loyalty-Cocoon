@@ -242,8 +242,6 @@ class Manage extends Component {
         if (result.affectedRows > 0) {
             this.setState({ isOpen: false });
             this.componentDidMount();
-        } else {
-            console.log('ma akal');
         }
     }
 

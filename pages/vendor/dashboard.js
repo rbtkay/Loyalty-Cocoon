@@ -73,9 +73,8 @@ class Dashboard extends Component {
          * Items most Viewed
          * Amount of Point Generated on the Site and its Distribution
          * Distribution of Product Bought (Pie Chart with Count and # of loco generated)
-         * 
+         * Categories distribution (radar chart)
          */
-
     }
 
     renderChart() {
