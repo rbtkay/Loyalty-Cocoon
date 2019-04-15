@@ -27,24 +27,6 @@ class SignIn extends Component {
         this.initializeReactGA();
     }
 
-    static async getInitialProps({ req }) {
-
-        try {
-            const confirmation = req.path;
-            const token = confirmation.slice(6);
-
-            const jwt = require('jsonwebtoken');
-            const decodedToken = jwt.decode(token);
-            const username = decodedToken.username;
-
-            const response = await fetch(`/api/lib/verify?username=${username}`);
-
-        } catch (e) {
-            //     throw e;
-        }
-        return {};
-    }
-
     render() {
         return (
             <div  >
@@ -86,7 +68,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <button style={{border: 'none', background: 'transparent'}} onClick={this.sendEmail}>here</button></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <button style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</button></p></Message>
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
                                     <br />
@@ -168,6 +150,7 @@ class SignIn extends Component {
 
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
+        let isEmailVerified = true;
 
         const { username, password } = this.state;
         if (username === '' || password === '') {
@@ -178,9 +161,25 @@ class SignIn extends Component {
         } else {
             const hashedPassword = sha256(password);
             try {
+
+                const confirmation = window.location.href;
+
+                const token = confirmation.split('/')[4];
+
+                if (typeof token !== 'undefined') {
+                    const jwt = require('jsonwebtoken');
+                    const decodedToken = jwt.decode(token);
+                    const username = decodedToken.username;
+
+                    const response = await fetch(`/api/lib/verify?username=${username}`);
+                    if (response.status !== 200) {
+                        isEmailVerified = false;
+                    }
+                }
+
                 let response = await fetch(`/api/auth/login?username=${username}&password=${hashedPassword}`);
 
-                if (response.status === 200) {
+                if (response.status === 200 && isEmailVerified === true) {
                     const data = await response.json();
                     this.setCookies(data);
                     const address = cookie.getCookie('address');
@@ -218,7 +217,7 @@ class SignIn extends Component {
 
             if (response.status === 200) {
                 alert('Confirmation Email Sent...');
-            }else{
+            } else {
                 alert('We Were not able to reach your email');
             }
         } catch (e) {
