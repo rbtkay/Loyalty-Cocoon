@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../../database/connection');
 
 sendEmail = async (username, email, res, type) => {
+
+    console.log('in the email function: ', email);
+
     const transporter = nodeMailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -17,12 +20,18 @@ sendEmail = async (username, email, res, type) => {
             username: username
         }, 'emailKey');
 
-        const url = `/auth/${emailToken}`;
+        console.log(process.env.NODE_ENV);
+
+        const head = `${process.env.NODE_ENV ? 'https://loyalty-cocoon.appspot.com' : 'http://localhost:8000'}`
+
+
+        const querySring = `/auth/${emailToken}`;
+
+        const url = head + querySring;
 
         var content;
         var code = 0;
 
-        // console.log(content);
         if (type === 'confirm') {
             content = {
                 to: email,
@@ -77,17 +86,20 @@ sendEmail = async (username, email, res, type) => {
 }
 
 exports.sendConfirmEmail = async (req, res) => {
-    const username = req.query.username;
-    var email = req.query.email;
+    const { username, email } = req.query;
+    // var email = req.query.email;
     const type = 'confirm';
 
-    if (email == undefined) {
+    // console.log(email);
+    if (!email) {
+        console.log('emil has no type');
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
                 if (result.length > 0) {
-                    email = result[0]['user_email'];
-                    sendEmail(username, email, res);
+                    console.log(result[0]['user_email']);
+                    const mail = result[0]['user_email'].toString();
+                    sendEmail(username, mail, res, type);
                 } else {
                     res.status(404).send('Something Unexpected Happened...');
                 }
@@ -122,16 +134,16 @@ exports.getUsernamesEmails = (req, res) => {
     mysqlConnection.query('select user_username, user_email from user_t', (err, result) => {
         if (err) throw err;
         else {
-            if(result.length > 0){
+            if (result.length > 0) {
                 let usernames = [];
                 let emails = [];
                 result.forEach(element => {
-                        usernames.push(element['user_username']);
-                        emails.push(element['user_email']);
+                    usernames.push(element['user_username'].toLowerCase());
+                    emails.push(element['user_email'].toLowerCase());
                 });
                 console.log(usernames);
-                res.status(200).send({usernames, emails});
-            }else{
+                res.status(200).send({ usernames, emails });
+            } else {
                 res.status(404).send('Something Unexpected Happened...');
             }
         }
@@ -178,7 +190,7 @@ exports.sendReceiptEmail = async (req, res) => {
     const txHash = req.query.txHash;
     var email = req.query.email;
 
-    mysqlConnection.query('select * from product_t where product_id = ?', [productId] , (err, result) => {
+    mysqlConnection.query('select * from product_t where product_id = ?', [productId], (err, result) => {
         if (err) throw err;
         else {
             if (email == undefined) {

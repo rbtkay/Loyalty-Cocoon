@@ -214,26 +214,22 @@ class SignUp extends Component {
         const result = await response.json();
 
         await this.setState({ takenUsernames: result['usernames'], takenEmails: result['emails'] });
-        console.log('this.state.takenUsernames');
-        console.log(this.state.takenUsernames);
     }
 
     usernameEvaluation = async (username) => {
-        console.log(username);
         await this.setState({ username });
 
-        if (this.state.takenUsernames.includes(username)) {
-            this.setState({ usernameError: true, isUsernameOpen: true, isFormValid: true });
+        if (this.state.takenUsernames.includes(username.toLowerCase())) {
+            this.setState({ usernameError: true, isUsernameOpen: true, isFormValid: false });
         } else {
-            this.setState({ usernameError: false, isUsernameOpen: false, isFormValid: true });
+            this.setState({ usernameError: false, isUsernameOpen: false, isFormValid: false });
         }
     }
 
     emailEvaluation = async (email) => {
-        console.log(email);
         await this.setState({ email });
 
-        if (this.state.takenEmails.includes(email)) {
+        if (this.state.takenEmails.includes(email.toLowerCase())) {
             this.setState({ emailError: true, isEmailOpen: true });
         } else {
             this.setState({ emailError: false, isEmailOpen: false });
@@ -241,7 +237,7 @@ class SignUp extends Component {
     }
 
     onSubmit = async (req, res, event) => {
-        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: false });
+        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: true });
 
         const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
@@ -300,13 +296,10 @@ class SignUp extends Component {
     }
 
     async sendConfirmation() {
-        const { username, email } = this.state;
-
-        console.log(username)
-        console.log(email)
+        const { username } = this.state;
 
         try {
-            var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);
+            var response = await fetch(`/api/lib/confirmEmail?username=${username}`);
         } catch (err) {
             throw err;
         }

@@ -44,8 +44,6 @@ class search extends Component {
 
     async componentDidMount() {
 
-        console.log("in the component did mount");
-        console.log(this.props);
 
         try {
             const response = await fetch(`/api/user/product/search?search=${this.props.search}`, {
@@ -53,14 +51,11 @@ class search extends Component {
                     'authorization': cookie.getCookie('authorization')
                 })
             });
-            console.log('response.status');
-            console.log(response.status);
 
             if (response.status === 404) {
                 await this.setState({ isSearching: false, products: [] });
             } else if (response.status === 200) {
                 const products = await response.json();
-                console.log(products);
                 this.setState({ search, products, isSearching: false });
             }
         } catch (e) {
@@ -69,10 +64,8 @@ class search extends Component {
     }
 
     renderProducts() {
-        console.log('in the render products');
         if (this.state.isSearching === false) {
             if (this.state.products.length > 0) {
-                console.log('Rendering');
                 return (<CategoryCard {...this.state} handleSuccess={this.flipSuccess} />);
             } else {
                 return (

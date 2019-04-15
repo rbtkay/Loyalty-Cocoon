@@ -37,11 +37,8 @@ class SignIn extends Component {
             const decodedToken = jwt.decode(token);
             const username = decodedToken.username;
 
-            console.log(username);
-
             const response = await fetch(`/api/lib/verify?username=${username}`);
 
-            console.log(decodedToken.username);
         } catch (e) {
             //     throw e;
         }
@@ -89,7 +86,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a onClick={this.sendEmail}>here</a></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <button style={{border: 'none', background: 'transparent'}} onClick={this.sendEmail}>here</button></p></Message>
                                     <br />
                                     <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
                                     <br />
@@ -172,8 +169,6 @@ class SignIn extends Component {
     onSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
 
-        console.log(this.state.errorMessage);
-
         const { username, password } = this.state;
         if (username === '' || password === '') {
             this.setState({
@@ -190,7 +185,6 @@ class SignIn extends Component {
                     this.setCookies(data);
                     const address = cookie.getCookie('address');
                     let balance = 0;
-                    console.log(address);
                     try {
                         balance = await loco.methods.balances(address).call();
                     } catch (e) {
@@ -221,10 +215,15 @@ class SignIn extends Component {
         const { username } = this.state;
         try {
             const response = await fetch(`/api/lib/confirmEmail?username=${username}`);
+
+            if (response.status === 200) {
+                alert('Confirmation Email Sent...');
+            }else{
+                alert('We Were not able to reach your email');
+            }
         } catch (e) {
             throw e;
         }
-        console.log('hehey');
     }
 
     setCookies(data) {

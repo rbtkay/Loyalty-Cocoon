@@ -130,6 +130,7 @@ class Transaction extends Component {
     })
 
     handleResultSelect = (e, { result }) => {
+        //TODO: check how the search result is displayed.'
         this.setState(({ searchValue: result.name }), () => {
             this.refresh();
         });
@@ -171,7 +172,6 @@ class Transaction extends Component {
         const { searchValue } = this.state;
         let response;
 
-
         if (searchValue.length > 0) {
             response = await fetch(`/api/vendor/purchase/byVendorUser?vendorUsername=${username}&userUsername=${searchValue}`, {
                 headers: new Headers({
@@ -202,8 +202,6 @@ class Transaction extends Component {
 
     async setStatValues(username) {
 
-        console.log(username);
-
         try {
             const responseProduct = await fetch(`/api/stats/countProductOfferedVender?username=${username}`);
             const resultProduct = await responseProduct.json();
@@ -221,6 +219,7 @@ class Transaction extends Component {
     }
 
     renderPurchases() {
+        //TODO: Order purchases to show non-finalized purchases first.'
         if (this.state.purchaseLength === '') {
             return (
                 <h3>Loading Your Purchases</h3>
@@ -284,7 +283,6 @@ class Transaction extends Component {
                 const res = await fetch(`/api/contract/grant?address=${receiver[0].user_ethAddress}&amount=${amount}`);
 
                 const result = await res.json();
-                console.log(result);
 
                 this.setState({ username: '', amount: '' });
             } catch (err) {

@@ -72,8 +72,6 @@ class Categories extends Component {
     }
 
     renderProducts = () => {
-        console.log("category page");
-        console.log(this.state.products);
         if (this.state.products) {
             if (this.state.products.length > 0) {
                 return (<CategoryCard {...this.state} handleSuccess={this.flipSuccess} />);

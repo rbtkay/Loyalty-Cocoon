@@ -104,7 +104,6 @@ class ResetPassword extends Component {
     }
 
     nextStep = async () => {
-        console.log("button clicked")
         await this.setState({ isNextLoading: true });
 
         switch (this.state.step) {

@@ -99,16 +99,22 @@ class VendorNavBar extends Component {
 
         console.log("alo?")
         if (modalUsername !== '' && modalPassword !== '') {
-            if (modalUsername === cookie.getCookie('username')) {
+            if (modalUsername.toLowerCase() === cookie.getCookie('username').toLowerCase()) {
 
                 const hashedPassword = sha256(modalPassword);
-                const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
-                const res = await response.json();
+                try {
+                    const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
+                    const res = await response.json();
 
-                const username = res['result'][0].user_username;
+                    const username = res['result'][0].user_username;
 
-                if (response.status === 200) {
-                    Router.pushRoute(`/vendor/manage/${modalUsername}`);
+                    if (response.status === 200) {
+                        Router.pushRoute(`/vendor/manage/${modalUsername}`);
+                    } else {
+                        this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
+                    }
+                } catch (err) {
+                    this.setState({ submission: { msg: 'Oops, Something went wrong...', error: true } });
                 }
             } else {
                 this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
