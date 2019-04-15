@@ -12,7 +12,8 @@ jwt.authorize((err, response) => {
             ids: 'ga:' + view_id,
             'start-date': '30daysAgo',
             'end-date': 'today',
-            metrics: 'ga:users' // ga:pageviews
+            'dimentions': 'ga:eventCategory:User',
+            'metrics': 'ga:eventValue' // ga:pageviews
         },
         (err, result) => {
             console.log(err, result);

@@ -236,7 +236,7 @@ class SignIn extends Component {
 
     initializeReactGA = () => {
         ReactGA.initialize('UA-138219487-1');
-        ReactGA.pageview('/index');
+        ReactGA.pageview('/');
     }
 
     triggerEvent = () => {
