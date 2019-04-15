@@ -46,7 +46,7 @@ class SignIn extends Component {
                                 <br />
                                 <br />
 
-                                <Form error={!!this.state.errorMessage}>
+                                <Form error={!!this.state.errorMessage} onSubmit={this.justSubmit}>
                                     <h1>Sign In</h1>
                                     <br />
                                     <Form.Field >
@@ -68,9 +68,9 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <button style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</button></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a class='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
                                     <br />
-                                    <Button color="green" onClick={this.onSubmit} loading={this.state.loading}>Sign In!</Button>
+                                    <Form.Button color="green" loading={this.state.loading} content='Sign In' />
                                     <br />
                                     <br />
                                 </Form>
@@ -148,7 +148,7 @@ class SignIn extends Component {
         );
     }
 
-    onSubmit = async (req, res, event) => {
+    justSubmit = async (req, res, event) => {
         this.setState({ loading: true, errorMessage: '' });
         let isEmailVerified = true;
 
@@ -242,6 +242,10 @@ class SignIn extends Component {
         ReactGA.event({
             category: 'User',
             action: `SignUp`
+        });
+        ReactGA.event({
+            category: 'Test',
+            action: 'ClickTest'
         });
         Router.pushRoute('/user/signup');
     }
