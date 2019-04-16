@@ -150,6 +150,10 @@ class Dashboard extends Component {
                 var loco = parseInt(purchase['product_loco']);
 
                 if (year === currentYear) {
+                    const category = purchase['product_category'];
+                    categories[category]['count']++;
+                    categories[category]['loco'] += loco;
+
                     if (month > (currentMonth - 6)) {
                         monthsLoco[month]['count']++;
                         monthsLoco[month]['loco'] += loco;
@@ -177,6 +181,8 @@ class Dashboard extends Component {
                 }
             }
 
+            console.log(categories);
+
             this.setState(
                 {
                     lineData: {
@@ -201,6 +207,22 @@ class Dashboard extends Component {
                                 'rgba(75, 192, 192, 1.0)',
                                 'rgba(153, 102, 255, 1.0)',
                                 'rgba(255, 159, 64, 1.0)'
+                            ]
+                        }]
+                    },
+                    radarData: {
+                        labels: ['Clothing', 'Food', 'Groceries', 'Electronics', 'Toys'],
+                        datasets: [{
+                            label: 'Product by Category',
+                            data: [
+                                categories['Clothing']['count'],
+                                categories['Electronics']['count'],
+                                categories['Food']['count'],
+                                categories['Groceries']['count'],
+                                categories['Toys']['count'],
+                            ],
+                            backgroundColor: [
+                                'rgba(148,0,211, 0.3)'
                             ]
                         }]
                     }
@@ -230,7 +252,7 @@ class Dashboard extends Component {
             return (
                 <Radar
                     height='100'
-                    data={this.state.chartData}
+                    data={this.state.radarData}
                 />
             )
         } else if (this.state.currentChart === 4) {
