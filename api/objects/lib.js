@@ -41,7 +41,7 @@ sendEmail = async (username, email, res, type) => {
             <div class="container">
               <h2>Confirm Your Email!</h2>
               <p>Welcome to the Cocoon</p>
-              <a href='${url}'>www.Loyalty-Cocoon.com</a>
+              <a href='${url}'>www.loyalty-cocoon.com</a>
 
             </div>
 
@@ -81,7 +81,7 @@ sendEmail = async (username, email, res, type) => {
                 <body>
                 <div class="container">
                     <h2>Redeem and start shopping!</h2>
-                    <p>Congratulations! You have been referred by <b>${username}</b> to join our evergrowing <i>Cocoon</i>. Click on the link below and register to redeem your headstarting <b><i>LOCO</i></b>.</p> <br /> <br /> <br />
+                    <p>Congratulations! You have been referred by <b>${username}</b> to join our evergrowing <i>Cocoon</i>. Click on the link below and register to redeem your headstarting <b><i>LOCO</i></b>.</p> <br />
                     <h3><a href=${boostUrl}>https://www.loyalty-cocoon.com</a></h3>
                 </div>
                 </body>
