@@ -27,8 +27,24 @@ exports.countPurchasePerMonth = (req, res) => {
                 if (month === currentMonth) {
                     countPurchase++;
                 }
-                // console.log(currentMonth);
             });
             res.status(202).json(countPurchase);
         });
+}
+
+exports.getLocoPerMonth = (req, res) => {
+    const { username } = req.query;
+
+    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_username = ?',
+        [username],
+        (err, result) => {
+            if (err) throw err;
+
+            if (result.length > 0) {
+                console.log(result);
+                res.status(200).send(result);
+            } else {
+                res.status(404).send('No Purchase available');
+            }
+        })
 }
