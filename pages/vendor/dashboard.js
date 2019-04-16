@@ -49,7 +49,8 @@ class Dashboard extends Component {
         },
         barData: {},
         lineData: {},
-        radarData: {}
+        radarData: {},
+        pieData: {}
     }
 
 
@@ -123,7 +124,9 @@ class Dashboard extends Component {
             }
 
             let products = [];
+
             let pieLabels = [];
+            let pieLoco = [];
 
             const monthsLoco = {
                 1: { 'name': 'Jan', 'count': 0, 'loco': 0 },
@@ -147,11 +150,13 @@ class Dashboard extends Component {
             console.log('currentMonth:', currentMonth);
             console.log(locoDistributionResult);
 
+            let orderedProducts;
+
             locoDistributionResult.map(purchase => {
                 var month = parseInt(purchase['purchase_date'].split('-')[1]);
                 var year = parseInt(purchase['purchase_date'].split('-')[0]);
                 var loco = parseInt(purchase['product_loco']);
-                var productName = purchase['product_name'];
+                var productName = purchase['product_name'].toString();
 
                 // if (typeof products[productName] === 'undefined') {
                 //     products[productName] = loco;
@@ -159,13 +164,32 @@ class Dashboard extends Component {
                 // } else {
                 //     products[productName] += loco;
                 // }
+                const prod = { name: productName, loco: loco };
+                var isDuplicate = false;
+                products.map(item => {
+                    if (item['name'] === prod['name']) {
+                        isDuplicate = true;
+                        item['loco'] += loco;
+                        return;
+                    }
+                })
 
-                if (!pieLabels.includes(productName)) {
-                    pieLabels.push(productName);
-                    products.push(loco);
-                } else {
-                    products[pieLabels.indexOf(productName)] += loco;
+                if (isDuplicate === false) {
+                    products.push(prod);
                 }
+
+                let temp = products.sort((a, b) => {
+                    return b.loco - a.loco;
+                });
+
+                orderedProducts = temp.slice(0, 5);
+
+                // if (!pieLabels.includes(productName)) {
+                //     pieLabels.push(productName);
+                //     products.push(loco);
+                // } else {
+                //     products[pieLabels.indexOf(productName)] += loco;
+                // }
 
                 if (year === currentYear) {
                     const category = purchase['product_category'];
@@ -184,10 +208,17 @@ class Dashboard extends Component {
                 }
             })
 
+            orderedProducts.map(item => {
+                console.log('mapping')
+                pieLabels.push(item.name);
+                pieLoco.push(item.loco)
+            })
+
             let labels = [];
             let lineData = [];
             let barData = [];
 
+            //Filling the 6 categories.
             for (let i = 0; i < 6; i++) {
                 labels[i] = monthsLoco[currentMonth]['name'];
                 lineData[i] = monthsLoco[currentMonth]['loco'];
@@ -198,6 +229,11 @@ class Dashboard extends Component {
                     currentMonth = 12;
                 }
             }
+
+            //getting the top 5 products.
+            // for (let i = 0; i < products.length; i++) {
+
+            // }
             // JSON.stringify(products)
             // console.log(JSON.stringify(products));
             // const pieData = products.map(prod =>{
@@ -212,25 +248,20 @@ class Dashboard extends Component {
             // console.log(pieData);
             console.log('products');
             console.log(products);
+            console.log('orderedProducts');
+            console.log(orderedProducts);
             console.log('pieData');
             console.log(pieLabels);
+            console.log('barData');
+            console.log(barData);
 
             this.setState(
                 {
-                    lineData: {
-                        labels: labels.reverse(),
-                        datasets: [{
-                            label: 'Loco Distribution',
-                            data: lineData.reverse(),
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 1.0)'
-                            ],
-                        }]
-                    },
                     barData: {
-                        labels: labels.reverse(),
+                        labels: labels,
                         datasets: [{
-                            data: barData.reverse(),
+                            label: 'Product Sold per Month',
+                            data: barData,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 1.0)',
                                 'rgba(54, 162, 235, 1.0)',
@@ -239,6 +270,16 @@ class Dashboard extends Component {
                                 'rgba(153, 102, 255, 1.0)',
                                 'rgba(255, 159, 64, 1.0)'
                             ]
+                        }],
+                    },
+                    lineData: {
+                        labels: labels.reverse(),
+                        datasets: [{
+                            label: 'Loco Distribution',
+                            data: lineData.reverse(),
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 1.0)'
+                            ],
                         }]
                     },
                     radarData: {
@@ -260,8 +301,7 @@ class Dashboard extends Component {
                     pieData: {
                         labels: pieLabels,
                         datasets: [{
-                            label: 'Most Valuable Products',
-                            data: products,
+                            data: pieLoco,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 1.0)',
                                 'rgba(54, 162, 235, 1.0)',
@@ -280,31 +320,42 @@ class Dashboard extends Component {
     }
 
     renderChart() {
+        const barOptions = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1
+                    }
+                }]
+            }
+        }
         if (this.state.currentChart === 1) {
             return (
                 <Bar
-                    height='100'
+                    height={100}
                     data={this.state.barData}
+                    options={barOptions}
                 />
             )
         } else if (this.state.currentChart === 2) {
             return (
                 <Line
-                    height='100'
+                    height={100}
                     data={this.state.lineData}
                 />
             )
         } else if (this.state.currentChart === 3) {
             return (
                 <Radar
-                    height='100'
+                    height={100}
                     data={this.state.radarData}
                 />
             )
         } else if (this.state.currentChart === 4) {
             return (
                 <Pie
-                    height='100'
+                    height={100}
                     data={this.state.pieData}
                 />
             )
