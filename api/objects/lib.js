@@ -69,8 +69,8 @@ sendEmail = async (username, email, res, type) => {
             </html>`
             }
         } else if (type === 'refer') {
-            const token = jwt.sign({ email: email });
-            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/NEWLOCO` : `http://localhost:8000/user/signup/${token}`;
+            const token = jwt.sign({ email: email }, 'emailKey');
+            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
             content = {
                 to: email,
                 subject: `Loyalty Cocoon Referral`,
