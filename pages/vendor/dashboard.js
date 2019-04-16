@@ -105,7 +105,7 @@ class Dashboard extends Component {
         //Get the 
 
     }
-
+//TODO: 
     async getLineStats() {
         try {
             const username = getCookie('username');
@@ -261,7 +261,7 @@ class Dashboard extends Component {
                         labels: labels,
                         datasets: [{
                             label: 'Product Sold per Month',
-                            data: barData,
+                            data: barData.reverse(),
                             backgroundColor: [
                                 'rgba(255, 99, 132, 1.0)',
                                 'rgba(54, 162, 235, 1.0)',
