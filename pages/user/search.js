@@ -93,9 +93,9 @@ class search extends Component {
                 icon: "thumbs up",
                 title: "Transaction Successful",
                 description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
-                time: 5000
+                time: 0
             });
-        }, 5000);
+        }, 500);
     }
 
     flipSuccess = () => {

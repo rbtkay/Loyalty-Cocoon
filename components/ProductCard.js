@@ -48,7 +48,14 @@ class ProductCard extends Component {
                             <p>{description}</p>
                             <br />
                             <b>by </b>{vendor}
-
+                            <br />
+                            <Button
+                                inverted
+                                color="violet"
+                                floated='right'
+                                size='large'
+                                style={{width: 300}}
+                                onClick={this.confirmOpen}>Buy</Button>
                         </Modal.Description>
                     </Modal.Content>
                 </Modal>
