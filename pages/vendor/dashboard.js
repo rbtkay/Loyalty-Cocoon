@@ -5,6 +5,21 @@ import { Segment, Button, Grid, Container } from 'semantic-ui-react';
 import { Bar, Line, Pie, Radar, Bubble } from 'react-chartjs-2';
 import { getCookie } from '../../cookie';
 
+const indexToMonths = {
+    1: 'Jan',
+    2: 'Feb',
+    3: 'Mar',
+    4: 'Apr',
+    5: 'May',
+    6: 'Jun',
+    7: 'Jul',
+    8: 'Aug',
+    9: 'Sep',
+    10: 'Oct',
+    11: 'Nov',
+    12: 'Dec'
+}
+
 class Dashboard extends Component {
 
     state = {
@@ -31,8 +46,14 @@ class Dashboard extends Component {
                     'rgba(255, 159, 64, 1.0)'
                 ],
             }]
-        }
+        },
+        barData: {},
+        lineData: {},
+        radarData: {}
     }
+
+
+
 
     render() {
 
@@ -78,44 +99,113 @@ class Dashboard extends Component {
          */
 
         //Get the Loco Distribution per Month.
+        this.getLineStats();
+
+        //Get the 
+
+    }
+
+    async getLineStats() {
         try {
             const username = getCookie('username');
             // console.log(username);
             const locoDistribution = await fetch(`/api/stats/locoPerMonth?username=${username}`);
             const locoDistributionResult = await locoDistribution.json();
 
+            ///////////////////////////////////////
+
+            const categories = {
+                'Clothing': { 'count': 0, 'loco': 0 },
+                'Food': { 'count': 0, 'loco': 0 },
+                'Groceries': { 'count': 0, 'loco': 0 },
+                'Electronics': { 'count': 0, 'loco': 0 },
+                'Toys': { 'count': 0, 'loco': 0 }
+            }
+
             const monthsLoco = {
-                1: 0,
-                2: 0,
-                3: 0,
-                4: 0,
-                5: 0,
-                6: 0,
-                7: 0,
-                8: 0,
-                9: 0,
-                10: 0,
-                11: 0,
-                12: 0,
+                1: { 'name': 'Jan', 'count': 0, 'loco': 0 },
+                2: { 'name': 'Feb', 'count': 0, 'loco': 0 },
+                3: { 'name': 'Mar', 'count': 0, 'loco': 0 },
+                4: { 'name': 'Apr', 'count': 0, 'loco': 0 },
+                5: { 'name': 'May', 'count': 0, 'loco': 0 },
+                6: { 'name': 'Jun', 'count': 0, 'loco': 0 },
+                7: { 'name': 'Jul', 'count': 0, 'loco': 0 },
+                8: { 'name': 'Aug', 'count': 0, 'loco': 0 },
+                9: { 'name': 'Sep', 'count': 0, 'loco': 0 },
+                10: { 'name': 'Oct', 'count': 0, 'loco': 0 },
+                11: { 'name': 'Nov', 'count': 0, 'loco': 0 },
+                12: { 'name': 'Dec', 'count': 0, 'loco': 0 }
             }
 
             const date = new Date();
-            const currentMonth = date.getMonth() + 1;
-
-            const pastMonth = currentMonth - 6;
+            let currentMonth = parseInt(date.getMonth() + 1);
+            const currentYear = date.getFullYear();
 
             console.log('currentMonth:', currentMonth);
+            console.log(locoDistributionResult);
 
             locoDistributionResult.map(purchase => {
-                var month = purchase['purchase_date'].split('-')[1];
-                var loco = purchase['product_loco'];
-                console.log(month);
-                console.log(loco);
-                monthsLoco[month]++;
+                var month = parseInt(purchase['purchase_date'].split('-')[1]);
+                var year = parseInt(purchase['purchase_date'].split('-')[0]);
+                var loco = parseInt(purchase['product_loco']);
+
+                if (year === currentYear) {
+                    if (month > (currentMonth - 6)) {
+                        monthsLoco[month]['count']++;
+                        monthsLoco[month]['loco'] += loco;
+                    }
+                } else if (year === currentYear - 1) {
+                    if (month > (12 - (6 - currentMonth))) {
+                        monthsLoco[month]['count']++;
+                        monthsLoco[month]['loco'] += loco;
+                    }
+                }
             })
 
-            console.log(monthsLoco);
-            console.log(locoDistributionResult);
+            let labels = [];
+            let lineData = [];
+            let barData = [];
+
+            for (let i = 0; i < 6; i++) {
+                labels[i] = monthsLoco[currentMonth]['name'];
+                lineData[i] = monthsLoco[currentMonth]['loco'];
+                barData[i] = monthsLoco[currentMonth]['count'];
+
+                currentMonth--;
+                if (currentMonth <= 0) {
+                    currentMonth = 12;
+                }
+            }
+
+            this.setState(
+                {
+                    lineData: {
+                        labels: labels.reverse(),
+                        datasets: [{
+                            label: 'Loco Distribution',
+                            data: lineData.reverse(),
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 1.0)'
+                            ],
+                        }]
+                    },
+                    barData: {
+                        labels: labels.reverse(),
+                        datasets: [{
+                            label: 'Product per Month',
+                            data: barData.reverse(),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 1.0)',
+                                'rgba(54, 162, 235, 1.0)',
+                                'rgba(255, 206, 86, 1.0)',
+                                'rgba(75, 192, 192, 1.0)',
+                                'rgba(153, 102, 255, 1.0)',
+                                'rgba(255, 159, 64, 1.0)'
+                            ]
+                        }]
+                    }
+
+                })
         } catch (err) {
             throw err;
         }
@@ -126,21 +216,14 @@ class Dashboard extends Component {
             return (
                 <Bar
                     height='100'
-                    data={this.state.chartData}
+                    data={this.state.barData}
                 />
             )
         } else if (this.state.currentChart === 2) {
             return (
                 <Line
                     height='100'
-                    data={this.state.chartData}
-                    options={{
-                        title: {
-                            display: true,
-                            text: 'Customers'
-                        }
-                    }
-                    }
+                    data={this.state.lineData}
                 />
             )
         } else if (this.state.currentChart === 3) {
