@@ -266,10 +266,23 @@ class SignUp extends Component {
             if (this.state.isFormValid === true) {
                 const hashedPassword = sha256(password);
 
+                let boost = 0;
                 try {
                     const newAccount = web3.eth.accounts.create();
                     var response = await fetch(`/api/auth/userSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&dob=${dob}&gender=${gender}&phone=${phone}&prefs=${preferences}&address=${newAccount["address"]}&country=${country}&profession=${profession}&organization=${organization}`);
                     var data = await response.json();
+
+                    const token = window.location.href.split('/')[5];
+                    if (typeof token !== 'undefined') {
+                        const jwt = require('jsonwebtoken');
+                        const decodedToken = jwt.decode(token);
+                        const emailToken = decodedToken.email;
+                        console.log(emailToken);
+                        if (emailToken === email) {
+                            boost = 25000;
+                            await fetch(`/api/contract/grant?address=${newAccount['address']}&amount=${boost}`);
+                        }
+                    }
 
                     if (data.token) {
                         cookie.setCookie('username', username, 100);

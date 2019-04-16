@@ -20,10 +20,7 @@ sendEmail = async (username, email, res, type) => {
             username: username
         }, 'emailKey');
 
-        console.log(process.env.NODE_ENV);
-
         const head = `${process.env.NODE_ENV ? 'https://loyalty-cocoon.appspot.com' : 'http://localhost:8000'}`
-
 
         const querySring = `/auth/${emailToken}`;
 
@@ -63,13 +60,32 @@ sendEmail = async (username, email, res, type) => {
 
             <div class="container">
               <h2>Forgot Password!</h2>
-              <p>Here is Your verification Code</p>
+              <p>Here is your verification code</p>
               <h3>Code: ${code}</h3>
 
             </div>
 
             </body>
             </html>`
+            }
+        } else if (type === 'refer') {
+            const token = jwt.sign({ email: email });
+            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/NEWLOCO` : `http://localhost:8000/user/signup/${token}`;
+            content = {
+                to: email,
+                subject: `Loyalty Cocoon Referral`,
+                html: `<html>
+                <head>
+                </head>
+
+                <body>
+                <div class="container">
+                    <h2>Redeem and start shopping!</h2>
+                    <p>Congratulations! You have been referred by <b>${username}</b> to join our evergrowing <i>Cocoon</i>. Click on the link below and register to redeem your headstarting <b><i>LOCO</i></b>.</p> <br /> <br /> <br />
+                    <h3><a href=${boostUrl}>https://www.loyalty-cocoon.com</a></h3>
+                </div>
+                </body>
+                </html>`
             }
         }
         const info = await transporter.sendMail(content);
@@ -92,7 +108,7 @@ exports.sendConfirmEmail = async (req, res) => {
 
     // console.log(email);
     if (!email) {
-        console.log('emil has no type');
+        console.log('email has no type');
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
@@ -184,11 +200,7 @@ exports.changePassword = (req, res) => {
 }
 
 exports.sendReceiptEmail = async (req, res) => {
-    const username = req.query.username;
-    const vendorUsername = req.query.vendorUsername;
-    const productId = req.query.productId;
-    const txHash = req.query.txHash;
-    var email = req.query.email;
+    const { username, vendorUsername, productId, txHash, email } = req.query;
 
     mysqlConnection.query('select * from product_t where product_id = ?', [productId], (err, result) => {
         if (err) throw err;
@@ -214,13 +226,13 @@ exports.sendReceiptEmail = async (req, res) => {
                                 subject: 'Thank You for Shopping @LoyaltyCocoon',
                                 html: `
                                 <div>
-                                <h1>Here is your purchase from ${vendorUsername}</h1>
-                                <h4>Product Details</h4>
+                                <h2>Here is your purchase from ${vendorUsername}</h2>
+                                <h3>Product Details</h3>
                                 <p>Product ID: ${productId} <br />
                                 Name: ${result[0]['product_name']} <br />
                                 Price: ${result[0]['product_loco']} LOCO
                                 </p>
-                                <h5>You can track your transaction at <a href="${url}">${url}</a></h5>
+                                <h4>You can track your transaction at <a href="${url}">${url}</a></h4>
                                 </div>
                                 `
                             })
@@ -235,4 +247,21 @@ exports.sendReceiptEmail = async (req, res) => {
             }
         }
     })
+}
+
+exports.sendReferral = async (req, res) => {
+    const { email, vendorUsername } = req.query;
+
+    try {
+        mysqlConnection.query('select user_email from user_t where user_email = ?', [email], (err, result) => {
+            if (result.length > 0) {
+                res.status(409).send(err);
+            } else {
+                sendEmail(vendorUsername, email, res, 'refer');
+            }
+        })
+    } catch (err) {
+        res.status(404).send('Something Unexpected Happened');
+    }
+
 }

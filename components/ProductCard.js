@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Modal, Image, Header } from 'semantic-ui-react';
+import { Card, Button, Modal, Image, Header, Label, Grid } from 'semantic-ui-react';
 import Layout from './Layout';
 import BuyModal from './BuyModal';
 let cookie = require('../cookie');
@@ -21,8 +21,8 @@ class ProductCard extends Component {
                     <Card.Content onClick={this.show}>
                         <Image floated='left' size='tiny' src='/static/default_product_image.jpg' />
                         <Card.Header>{name}</Card.Header>
-                        <Card.Meta>{priceLoco}</Card.Meta>
                         <Card.Meta>{vendor}</Card.Meta>
+                        <Card.Meta textAlign='right'><Label tag >{priceLoco}</Label></Card.Meta>
                     </Card.Content>
                     <Card.Content extra>
                         <div className='ui two buttons'>
@@ -38,25 +38,31 @@ class ProductCard extends Component {
 
                 <Modal open={this.state.isOpen} onClose={this.close}>
                     <Modal.Header>{name}</Modal.Header>
-                    <Modal.Content image>
-                        <Image wrapped size='big' src='/static/default_product_image.jpg' />
-                        <Modal.Description>
-                            <b>Price </b>{priceLoco}
-                            <br />
-                            <br />
-                            <b>Description </b>
-                            <p>{description}</p>
-                            <br />
-                            <b>by </b>{vendor}
-                            <br />
-                            <Button
-                                inverted
-                                color="violet"
-                                floated='right'
-                                size='large'
-                                style={{width: 300}}
-                                onClick={this.confirmOpen}>Buy</Button>
-                        </Modal.Description>
+                    <Modal.Content>
+                        <Grid>
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <Image wrapped size='big' src='/static/default_product_image.jpg' />
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Modal.Description>
+                                        <b>Sold by: </b>{vendor}
+                                        <br /> <br />
+                                        <b>Description </b>
+                                        <p>{description}</p>
+                                        <br />
+                                        <Label tag>{priceLoco}</Label>
+                                        <br /> <br />
+                                        <Button
+                                            inverted
+                                            color='violet'
+                                            fluid
+                                            size='large'
+                                            onClick={this.confirmOpen}>Buy</Button>
+                                    </Modal.Description>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </Modal.Content>
                 </Modal>
             </div>

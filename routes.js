@@ -1,7 +1,7 @@
 const routes = require('next-routes')();
 
 routes.add('/user/purchases/:username', '/user/purchases')
-    .add('/user/signup', '/user/signup')
+    .add('/user/signup/:promo', '/user/signup')
     .add('/user/settings/:username', '/user/settings')
     .add('/user/settings', '/user/settings')
     .add('/vendor/manage/:modalUsername', '/vendor/manage')
