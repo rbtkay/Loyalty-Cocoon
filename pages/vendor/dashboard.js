@@ -3,6 +3,7 @@ import Layout from '../../components/Layout';
 import NavigationBar from '../../components/VendorNavBar';
 import { Segment, Button, Grid, Container } from 'semantic-ui-react';
 import { Bar, Line, Pie, Radar, Bubble } from 'react-chartjs-2';
+import { getCookie } from '../../cookie';
 
 class Dashboard extends Component {
 
@@ -66,7 +67,7 @@ class Dashboard extends Component {
         this.setState({ currentChart: chartNumber });
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
         //TODO: Call api to get stats.
         /**
          * Number of Products bought per month
@@ -75,6 +76,49 @@ class Dashboard extends Component {
          * Distribution of Product Bought (Pie Chart with Count and # of loco generated)
          * Categories distribution (radar chart)
          */
+
+        //Get the Loco Distribution per Month.
+        try {
+            const username = getCookie('username');
+            // console.log(username);
+            const locoDistribution = await fetch(`/api/stats/locoPerMonth?username=${username}`);
+            const locoDistributionResult = await locoDistribution.json();
+
+            const monthsLoco = {
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: 0,
+                6: 0,
+                7: 0,
+                8: 0,
+                9: 0,
+                10: 0,
+                11: 0,
+                12: 0,
+            }
+
+            const date = new Date();
+            const currentMonth = date.getMonth() + 1;
+
+            const pastMonth = currentMonth - 6;
+
+            console.log('currentMonth:', currentMonth);
+
+            locoDistributionResult.map(purchase => {
+                var month = purchase['purchase_date'].split('-')[1];
+                var loco = purchase['product_loco'];
+                console.log(month);
+                console.log(loco);
+                monthsLoco[month]++;
+            })
+
+            console.log(monthsLoco);
+            console.log(locoDistributionResult);
+        } catch (err) {
+            throw err;
+        }
     }
 
     renderChart() {
