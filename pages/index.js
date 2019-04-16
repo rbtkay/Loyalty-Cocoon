@@ -68,7 +68,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a class='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <input type='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail} value='here'></input></p></Message>
                                     <br />
                                     <Form.Button color="green" loading={this.state.loading} content='Sign In' />
                                     <br />
@@ -149,7 +149,7 @@ class SignIn extends Component {
     }
 
     justSubmit = async (req, res, event) => {
-        this.setState({ loading: true, errorMessage: '' });
+        this.setState({ loading: true, errorMessage: '', needConfirm: false });
         let isEmailVerified = true;
 
         const { username, password } = this.state;
