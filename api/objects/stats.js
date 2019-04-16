@@ -35,7 +35,7 @@ exports.countPurchasePerMonth = (req, res) => {
 exports.getLocoPerMonth = (req, res) => {
     const { username } = req.query;
 
-    mysqlconnection.query('SELECT purchase_t.*, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_username = ?',
+    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_username = ?',
         [username],
         (err, result) => {
             if (err) throw err;

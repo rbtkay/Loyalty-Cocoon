@@ -122,6 +122,9 @@ class Dashboard extends Component {
                 'Toys': { 'count': 0, 'loco': 0 }
             }
 
+            let products = [];
+            let pieLabels = [];
+
             const monthsLoco = {
                 1: { 'name': 'Jan', 'count': 0, 'loco': 0 },
                 2: { 'name': 'Feb', 'count': 0, 'loco': 0 },
@@ -148,6 +151,21 @@ class Dashboard extends Component {
                 var month = parseInt(purchase['purchase_date'].split('-')[1]);
                 var year = parseInt(purchase['purchase_date'].split('-')[0]);
                 var loco = parseInt(purchase['product_loco']);
+                var productName = purchase['product_name'];
+
+                // if (typeof products[productName] === 'undefined') {
+                //     products[productName] = loco;
+                //     pieLabels.push(productName);
+                // } else {
+                //     products[productName] += loco;
+                // }
+
+                if (!pieLabels.includes(productName)) {
+                    pieLabels.push(productName);
+                    products.push(loco);
+                } else {
+                    products[pieLabels.indexOf(productName)] += loco;
+                }
 
                 if (year === currentYear) {
                     const category = purchase['product_category'];
@@ -180,8 +198,22 @@ class Dashboard extends Component {
                     currentMonth = 12;
                 }
             }
+            // JSON.stringify(products)
+            // console.log(JSON.stringify(products));
+            // const pieData = products.map(prod =>{
+            //     console.log(prod);
+            //     return prod;
+            // })
 
-            console.log(categories);
+
+
+
+
+            // console.log(pieData);
+            console.log('products');
+            console.log(products);
+            console.log('pieData');
+            console.log(pieLabels);
 
             this.setState(
                 {
@@ -198,7 +230,6 @@ class Dashboard extends Component {
                     barData: {
                         labels: labels.reverse(),
                         datasets: [{
-                            label: 'Product per Month',
                             data: barData.reverse(),
                             backgroundColor: [
                                 'rgba(255, 99, 132, 1.0)',
@@ -223,6 +254,21 @@ class Dashboard extends Component {
                             ],
                             backgroundColor: [
                                 'rgba(148,0,211, 0.3)'
+                            ]
+                        }]
+                    },
+                    pieData: {
+                        labels: pieLabels,
+                        datasets: [{
+                            label: 'Most Valuable Products',
+                            data: products,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 1.0)',
+                                'rgba(54, 162, 235, 1.0)',
+                                'rgba(255, 206, 86, 1.0)',
+                                'rgba(75, 192, 192, 1.0)',
+                                'rgba(153, 102, 255, 1.0)',
+                                'rgba(255, 159, 64, 1.0)'
                             ]
                         }]
                     }
@@ -259,7 +305,7 @@ class Dashboard extends Component {
             return (
                 <Pie
                     height='100'
-                    data={this.state.chartData}
+                    data={this.state.pieData}
                 />
             )
         } else {
