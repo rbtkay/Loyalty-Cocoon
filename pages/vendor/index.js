@@ -154,8 +154,8 @@ class Transaction extends Component {
             const source = purchases.map(object => {
                 return {
                     key: object['purchase_id'],
-                    title: object['cust_username'],
-                    name: object['cust_username'],
+                    title: object['cust_id'],
+                    name: object['cust_id'],
                     description: 'TxID: ' + object['purchase_id']
                 }
             })
@@ -238,8 +238,8 @@ class Transaction extends Component {
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}
                                 productName={object['product_name']}
-                                username={object['cust_username']}
-                                vendor={object['vendor_username']}
+                                username={object['cust_id']}
+                                vendor={object['vendor_id']}
                                 time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
                                 finalize={this.finalizePurchase}

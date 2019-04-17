@@ -1,9 +1,10 @@
 const mysqlconnection = require('../../database/connection');
 
+//FIXME: Refactor
 exports.countProductVendor = (req, res) => {
     const username = req.query.username;
 
-    mysqlconnection.query('select count(product_id) as productsCount from product_t where product_offered = 1 and user_username = ?',
+    mysqlconnection.query('select count(product_id) as productsCount from product_t where product_isOffered = 1 and user_username = ?',
         [username],
         (err, result) => {
             if (err) throw err;
@@ -11,10 +12,11 @@ exports.countProductVendor = (req, res) => {
         });
 }
 
+//FIXME: Refactor
 exports.countPurchasePerMonth = (req, res) => {
     const username = req.query.username;
 
-    mysqlconnection.query('select * from purchase_t where vendor_username = ?',
+    mysqlconnection.query('select * from purchase_t where vendor_id = ?',
         [username],
         (err, result) => {
             if (err) throw err;
@@ -32,10 +34,11 @@ exports.countPurchasePerMonth = (req, res) => {
         });
 }
 
+//FIXME: Refactor
 exports.getLocoPerMonth = (req, res) => {
     const { username } = req.query;
 
-    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_username = ?',
+    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_id = ?',
         [username],
         (err, result) => {
             if (err) throw err;

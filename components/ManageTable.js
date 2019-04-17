@@ -40,7 +40,7 @@ class ManageTable extends Component {
     renderRow = (products) => {
         if (this.props.products) {
             return this.props.products.map((product, index) => {
-                if (product.product_offered.data[0] == 0) {
+                if (product.product_isOffered.data[0] == 0) {
                     if (!this.props.active.includes(index.toString())) {
                         return (
                             <Table.Row key={product['product_id']} data-item={index} onClick={this.props.handleActive}>
@@ -80,7 +80,7 @@ class ManageTable extends Component {
     renderOfferedRow = (products) => {
         if (this.props.products) {
             return this.props.products.map((product, index) => {
-                if (product.product_offered.data[0] == 1) {
+                if (product.product_isOffered.data[0] == 1) {
                     if (!this.props.active.includes(index.toString())) {
                         return (
                             <Table.Row key={product['product_id']} data-item={index} onClick={this.props.handleActive}>

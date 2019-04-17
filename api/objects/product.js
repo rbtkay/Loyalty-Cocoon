@@ -1,5 +1,6 @@
 const mysqlConnection = require('../../database/connection');
 
+//FIXME: Refactor
 exports.getAllProducts = (req, res, next) => {
     mysqlConnection.query('select * from product_t', (err, result, fields) => {
         if (err) throw err;
@@ -7,21 +8,23 @@ exports.getAllProducts = (req, res, next) => {
     });
 }
 
+//FIXME: Refactor
 exports.getOfferedProducts = (req, res, next) => {
     const isOffered = 1;
 
-    mysqlConnection.query('select * from product_t where product_offered = ?', [isOffered], (err, result, fields) => {
+    mysqlConnection.query('select * from product_t where product_isOffered = ?', [isOffered], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     });
 }
 
+//FIXME: Refactor
 exports.getProductSearch = (req, res, next) => {
     const searchRequest = req.query.search.toLowerCase();
     const isOffered = 1;
     let filteredResult = [];
 
-    mysqlConnection.query('select * from product_t where product_offered = ?', [isOffered], (err, result, fields) => {
+    mysqlConnection.query('select * from product_t where product_isOffered = ?', [isOffered], (err, result, fields) => {
         if (err) throw err;
         result.map((object) => {
             const name = object['product_name'].toLowerCase();
@@ -39,25 +42,28 @@ exports.getProductSearch = (req, res, next) => {
     });
 }
 
+//FIXME: Refactor
 exports.getProductByCategory = (req, res) => {
     const category = req.query.category;
 
-    mysqlConnection.query('select * from product_t where product_category = ? and product_offered = 1', [category], (err, result, fields) => {
+    mysqlConnection.query('select * from product_t where product_category = ? and product_isOffered = 1', [category], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     })
 }
 
+//FIXME: Refactor
 exports.getTopDeals = (req, res) => {
     const topDealsMargin = 100;
     const isOffered = 1;
 
-    mysqlConnection.query('select * from product_t where product_loco < ? and product_offered = ?', [topDealsMargin, isOffered], (err, result) => {
+    mysqlConnection.query('select * from product_t where product_loco < ? and product_isOffered = ?', [topDealsMargin, isOffered], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
     })
 }
 
+//FIXME: Refactor
 exports.getProductsByVendor = (req, res) => {
     const vendor = req.query.username;
 
@@ -67,6 +73,8 @@ exports.getProductsByVendor = (req, res) => {
     });
 }
 
+
+//FIXME: Refactor
 exports.insertProduct = (req, res) => {
     var name = req.query.name;
     var category = req.query.category;
@@ -113,7 +121,7 @@ exports.addOffersById = (req, res) => {
     let temp = id.split(',');
 
     if (temp) {
-        mysqlConnection.query('update product_t set product_offered = 1 where product_id in (?)', [temp], (err, result) => {
+        mysqlConnection.query('update product_t set product_isOffered = 1 where product_id in (?)', [temp], (err, result) => {
             if (err) throw err;
             else {
                 res.status(200).send(result);
@@ -127,7 +135,7 @@ exports.removeOffersById = (req, res) => {
     let temp = id.split(',');
 
     if (temp) {
-        mysqlConnection.query('update product_t set product_offered = 0 where product_id in (?)', [temp], (err, result) => {
+        mysqlConnection.query('update product_t set product_isOffered = 0 where product_id in (?)', [temp], (err, result) => {
             if (err) throw err;
             else {
                 res.status(200).send(result);

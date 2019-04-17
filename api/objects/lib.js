@@ -133,7 +133,7 @@ exports.verifyEmail = (req, res) => {
         if (err) throw err;
         else {
             if (result.length > 0) {
-                mysqlConnection.query('update user_t set user_verified = 1 where user_username = ?', [username], (err, result) => {
+                mysqlConnection.query('update user_t set user_isVerified = 1 where user_username = ?', [username], (err, result) => {
                     if (err) throw err;
                     else {
                         res.status(200).send('User is verified');

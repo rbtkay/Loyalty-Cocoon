@@ -208,7 +208,7 @@ class Manage extends Component {
         const products = await response.json();
         const offered = [];
         products.map((product) => {
-            if (product.product_offered.data[0] == 1) {
+            if (product.product_isOffered.data[0] == 1) {
                 offered.push(product);
             }
         })

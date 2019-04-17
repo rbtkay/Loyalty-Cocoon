@@ -1,8 +1,6 @@
 const mysqlConnection = require('../../database/connection');
 const jwt = require('jsonwebtoken');
 
-// TODO: Replace secretKey with process.env.JWT_USER/VENDOR
-
 exports.vendorSignUp = (req, res) => {
     var username = req.query.username;
     var email = req.query.email;
@@ -96,7 +94,7 @@ exports.login = (req, res, next) => {
         mysqlConnection.query('select * from user_t where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
-                const verifyResult = result[0]['user_verified'].toJSON();
+                const verifyResult = result[0]['user_isVerified'].toJSON();
                 const isverified = verifyResult.data[0];
 
                 if (isverified === 0) {
