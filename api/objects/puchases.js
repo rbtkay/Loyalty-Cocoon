@@ -49,7 +49,7 @@ exports.getPurchaseByVendorUser = (req, res) => {
 exports.addPurchase = (req, res) => {
     const { username, productId, vendorUsername, purchaseTime } = req.query;
 
-    mysqlconnection.query('insert into purchase_t (cust_id, product_id, vendor_id, purchase_date) values ((select user_id from user_t where user_t.user_username = ?),2,(select user_id from user_t where user_t.user_username = ?),?)', [username, productId, vendorUsername, purchaseTime], (err, result) => {
+    mysqlconnection.query('insert into purchase_t (cust_id, product_id, vendor_id, purchase_date) values ((select user_id from user_t where user_t.user_username = ?),?,(select user_id from user_t where user_t.user_username = ?),?)', [username, productId, vendorUsername, purchaseTime], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
     });

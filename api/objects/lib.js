@@ -200,51 +200,49 @@ exports.changePassword = (req, res) => {
 }
 
 exports.sendReceiptEmail = async (req, res) => {
-    const { username, vendorUsername, productId, txHash, email } = req.query;
-
+    const { username, vendorUsername, productId, txHash } = req.query;
+    let email;
     mysqlConnection.query('select * from product_t where product_id = ?', [productId], (err, result) => {
         if (err) throw err;
         else {
-            if (email == undefined) {
-                mysqlConnection.query('select user_email from user_t where user_username = ?', [username], async (err, newResult) => {
-                    if (err) throw err;
-                    else {
-                        email = newResult[0]['user_email'];
-                        const transporter = nodeMailer.createTransport({
-                            service: 'Gmail',
-                            auth: {
-                                user: 'Loyalty.Cocoon',
-                                pass: 'Loyalty11Cocoon'
-                            },
-                        });
+            mysqlConnection.query('select user_email from user_t where user_username = ?', [username], async (err, newResult) => {
+                if (err) throw err;
+                else {
+                    email = newResult[0]['user_email'];
+                    const transporter = nodeMailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: 'Loyalty.Cocoon',
+                            pass: 'Loyalty11Cocoon'
+                        },
+                    });
 
-                        try {
-                            const url = `https://rinkeby.etherscan.io/tx/${txHash}`;
+                    try {
+                        const url = `https://rinkeby.etherscan.io/tx/${txHash}`;
 
-                            const info = await transporter.sendMail({
-                                to: email,
-                                subject: 'Thank You for Shopping @LoyaltyCocoon',
-                                html: `
-                                <div>
-                                <h2>Here is your purchase from ${vendorUsername}</h2>
-                                <h3>Product Details</h3>
-                                <p>Product ID: ${productId} <br />
-                                Name: ${result[0]['product_name']} <br />
-                                Price: ${result[0]['product_loco']} LOCO
-                                </p>
-                                <h4>You can track your transaction at <a href="${url}">${url}</a></h4>
-                                </div>
-                                `
-                            })
-                            console.log("sent the email");
-                            console.log(info);
-                            res.status(200).send('sent');
-                        } catch (e) {
-                            throw e;
-                        }
+                        const info = await transporter.sendMail({
+                            to: email,
+                            subject: 'Thank You for Shopping @LoyaltyCocoon',
+                            html: `
+                            <div>
+                            <h2>Here is your purchase from ${vendorUsername}</h2>
+                            <h3>Product Details</h3>
+                            <p>Product ID: ${productId} <br />
+                            Name: ${result[0]['product_name']} <br />
+                            Price: ${result[0]['product_loco']} LOCO
+                            </p>
+                            <h4>You can track your transaction at <a href="${url}">${url}</a></h4>
+                            </div>
+                            `
+                        })
+                        console.log("sent the email");
+                        console.log(info);
+                        res.status(200).send('sent');
+                    } catch (e) {
+                        throw e;
                     }
-                })
-            }
+                }
+            })
         }
     })
 }

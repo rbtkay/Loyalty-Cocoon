@@ -120,6 +120,7 @@ class BuyModal extends Component {
                 });
 
                 const receiver = await response.json();
+                console.log(receiver[0].user_ethAddress);
                 console.log('price', this.props.price);
 
                 const res = await fetch(`/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].user_ethAddress}`);
@@ -127,19 +128,18 @@ class BuyModal extends Component {
                 const result = await res.json();
                 console.log(result.transactionHash);
 
-                const send = await fetch(`/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
-
-
-                // TODO: Update user's balance in navbar
-
-                let balance = cookie.getCookie('balance');
-                balance -= this.props.price;
-
                 const insertPurchase = await fetch(`/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
                     headers: new Headers({
                         'authorization': cookie.getCookie('authorization')
                     })
                 });
+
+                const send = await fetch(`/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
+
+                // TODO: Update user's balance in navbar
+
+                let balance = cookie.getCookie('balance');
+                balance -= this.props.price;
 
                 cookie.setCookie('balance', balance, 100);
                 this.props.handleSuccess();
