@@ -17,7 +17,7 @@ if (process.env.NODE_ENV) {
         host: "localhost",
         user: "root",
         password: "",
-        database: "locodb",
+        database: "cocoondb",
         port: 3306
     });
 }

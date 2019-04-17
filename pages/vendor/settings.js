@@ -10,10 +10,7 @@ class Settings extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-                <br />
+                <br /> <br /> <br /> <br />
                 <Segment textAlign='center'>
                     <h1>Page Under Construction...</h1>
                 </Segment>
