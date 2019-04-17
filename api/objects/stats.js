@@ -4,7 +4,7 @@ const mysqlconnection = require('../../database/connection');
 exports.countProductVendor = (req, res) => {
     const username = req.query.username;
 
-    mysqlconnection.query('select count(product_id) as productsCount from product_t where product_isOffered = 1 and user_username = ?',
+    mysqlconnection.query('select count(product_t.product_id) as productsCount, user_t.user_username from product_t, user_t where product_t.product_isOffered = 1 and user_t.user_username = ? and user_t.user_id = product_t.user_id',
         [username],
         (err, result) => {
             if (err) throw err;
@@ -16,7 +16,7 @@ exports.countProductVendor = (req, res) => {
 exports.countPurchasePerMonth = (req, res) => {
     const username = req.query.username;
 
-    mysqlconnection.query('select * from purchase_t where vendor_id = ?',
+    mysqlconnection.query('select purchase_t.*, user_t.user_username from purchase_t, user_t where user_t.user_username = ? and purchase_t.vendor_id = user_t.user_id',
         [username],
         (err, result) => {
             if (err) throw err;
@@ -38,7 +38,7 @@ exports.countPurchasePerMonth = (req, res) => {
 exports.getLocoPerMonth = (req, res) => {
     const { username } = req.query;
 
-    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category FROM purchase_t, product_t WHERE purchase_t.product_id = product_t.product_id and purchase_t.vendor_id = ?',
+    mysqlconnection.query('SELECT purchase_t.*,product_t.product_name, product_t.product_loco, product_t.product_category, user_t.user_username FROM purchase_t, product_t, user_t WHERE purchase_t.product_id = product_t.product_id and user_t.user_username = ? and user_t.user_id = purchase_t.vendor_id',
         [username],
         (err, result) => {
             if (err) throw err;

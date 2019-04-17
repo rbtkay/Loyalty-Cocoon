@@ -1,30 +1,27 @@
 const mysqlConnection = require('../../database/connection');
 
-//FIXME: Refactor
 exports.getAllProducts = (req, res, next) => {
-    mysqlConnection.query('select * from product_t', (err, result, fields) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.user_id = user_t.user_id', (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     });
 }
 
-//FIXME: Refactor
 exports.getOfferedProducts = (req, res, next) => {
     const isOffered = 1;
 
-    mysqlConnection.query('select * from product_t where product_isOffered = ?', [isOffered], (err, result, fields) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.product_isOffered = ? and product_t.user_id = user_t.user_id', [isOffered], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     });
 }
 
-//FIXME: Refactor
 exports.getProductSearch = (req, res, next) => {
     const searchRequest = req.query.search.toLowerCase();
     const isOffered = 1;
     let filteredResult = [];
 
-    mysqlConnection.query('select * from product_t where product_isOffered = ?', [isOffered], (err, result, fields) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.product_isOffered = ? and product_t.user_id = user_t.user_id', [isOffered], (err, result, fields) => {
         if (err) throw err;
         result.map((object) => {
             const name = object['product_name'].toLowerCase();
@@ -42,39 +39,34 @@ exports.getProductSearch = (req, res, next) => {
     });
 }
 
-//FIXME: Refactor
 exports.getProductByCategory = (req, res) => {
     const category = req.query.category;
 
-    mysqlConnection.query('select * from product_t where product_category = ? and product_isOffered = 1', [category], (err, result, fields) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.product_category = ? and product_t.product_isOffered = 1 and product_t.user_id = user_t.user_id', [category], (err, result, fields) => {
         if (err) throw err;
         res.status(200).send(result);
     })
 }
 
-//FIXME: Refactor
 exports.getTopDeals = (req, res) => {
     const topDealsMargin = 100;
     const isOffered = 1;
 
-    mysqlConnection.query('select * from product_t where product_loco < ? and product_isOffered = ?', [topDealsMargin, isOffered], (err, result) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.product_loco < ? and product_t.product_isOffered = ? and product_t.user_id = user_t.user_id', [topDealsMargin, isOffered], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
     })
 }
 
-//FIXME: Refactor
 exports.getProductsByVendor = (req, res) => {
     const vendor = req.query.username;
 
-    mysqlConnection.query('select * from product_t where user_username = ?', [vendor], (err, result) => {
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where user_t.user_username = ? and product_t.user_id = user_t.user_id', [vendor], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
     });
 }
 
-
-//FIXME: Refactor
 exports.insertProduct = (req, res) => {
     var name = req.query.name;
     var category = req.query.category;
@@ -84,18 +76,22 @@ exports.insertProduct = (req, res) => {
     var username = req.query.username;
 
     if (name && category && price && loco && description && username) {
-        mysqlConnection.query('insert into product_t (product_name, product_category, product_price, product_loco, product_description, user_username) values (?, ?, ?, ?, ?, ?)', [
-            name,
-            category,
-            price,
-            loco,
-            description,
-            username
-        ], (err, result) => {
+        mysqlConnection.query('select user_id from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
-            else {
-                res.status(200).send(result);
-            }
+            const id = result[0].user_id;
+            mysqlConnection.query('insert into product_t (product_name, product_category, product_price, product_loco, product_description, user_id) values (?, ?, ?, ?, ?, ?)', [
+                name,
+                category,
+                price,
+                loco,
+                description,
+                id
+            ], (err, result) => {
+                if (err) throw err;
+                else {
+                    res.status(200).send(result);
+                }
+            })
         })
     } else {
         res.status(400).send();

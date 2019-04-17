@@ -51,7 +51,6 @@ class Manage extends Component {
             }
         ]
 
-
         return (
             <div>
                 <Layout />
