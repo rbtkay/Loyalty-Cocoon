@@ -53,9 +53,6 @@ class Dashboard extends Component {
         pieData: {}
     }
 
-
-
-
     render() {
 
         return (
@@ -91,7 +88,7 @@ class Dashboard extends Component {
 
 
     }
-    //TODO: 
+
     async getLineStats() {
         try {
             const username = getCookie('username');

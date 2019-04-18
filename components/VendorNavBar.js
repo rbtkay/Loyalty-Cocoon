@@ -129,8 +129,6 @@ class VendorNavBar extends Component {
             this.setState({ submission: { msg: 'Fields Required', error: true } });
         }
     }
-    //TODO: make manage Product HyperLink Model a form!
-    //FIXME: VErify button should load
     renderModal() {
         if (this.state.submission['error']) {
             return (
