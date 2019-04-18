@@ -8,6 +8,18 @@ exports.getAllVendors = (req, res, next) => {
     });
 }
 
+exports.getVendorByUsername = (req, res, next) => {
+    var username = req.query.username;
+
+    mysqlConnection.query('select user_t.*, vendor_t.* from user_t, vendor_t where user_t.user_username = ? and user_t.user_id = vendor_t.user_id', [username], (err, result) => {
+        if (result.length > 0) {
+            res.status(200).send(result);
+        } else {
+            res.status(404).send(err);
+        }
+    })
+}
+
 exports.getCustomerAddress = (req, res, next) => {
     var username = req.query.username;
 
