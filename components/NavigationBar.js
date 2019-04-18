@@ -68,7 +68,7 @@ class NavigationBar extends Component {
         );
     }
 
-    updateBalance = () =>{
+    updateBalance = () => {
         console.log('hello')
         this.componentDidMount();
     }

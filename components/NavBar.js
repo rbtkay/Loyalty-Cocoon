@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Image } from 'semantic-ui-react';
 import { Link } from '../routes';
+import { viewSession } from '../Session';
 
 class NavBar extends Component {
     render() {
