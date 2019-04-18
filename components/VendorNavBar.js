@@ -15,7 +15,8 @@ class VendorNavBar extends Component {
         modalPassword: '',
         submission: { msg: '', error: false },
         referralOpen: false,
-        referralEmail: ''
+        referralEmail: '',
+        isVerifyLoading: false
     };
 
     constructor(props) {
@@ -23,7 +24,7 @@ class VendorNavBar extends Component {
     };
 
     render() {
-
+        const { isVerifyLoading } = this.state;
         return (
             <div>
                 <Menu fixed="top" inverted color="violet" style={{ height: "65px" }}>
@@ -71,7 +72,7 @@ class VendorNavBar extends Component {
 
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button negative onClick={this.onClick}>Verify</Button>
+                        <Button negative loading={isVerifyLoading} onClick={this.onClick}>Verify</Button>
                     </Modal.Actions>
                 </Modal>
             </div>
@@ -101,7 +102,7 @@ class VendorNavBar extends Component {
 
     onClick = async () => {
         const { modalUsername, modalPassword } = this.state;
-        this.setState({ submission: { msg: '', error: false } });
+        this.setState({ submission: { msg: '', error: false }, isVerifyLoading: true });
 
         if (modalUsername !== '' && modalPassword !== '') {
             if (modalUsername.toLowerCase() === cookie.getCookie('username').toLowerCase()) {
@@ -128,7 +129,6 @@ class VendorNavBar extends Component {
             this.setState({ submission: { msg: 'Fields Required', error: true } });
         }
     }
-    //TODO: make manage Product HyperLink Model a form!
     renderModal() {
         if (this.state.submission['error']) {
             return (
@@ -215,7 +215,7 @@ class VendorNavBar extends Component {
                     <Form onSubmit={this.refer}>
                         <Form.Input
                             placeholder='Customer Email'
-                            onChange={event => this.setState({ referralEmail: event.target.value })}/>
+                            onChange={event => this.setState({ referralEmail: event.target.value })} />
                     </Form>
                 </MenuItem>
             );

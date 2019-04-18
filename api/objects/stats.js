@@ -1,6 +1,5 @@
 const mysqlconnection = require('../../database/connection');
 
-//FIXME: Refactor
 exports.countProductVendor = (req, res) => {
     const username = req.query.username;
 
@@ -12,7 +11,6 @@ exports.countProductVendor = (req, res) => {
         });
 }
 
-//FIXME: Refactor
 exports.countPurchasePerMonth = (req, res) => {
     const username = req.query.username;
 
@@ -34,7 +32,6 @@ exports.countPurchasePerMonth = (req, res) => {
         });
 }
 
-//FIXME: Refactor
 exports.getLocoPerMonth = (req, res) => {
     const { username } = req.query;
 
