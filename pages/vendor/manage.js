@@ -25,30 +25,30 @@ class Manage extends Component {
 
     render() {
         const options = [{
-                key: 'Clothing',
-                text: 'Clothing',
-                value: 'Clothing'
-            },
-            {
-                key: 'Electronics',
-                text: 'Electronics',
-                value: 'Electronics'
-            },
-            {
-                key: 'Food',
-                text: 'Food',
-                value: 'Food'
-            },
-            {
-                key: 'Groceries',
-                text: 'Groceries',
-                value: 'Groceries'
-            },
-            {
-                key: 'Toys',
-                text: 'Toys',
-                value: 'Toys'
-            }
+            key: 'Clothing',
+            text: 'Clothing',
+            value: 'Clothing'
+        },
+        {
+            key: 'Electronics',
+            text: 'Electronics',
+            value: 'Electronics'
+        },
+        {
+            key: 'Food',
+            text: 'Food',
+            value: 'Food'
+        },
+        {
+            key: 'Groceries',
+            text: 'Groceries',
+            value: 'Groceries'
+        },
+        {
+            key: 'Toys',
+            text: 'Toys',
+            value: 'Toys'
+        }
         ]
 
         return (
@@ -61,10 +61,12 @@ class Manage extends Component {
                         <br /><br /><br />
 
                         <Grid columns={2}>
-                            <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
+                            <Grid.Column width='7' verticalAlign='top' textAlign='center'>
                                 <h1>Manage Your Products</h1>
 
-                                <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active} />
+                                <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
+                                    <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active} />
+                                </Segment>
 
                                 <Button
                                     negative
@@ -98,10 +100,12 @@ class Manage extends Component {
                                     onClick={this.removeOffers}></Button>
                             </Grid.Column>
 
-                            <Grid.Column width='7' verticalAlign='middle' textAlign='center'>
+                            <Grid.Column width='7' verticalAlign='top' textAlign='center'>
                                 <h1>Products Offered</h1>
 
-                                <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered} />
+                                <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
+                                    <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered} />
+                                </Segment>
 
                             </Grid.Column>
                         </Grid>

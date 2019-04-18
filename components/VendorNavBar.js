@@ -129,6 +129,7 @@ class VendorNavBar extends Component {
         }
     }
     //TODO: make manage Product HyperLink Model a form!
+    //FIXME: VErify button should load
     renderModal() {
         if (this.state.submission['error']) {
             return (
