@@ -55,7 +55,7 @@ class NavigationBar extends Component {
                             />
                         </Form>
                     </MenuItem>
-                    <Dropdown text={`Welcome ${this.state.username}`} className='item' pointing >
+                    <Dropdown text={`Welcome ${this.state.username}`} className='item' pointing onClick={this.updateBalance}>
                         <Dropdown.Menu>
                             <Dropdown.Header style={{ textAlign: "right" }}>{this.state.balance} LOCO</Dropdown.Header>
                             <Dropdown.Item onClick={this.settings}>Settings</Dropdown.Item>
@@ -66,6 +66,11 @@ class NavigationBar extends Component {
                 </Menu.Menu>
             </Menu>
         );
+    }
+
+    updateBalance = () =>{
+        console.log('hello')
+        this.componentDidMount();
     }
 
     async componentDidMount() {
