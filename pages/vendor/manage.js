@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider, Icon } from 'semantic-ui-react';
+import { Form, Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider, Icon } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import VendorNavBar from '../../components/VendorNavBar';
 import ManageTable from '../../components/ManageTable';
+import { sha256 } from 'js-sha256';
 let cookie = require('../../cookie');
 
 class Manage extends Component {
@@ -20,7 +21,13 @@ class Manage extends Component {
         username: '',
         auth: '',
         active: [],
-        activeOffered: []
+        activeOffered: [],
+        isVendorVerified: false,
+        isVerifyLoading: false,
+        verification: { msg: '' },
+        verificationPassword: '',
+        verificationUser: '',
+        isFormValid: true
     };
 
     render() {
@@ -51,154 +58,226 @@ class Manage extends Component {
         }
         ]
 
-        return (
-            <div>
-                <Layout />
-                <VendorNavBar />
+        if (this.state.isVendorVerified) {
+            return (
                 <div>
-                    <Segment color='violet' inverted>
+                    <Layout />
+                    <VendorNavBar />
+                    <div>
+                        <Segment color='violet' inverted>
 
-                        <br /><br /><br />
+                            <br /><br /><br />
 
-                        <Grid columns={2}>
-                            <Grid.Column width='7' verticalAlign='top' textAlign='center'>
-                                <h1>Manage Your Products</h1>
+                            <Grid columns={2}>
+                                <Grid.Column width='7' verticalAlign='top' textAlign='center'>
+                                    <h1>Manage Your Products</h1>
 
-                                <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
-                                    <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active} />
+                                    <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
+                                        <ManageTable products={this.state.products} offered={false} handleActive={this.onRowClick} active={this.state.active} />
+                                    </Segment>
+
+                                    <Button
+                                        negative
+                                        onClick={this.showConfirm}
+                                        floated='left'>Remove Selected Items</Button>
+                                    <Button
+                                        positive
+                                        floated='right'
+                                        onClick={this.show}>Add New Item</Button>
+                                </Grid.Column>
+
+                                <Grid.Column width='2' verticalAlign='middle' textAlign='center'>
+                                    <Button
+                                        as='a'
+                                        circular
+                                        inverted
+                                        icon='angle double right'
+                                        size='massive'
+                                        fluid
+                                        onClick={this.addOffers}></Button>
+
+                                    <br /><br />
+
+                                    <Button
+                                        as='a'
+                                        circular
+                                        inverted
+                                        icon='angle double left'
+                                        size='massive'
+                                        fluid
+                                        onClick={this.removeOffers}></Button>
+                                </Grid.Column>
+
+                                <Grid.Column width='7' verticalAlign='top' textAlign='center'>
+                                    <h1>Products Offered</h1>
+
+                                    <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
+                                        <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered} />
+                                    </Segment>
+
+                                </Grid.Column>
+                            </Grid>
+
+                            <br /><br /><br />
+
+                        </Segment>
+                    </div>
+
+                    <Modal open={this.state.isOpen} onClose={this.close} size='tiny'>
+                        <Modal.Header>Add a new item</Modal.Header>
+                        <Modal.Content>
+                            <Grid columns={2} rows={2} textAlign='center' verticalAlign='middle'>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Input
+                                            name='name'
+                                            placeholder='Product Name'
+                                            value={this.state.name}
+                                            onChange={event => this.setState({ name: event.target.value })}
+                                        />
+                                    </Grid.Column>
+
+                                    <Grid.Column>
+                                        <Input
+                                            icon='dollar sign'
+                                            name='price'
+                                            placeholder='Price'
+                                            value={this.state.price}
+                                            onChange={event => this.setState({ price: event.target.value })}
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
+
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <Dropdown
+                                            name='category'
+                                            value={this.state.category}
+                                            selection
+                                            options={options}
+                                            placeholder='Category'
+                                            onChange={(event, data) => this.setState({ category: data.value })}
+                                        />
+                                    </Grid.Column>
+
+                                    <Grid.Column>
+                                        <Input
+                                            name='loco'
+                                            labelPosition='right'
+                                            label='LOCO'
+                                            value={this.state.loco}
+                                            placeholder='Price in LOCO'
+                                            onChange={event => this.setState({ loco: event.target.value })}
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+
+                            <Divider />
+
+                            <TextArea
+                                name='description'
+                                placeholder='Item Description'
+                                style={{ width: '100%', height: '100%' }}
+                                value={this.state.description}
+                                onChange={event => this.setState({ description: event.target.value })}
+                            />
+
+                            <Button
+                                color='violet'
+                                onClick={this.addItem}>Add Item</Button>
+                        </Modal.Content>
+                    </Modal>
+
+                    <Modal open={this.state.isConfirmOpen} onClose={this.confirmClose} size='tiny' basic>
+                        <Modal.Header>
+                            <Icon name='times circle' /> Confirm Removal
+                    </Modal.Header>
+                        <Modal.Content>
+                            <h3>Are you sure you want to permanently remove the selected items?</h3>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button onClick={this.confirmClose} inverted>No</Button>
+                            <Button color='red' onClick={this.removeItems} inverted>
+                                <Icon name='checkmark' /> Yes
+                        </Button>
+                        </Modal.Actions>
+                    </Modal>
+
+
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Layout />
+                    <VendorNavBar />
+                    <Segment inverted color='violet'>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <Container>
+                            <Segment textAlign='center' color='violet' inverted>
+                                <Segment>
+                                    <Grid columns={3}>
+                                        <Grid.Column width='3'>
+                                        </Grid.Column>
+                                        <Grid.Column width='10'>
+                                            <Segment className='header'>Login to Continue...</Segment>
+                                            <Form error={!this.state.isFormValid}>
+                                                <Form.Field>
+                                                    <Input
+                                                        fluid
+                                                        error
+                                                        name="verificationUser"
+                                                        placeholder="Username"
+                                                        value={this.state.verificationUser}
+                                                        onChange={event => {
+                                                            this.setState({ verificationUser: event.target.value })
+                                                        }}
+                                                    />
+                                                </Form.Field>
+                                                <Form.Field>
+                                                    <Input
+                                                        type="password"
+                                                        fluid
+                                                        name="verificationPassword"
+                                                        placeholder="Password"
+                                                        value={this.state.verificationPassword}
+                                                        onChange={event => this.setState({ verificationPassword: event.target.value })}
+                                                    />
+                                                </Form.Field>
+                                                <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
+                                                <Form.Field>
+                                                    <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
+                                                </Form.Field>
+                                            </Form>
+                                        </Grid.Column>
+                                        <Grid.Column width='3'>
+                                        </Grid.Column>
+                                    </Grid>
                                 </Segment>
-
-                                <Button
-                                    negative
-                                    onClick={this.showConfirm}
-                                    floated='left'>Remove Selected Items</Button>
-                                <Button
-                                    positive
-                                    floated='right'
-                                    onClick={this.show}>Add New Item</Button>
-                            </Grid.Column>
-
-                            <Grid.Column width='2' verticalAlign='middle' textAlign='center'>
-                                <Button
-                                    as='a'
-                                    circular
-                                    inverted
-                                    icon='angle double right'
-                                    size='massive'
-                                    fluid
-                                    onClick={this.addOffers}></Button>
-
-                                <br /><br />
-
-                                <Button
-                                    as='a'
-                                    circular
-                                    inverted
-                                    icon='angle double left'
-                                    size='massive'
-                                    fluid
-                                    onClick={this.removeOffers}></Button>
-                            </Grid.Column>
-
-                            <Grid.Column width='7' verticalAlign='top' textAlign='center'>
-                                <h1>Products Offered</h1>
-
-                                <Segment style={{ overflow: 'auto', maxHeight: '500px' }}>
-                                    <ManageTable products={this.state.offered} offered={true} handleActive={this.onOfferedRowClick} active={this.state.activeOffered} />
-                                </Segment>
-
-                            </Grid.Column>
-                        </Grid>
-
-                        <br /><br /><br />
-
+                            </Segment>
+                        </Container>
                     </Segment>
                 </div>
+            );
 
-                <Modal open={this.state.isOpen} onClose={this.close} size='tiny'>
-                    <Modal.Header>Add a new item</Modal.Header>
-                    <Modal.Content>
-                        <Grid columns={2} rows={2} textAlign='center' verticalAlign='middle'>
-                            <Grid.Row>
-                                <Grid.Column>
-                                    <Input
-                                        name='name'
-                                        placeholder='Product Name'
-                                        value={this.state.name}
-                                        onChange={event => this.setState({ name: event.target.value })}
-                                    />
-                                </Grid.Column>
-
-                                <Grid.Column>
-                                    <Input
-                                        icon='dollar sign'
-                                        name='price'
-                                        placeholder='Price'
-                                        value={this.state.price}
-                                        onChange={event => this.setState({ price: event.target.value })}
-                                    />
-                                </Grid.Column>
-                            </Grid.Row>
-
-                            <Grid.Row>
-                                <Grid.Column>
-                                    <Dropdown
-                                        name='category'
-                                        value={this.state.category}
-                                        selection
-                                        options={options}
-                                        placeholder='Category'
-                                        onChange={(event, data) => this.setState({ category: data.value })}
-                                    />
-                                </Grid.Column>
-
-                                <Grid.Column>
-                                    <Input
-                                        name='loco'
-                                        labelPosition='right'
-                                        label='LOCO'
-                                        value={this.state.loco}
-                                        placeholder='Price in LOCO'
-                                        onChange={event => this.setState({ loco: event.target.value })}
-                                    />
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-
-                        <Divider />
-
-                        <TextArea
-                            name='description'
-                            placeholder='Item Description'
-                            style={{ width: '100%', height: '100%' }}
-                            value={this.state.description}
-                            onChange={event => this.setState({ description: event.target.value })}
-                        />
-
-                        <Button
-                            color='violet'
-                            onClick={this.addItem}>Add Item</Button>
-                    </Modal.Content>
-                </Modal>
-
-                <Modal open={this.state.isConfirmOpen} onClose={this.confirmClose} size='tiny' basic>
-                    <Modal.Header>
-                        <Icon name='times circle' /> Confirm Removal
-                    </Modal.Header>
-                    <Modal.Content>
-                        <h3>Are you sure you want to permanently remove the selected items?</h3>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button onClick={this.confirmClose} inverted>No</Button>
-                        <Button color='red' onClick={this.removeItems} inverted>
-                            <Icon name='checkmark' /> Yes
-                        </Button>
-                    </Modal.Actions>
-                </Modal>
-
-            </div>
-        );
+        }
     }
+
+    // <Modal open={!this.state.isVendorVerified} size="mini" centered={false} dimmer='blurring'>
+    //         <Modal.Header>Login to continue...</Modal.Header>
+    //         <Modal.Content>
+
+    //             {this.renderVerifyVendorModal()}
+
+    //         </Modal.Content>
+    //         <Modal.Actions>
+    //             <Button negative loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
+    //         </Modal.Actions>
+    //     </Modal>
 
     async componentDidMount() {
         const username = cookie.getCookie('username');
@@ -326,6 +405,93 @@ class Manage extends Component {
             }
         }
         this.setState({ activeOffered });
+    }
+
+    renderVerifyVendorModal() {
+        if (this.state.verification['error']) {
+            return (
+                <div>
+
+                    <Input
+                        fluid
+                        error
+                        name="verificationUser"
+                        placeholder="Username"
+                        value={this.state.verificationUser}
+                        onChange={event => {
+                            this.setState({ verificationUser: event.target.value })
+                        }}
+                    />
+
+                    <br />
+
+                    <Input
+                        type="password"
+                        fluid
+                        name="verificationPassword"
+                        placeholder="Password"
+                        value={this.state.verificationPassword}
+                        onChange={event => this.setState({ verificationPassword: event.target.value })}
+                    />
+                    <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <Input
+                        fluid
+                        name="verificationUser"
+                        placeholder="Username"
+                        value={this.state.verificationUser}
+                        onChange={event => {
+                            this.setState({ verificationUser: event.target.value })
+                        }}
+                    />
+
+                    <br />
+
+                    <Input
+                        fluid
+                        name="verificationPassword"
+                        placeholder="Password"
+                        type="password"
+                        value={this.state.verificationPassword}
+                        onChange={event => this.setState({ verificationPassword: event.target.value })}
+                    />
+                </div>
+            )
+        }
+    }
+
+    verifyVendor = async () => {
+        const { verificationUser, verificationPassword } = this.state;
+        this.setState({ verification: { msg: '' }, isVerifyLoading: true });
+
+        if (verificationUser !== '' && verificationPassword !== '') {
+            if (verificationUser.toLowerCase() === cookie.getCookie('username').toLowerCase()) {
+
+                const hashedPassword = sha256(verificationPassword);
+                try {
+                    const response = await fetch(`/api/auth/login?username=${verificationUser}&password=${hashedPassword}`);
+                    const res = await response.json();
+
+                    const username = res['result'][0].user_username;
+
+                    if (response.status === 200) {
+                        this.setState({ isVendorVerified: true });
+                    } else {
+                        this.setState({ verification: { msg: 'Invalid Username/Password' }, isFormValid: false, isVerifyLoading: false });
+                    }
+                } catch (err) {
+                    this.setState({ verification: { msg: 'Oops, Something went wrong...' }, isFormValid: false, isVerifyLoading: false });
+                }
+            } else {
+                this.setState({ verification: { msg: 'Invalid Username/Password' }, isFormValid: false, isVerifyLoading: false });
+            }
+        } else {
+            this.setState({ verification: { msg: 'Fields Required' }, isFormValid: false, isVerifyLoading: false });
+        }
     }
 }
 
