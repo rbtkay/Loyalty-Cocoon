@@ -52,9 +52,7 @@ class SignUp extends Component {
                 <Layout />
                 <NavBar />
                 <Segment inverted color='violet'>
-                    <br />
-                    <br />
-                    <br />
+                    <br /> <br /> <br />
                     <div className="ui raised very padded text container segment">
                         <h1>Join Millions of Shoppers</h1>
 
@@ -201,9 +199,7 @@ class SignUp extends Component {
 
 
                     </div>
-                    <br />
-                    <br />
-                    <br />
+                    <br /> <br /> <br />
                 </Segment>
             </div>
         );

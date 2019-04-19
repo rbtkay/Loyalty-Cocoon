@@ -16,8 +16,9 @@ class Settings extends Component {
                 <Layout />
                 <NavigationBar />
                 <br /> <br /> <br /> <br />
-                <Segment>
-                    <CompSettings user={this.state.user} onSubmit={this.submit}/>
+                <Segment color='violet' inverted>
+                    <br />
+                    <CompSettings user={this.state.user} onSubmit={this.submit} cancelChanges={this.cancel}/>
                 </Segment>
             </div>
         )
@@ -35,8 +36,17 @@ class Settings extends Component {
         this.setState({ user: user[0] });
     }
 
+    // FIXME: check whether to keep submits on pages or move into components
+
     submit = () => {
         console.log('vendor clicked');
+    }
+
+    cancel = (event) => {
+        event.preventDefault();
+        console.log('cancelled');
+        event.target.blur();
+        window.location = '/vendor';
     }
 }
 

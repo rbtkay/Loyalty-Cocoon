@@ -77,7 +77,8 @@ class ProductCard extends Component {
         this.setState({ isOpen: false });
     }
 
-    confirmOpen = () => {
+    confirmOpen = (event) => {
+        event.target.blur();
         this.setState({ isConfirmOpen: true });
         this.handleMessage('');
     }

@@ -91,6 +91,7 @@ class BuyModal extends Component {
 
     purchaseProduct = async (event) => {
         event.preventDefault();
+        event.target.blur();
 
         const { username, vendorUsername, productId } = this.props;
         const d = new Date();

@@ -53,9 +53,6 @@ class Dashboard extends Component {
         pieData: {}
     }
 
-
-
-
     render() {
 
         return (
@@ -102,14 +99,13 @@ class Dashboard extends Component {
         //Get the Loco Distribution per Month.
         this.getLineStats();
 
-        //Get the 
+        //Get the
 
     }
-//TODO: 
+    //TODO:
     async getLineStats() {
         try {
             const username = getCookie('username');
-            // console.log(username);
             const locoDistribution = await fetch(`/api/stats/locoPerMonth?username=${username}`);
             const locoDistributionResult = await locoDistribution.json();
 
@@ -241,10 +237,6 @@ class Dashboard extends Component {
             //     return prod;
             // })
 
-
-
-
-
             // console.log(pieData);
             console.log('products');
             console.log(products);
@@ -255,65 +247,64 @@ class Dashboard extends Component {
             console.log('barData');
             console.log(barData);
 
-            this.setState(
-                {
-                    barData: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Product Sold per Month',
-                            data: barData.reverse(),
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 1.0)',
-                                'rgba(54, 162, 235, 1.0)',
-                                'rgba(255, 206, 86, 1.0)',
-                                'rgba(75, 192, 192, 1.0)',
-                                'rgba(153, 102, 255, 1.0)',
-                                'rgba(255, 159, 64, 1.0)'
-                            ]
-                        }],
-                    },
-                    lineData: {
-                        labels: labels.reverse(),
-                        datasets: [{
-                            label: 'Loco Distribution',
-                            data: lineData.reverse(),
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 1.0)'
-                            ],
-                        }]
-                    },
-                    radarData: {
-                        labels: ['Clothing', 'Food', 'Groceries', 'Electronics', 'Toys'],
-                        datasets: [{
-                            label: 'Product by Category',
-                            data: [
-                                categories['Clothing']['count'],
-                                categories['Electronics']['count'],
-                                categories['Food']['count'],
-                                categories['Groceries']['count'],
-                                categories['Toys']['count'],
-                            ],
-                            backgroundColor: [
-                                'rgba(148,0,211, 0.3)'
-                            ]
-                        }]
-                    },
-                    pieData: {
-                        labels: pieLabels,
-                        datasets: [{
-                            data: pieLoco,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 1.0)',
-                                'rgba(54, 162, 235, 1.0)',
-                                'rgba(255, 206, 86, 1.0)',
-                                'rgba(75, 192, 192, 1.0)',
-                                'rgba(153, 102, 255, 1.0)',
-                                'rgba(255, 159, 64, 1.0)'
-                            ]
-                        }]
-                    }
+            this.setState({
+                barData: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Product Sold per Month',
+                        data: barData.reverse(),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1.0)',
+                            'rgba(54, 162, 235, 1.0)',
+                            'rgba(255, 206, 86, 1.0)',
+                            'rgba(75, 192, 192, 1.0)',
+                            'rgba(153, 102, 255, 1.0)',
+                            'rgba(255, 159, 64, 1.0)'
+                        ]
+                    }],
+                },
+                lineData: {
+                    labels: labels.reverse(),
+                    datasets: [{
+                        label: 'Loco Distribution',
+                        data: lineData.reverse(),
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 1.0)'
+                        ],
+                    }]
+                },
+                radarData: {
+                    labels: ['Clothing', 'Food', 'Groceries', 'Electronics', 'Toys'],
+                    datasets: [{
+                        label: 'Product by Category',
+                        data: [
+                            categories['Clothing']['count'],
+                            categories['Electronics']['count'],
+                            categories['Food']['count'],
+                            categories['Groceries']['count'],
+                            categories['Toys']['count'],
+                        ],
+                        backgroundColor: [
+                            'rgba(148,0,211, 0.3)'
+                        ]
+                    }]
+                },
+                pieData: {
+                    labels: pieLabels,
+                    datasets: [{
+                        data: pieLoco,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1.0)',
+                            'rgba(54, 162, 235, 1.0)',
+                            'rgba(255, 206, 86, 1.0)',
+                            'rgba(75, 192, 192, 1.0)',
+                            'rgba(153, 102, 255, 1.0)',
+                            'rgba(255, 159, 64, 1.0)'
+                        ]
+                    }]
+                }
 
-                })
+            })
         } catch (err) {
             throw err;
         }
