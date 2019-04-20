@@ -137,8 +137,6 @@ class BuyModal extends Component {
 
                 const send = await fetch(`/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
 
-                // TODO: Update user's balance in navbar
-
                 let balance = cookie.getCookie('balance');
                 balance -= this.props.price;
 

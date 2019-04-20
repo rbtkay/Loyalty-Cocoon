@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Layout from '../../components/Layout';
 import NavigationBar from '../../components/VendorNavBar';
-import { Segment, Button, Grid, Container } from 'semantic-ui-react';
+import { Segment, Button, Grid, Container, Divider } from 'semantic-ui-react';
 import { Bar, Line, Pie, Radar, Bubble } from 'react-chartjs-2';
 import { getCookie } from '../../cookie';
 
@@ -54,7 +54,6 @@ class Dashboard extends Component {
     }
 
     render() {
-
         return (
             <div>
                 <Layout />
@@ -62,11 +61,16 @@ class Dashboard extends Component {
                 <br />
                 <br />
                 <br />
-                <br />
-                <Segment color='violet' inverted>
-                    <Container>
-                        {this.renderChart()}
-                    </Container>
+                <Segment>
+                    <Segment className='header' color='violet'>
+                        Monitor Your Cocoon
+                    </Segment>
+                    <Divider/>
+                    <Segment color='violet' inverted>
+                        <Container>
+                            {this.renderChart()}
+                        </Container>
+                    </Segment>
                 </Segment>
             </div>
         )

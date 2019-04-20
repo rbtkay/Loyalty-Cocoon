@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Menu, MenuItem, Dropdown, DropdownItem, Modal, Input, Button, Message, Image, Form, Icon } from 'semantic-ui-react';
 import { Router } from '../routes';
 import loco from '../ethereum/loco';
-import { sha256 } from 'js-sha256';
 import { Link } from '../routes';
 let cookie = require('../cookie');
 
@@ -10,7 +9,6 @@ class VendorNavBar extends Component {
     input;
     state = {
         username: '',
-        isOpen: false,
         modalUsername: '',
         modalPassword: '',
         submission: { msg: '', error: false },
@@ -21,6 +19,7 @@ class VendorNavBar extends Component {
 
     constructor(props) {
         super(props);
+        console.log('in the vendor navbar!!!');
     };
 
     render() {
@@ -64,27 +63,13 @@ class VendorNavBar extends Component {
                     </Menu.Menu>
                 </Menu>
 
-                <Modal open={this.state.isOpen} onClose={this.close} size="mini" centered={false} dimmer='blurring'>
-                    <Modal.Header>Login to continue...</Modal.Header>
-                    <Modal.Content>
-
-                        {this.renderModal()}
-
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button negative loading={isVerifyLoading} onClick={this.onClick}>Verify</Button>
-                    </Modal.Actions>
-                </Modal>
+                
             </div>
         );
     }
 
     show = () => {
-        this.setState({ isOpen: true });
-    }
-
-    close = () => {
-        this.setState({ isOpen: false });
+        Router.pushRoute('/vendor/manage');
     }
 
     logout = () => {
@@ -100,91 +85,8 @@ class VendorNavBar extends Component {
         Router.pushRoute(`/vendor/settings/${this.state.username}`);
     }
 
-    onClick = async () => {
-        const { modalUsername, modalPassword } = this.state;
-        this.setState({ submission: { msg: '', error: false }, isVerifyLoading: true });
-
-        if (modalUsername !== '' && modalPassword !== '') {
-            if (modalUsername.toLowerCase() === cookie.getCookie('username').toLowerCase()) {
-
-                const hashedPassword = sha256(modalPassword);
-                try {
-                    const response = await fetch(`/api/auth/login?username=${modalUsername}&password=${hashedPassword}`);
-                    const res = await response.json();
-
-                    const username = res['result'][0].user_username;
-
-                    if (response.status === 200) {
-                        Router.pushRoute(`/vendor/manage/${modalUsername}`);
-                    } else {
-                        this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
-                    }
-                } catch (err) {
-                    this.setState({ submission: { msg: 'Oops, Something went wrong...', error: true } });
-                }
-            } else {
-                this.setState({ submission: { msg: 'Invalid Username/Password', error: true } });
-            }
-        } else {
-            this.setState({ submission: { msg: 'Fields Required', error: true } });
-        }
-    }
-    renderModal() {
-        if (this.state.submission['error']) {
-            return (
-                <div>
-
-                    <Input
-                        fluid
-                        error
-                        name="modalUsername"
-                        placeholder="Username"
-                        value={this.state.modalUsername}
-                        onChange={event => {
-                            this.setState({ modalUsername: event.target.value })
-                        }}
-                    />
-
-                    <br />
-
-                    <Input
-                        type="password"
-                        fluid
-                        name="modalPassword"
-                        placeholder="Password"
-                        value={this.state.modalPassword}
-                        onChange={event => this.setState({ modalPassword: event.target.value })}
-                    />
-                    <Message error header='Oops!' content={this.state.submission['msg']} ></Message>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <Input
-                        fluid
-                        name="modalUsername"
-                        placeholder="Username"
-                        value={this.state.modalUsername}
-                        onChange={event => {
-                            this.setState({ modalUsername: event.target.value })
-                        }}
-                    />
-
-                    <br />
-
-                    <Input
-                        fluid
-                        name="modalPassword"
-                        placeholder="Password"
-                        type="password"
-                        value={this.state.modalPassword}
-                        onChange={event => this.setState({ modalPassword: event.target.value })}
-                    />
-                </div>
-            )
-        }
-    }
+    
+    
 
     async componentDidMount() {
         const auth = cookie.getCookie('authorization');
