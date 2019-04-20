@@ -36,7 +36,7 @@ class SignUp extends Component {
     };
 
     onSubmit = async (req, res, event) => {
-        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: false });
+        await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: true });
 
         const { username, email, password, name, phone, location, tag } = this.state;
 
@@ -59,6 +59,7 @@ class SignUp extends Component {
             await this.setState({ locationError: true, isFormEmpty: true });
         }
 
+
         if (this.state.isFormEmpty === false) {
             const emailRegEx = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/);
 
@@ -72,6 +73,7 @@ class SignUp extends Component {
                 const hashedPassword = sha256(password);
                 try {
                     const newAccount = web3.eth.accounts.create();
+                    console.log("this.state.isFormEmpty");
 
                     var response = await fetch(`/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
                     var data = await response.json();

@@ -103,10 +103,12 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Button
-                                    size="big"
-                                    color='violet'
-                                    onClick={this.triggerEvent} >Sign Up</Button>
+                                <Link href='/user/signup'>
+                                    <Button
+                                        size="big"
+                                        color='violet'
+                                        onClick={this.triggerEvent} >Sign Up</Button>
+                                </Link>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
                                 <Image src='/static/default_product_image.jpg' centered rounded size='large' />
@@ -245,7 +247,7 @@ class SignIn extends Component {
             category: 'Test',
             action: 'ClickTest'
         });
-        Router.pushRoute('/user/signup');
+        // Router.pushRoute('/user/signup');
     }
 }
 

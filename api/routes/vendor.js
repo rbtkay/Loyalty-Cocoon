@@ -9,5 +9,6 @@ router.use('/purchase', purchaseRoutes);
 
 router.get('/all', Vendor.getAllVendors);
 router.get('/address', Vendor.getCustomerAddress);
+router.get('/delete', Vendor.deleteAccount);
 
 module.exports = router;

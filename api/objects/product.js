@@ -101,9 +101,8 @@ exports.insertProduct = (req, res) => {
 exports.deleteProductById = (req, res) => {
     var id = req.query.id;
     let temp = id.split(',');
-
     if (temp) {
-        mysqlConnection.query('delete from product_t where product_id in (?)', [temp], (err, result) => {
+        mysqlConnection.query('UPDATE product_t SET product_t.product_isDeleted = 1, product_t.product_isOffered = 0 where product_t.product_id in (?)', [temp], (err, result) => {
             if (err) throw err;
             else {
                 res.status(200).send(result);
