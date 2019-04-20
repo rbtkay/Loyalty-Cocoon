@@ -80,26 +80,32 @@ class ProductRow extends Component {
     async componentDidMount() {
         const filter = this.state.filter;
 
+        // try {
         const response = await fetch(`/api/user/product/offered`, {
             headers: new Headers({
                 'authorization': cookie.getCookie('authorization')
             })
         });
-        const products = await response.json();
 
         const responseTopDeals = await fetch(`/api/user/product/topDeals`, {
             headers: new Headers({
                 'authorization': cookie.getCookie('authorization')
             })
         });
-        const topDealsArray = await responseTopDeals.json();
 
-        //TODO: Make create the following arrays from api calls.
-        const topDeals = topDealsArray.slice(0, 3);
-        const recommended = products.slice(3, 7);
-        const bestSeller = products.slice(7, 12);
+        if (response.status === 401 || responseTopDeals.status === 401) {
+            cookie.deleteCookie();
+            window.location = '/';
+        } else {
+            const products = await response.json();
+            const topDealsArray = await responseTopDeals.json();
 
-        this.setState({ products, topDeals, recommended, bestSeller });
+            const topDeals = topDealsArray.slice(0, 3);
+            //TODO: Make create the following arrays from api calls.
+            const recommended = products.slice(3, 7);
+            const bestSeller = products.slice(7, 12);
+            this.setState({ products, topDeals, recommended, bestSeller });
+        }
     }
 }
 
