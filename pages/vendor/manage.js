@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider, Icon } from 'semantic-ui-react';
+import { Form, Table, Button, Modal, Input, Message, Segment, Container, Grid, Image, TextArea, Dropdown, Divider, Icon, Label } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Router } from '../../routes';
 import VendorNavBar from '../../components/VendorNavBar';
@@ -212,21 +212,24 @@ class Manage extends Component {
                 <div>
                     <Layout />
                     <VendorNavBar />
+                    <br />
+                    <br />
+                    <br />
                     <Segment inverted color='violet'>
                         <br />
-                        <br />
-                        <br />
-                        <br />
                         <Container>
-                            <Segment textAlign='center' color='violet' inverted>
-                                <Segment>
-                                    <Grid columns={3}>
-                                        <Grid.Column width='3'>
-                                        </Grid.Column>
-                                        <Grid.Column width='10'>
-                                            <Segment className='header'>Login to Continue...</Segment>
+                            <Segment color='violet' inverted>
+                                {/* <Segment> */}
+                                <Grid columns={3}>
+                                    <Grid.Column width='4'>
+                                    </Grid.Column>
+                                    <Grid.Column width='8'>
+                                        <Segment>
+                                            <Segment className='header' color='violet' >Login to Continue...</Segment>
+                                            <Divider />
                                             <Form error={!this.state.isFormValid}>
                                                 <Form.Field>
+                                                    <label floated='right'>Username</label>
                                                     <Input
                                                         fluid
                                                         error
@@ -239,6 +242,7 @@ class Manage extends Component {
                                                     />
                                                 </Form.Field>
                                                 <Form.Field>
+                                                    <label>Password</label>
                                                     <Input
                                                         type="password"
                                                         fluid
@@ -249,35 +253,29 @@ class Manage extends Component {
                                                     />
                                                 </Form.Field>
                                                 <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
-                                                <Form.Field>
-                                                    <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
-                                                </Form.Field>
+                                                <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
+                                                <br />
+                                                <br />
                                             </Form>
-                                        </Grid.Column>
-                                        <Grid.Column width='3'>
-                                        </Grid.Column>
-                                    </Grid>
-                                </Segment>
+                                        </Segment>
+                                    </Grid.Column>
+                                    <Grid.Column width='4'>
+                                    </Grid.Column>
+                                </Grid>
                             </Segment>
                         </Container>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                     </Segment>
                 </div>
             );
 
         }
     }
-
-    // <Modal open={!this.state.isVendorVerified} size="mini" centered={false} dimmer='blurring'>
-    //         <Modal.Header>Login to continue...</Modal.Header>
-    //         <Modal.Content>
-
-    //             {this.renderVerifyVendorModal()}
-
-    //         </Modal.Content>
-    //         <Modal.Actions>
-    //             <Button negative loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
-    //         </Modal.Actions>
-    //     </Modal>
 
     async componentDidMount() {
         const username = cookie.getCookie('username');
@@ -405,63 +403,6 @@ class Manage extends Component {
             }
         }
         this.setState({ activeOffered });
-    }
-
-    renderVerifyVendorModal() {
-        if (this.state.verification['error']) {
-            return (
-                <div>
-
-                    <Input
-                        fluid
-                        error
-                        name="verificationUser"
-                        placeholder="Username"
-                        value={this.state.verificationUser}
-                        onChange={event => {
-                            this.setState({ verificationUser: event.target.value })
-                        }}
-                    />
-
-                    <br />
-
-                    <Input
-                        type="password"
-                        fluid
-                        name="verificationPassword"
-                        placeholder="Password"
-                        value={this.state.verificationPassword}
-                        onChange={event => this.setState({ verificationPassword: event.target.value })}
-                    />
-                    <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <Input
-                        fluid
-                        name="verificationUser"
-                        placeholder="Username"
-                        value={this.state.verificationUser}
-                        onChange={event => {
-                            this.setState({ verificationUser: event.target.value })
-                        }}
-                    />
-
-                    <br />
-
-                    <Input
-                        fluid
-                        name="verificationPassword"
-                        placeholder="Password"
-                        type="password"
-                        value={this.state.verificationPassword}
-                        onChange={event => this.setState({ verificationPassword: event.target.value })}
-                    />
-                </div>
-            )
-        }
     }
 
     verifyVendor = async () => {
