@@ -184,7 +184,6 @@ class CompSettings extends Component {
                     open={this.state.isDelOpen}
                     onOpen={this.handleDelOpen}
                     onClose={this.handleDelClose}
-                    closeOnDimmerClick={false}
                     dimmer='blurring'
                     size='mini'>
                     <Modal.Header>
@@ -455,8 +454,9 @@ class CompSettings extends Component {
                 });
 
                 if (response.status == 200) {
-                    // FIXME:
-                    console.log('astaze!');
+                    this.props.success();
+                } else {
+                    this.setState({ errorMessage: 'Something went wrong...' });
                 }
             } else {
                 const { locCountry, locCity, locStreet, locBldg } = this.state;
@@ -489,7 +489,9 @@ class CompSettings extends Component {
                 });
 
                 if (response.status == 200) {
-                    console.log('astaze');
+                    this.props.success();
+                } else {
+                    this.setState({ errorMessage: 'Something went wrong...' });
                 }
             }
         }
@@ -498,15 +500,25 @@ class CompSettings extends Component {
     deleteAccount = async () => {
         const user = this.props.user;
 
-        if (user.isVendor.data[0] == 0) {
-            const response = await fetch(`/api/user/delete?id=${user.user_id}`);
+        if (user.user_isVendor.data[0] == 0) {
+            const response = await fetch(`/api/user/delete?id=${user.user_id}&username=${user.user_username}&email=${user.user_email}`, {
+                headers: new Headers({
+                    'authorization': cookie.getCookie('authorization')
+                })
+            });
             if (response.status == 200) {
-                // FIXME:
+                this.props.delete();
+                cookie.deleteCookie();
             }
         } else {
-            const response = await fetch(`/api/vendor/delete?id=${user.user_id}`);
+            const response = await fetch(`/api/vendor/delete?id=${user.user_id}&username=${user.user_username}&email=${user.user_email}`, {
+                headers: new Headers({
+                    'authorization': cookie.getCookie('authorization')
+                })
+            });
             if (response.status == 200) {
-                // FIXME: 
+                this.props.delete();
+                cookie.deleteCookie();
             }
         }
     }

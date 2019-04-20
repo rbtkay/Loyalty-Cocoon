@@ -18,7 +18,7 @@ class Settings extends Component {
                 <br /> <br /> <br /> <br />
                 <Segment color='violet' inverted>
                     <br />
-                    <CompSettings user={this.state.user} onSubmit={this.submit} cancelChanges={this.cancel}/>
+                    <CompSettings user={this.state.user} cancelChanges={this.cancel} success={this.showSuccessToast} delete={this.showDeleteToast}/>
                 </Segment>
             </div>
         )
@@ -36,12 +36,42 @@ class Settings extends Component {
         this.setState({ user: user[0] });
     }
 
+    showSuccessToast = () => {
+        setTimeout(() => {
+            success({
+                type: "success",
+                icon: "thumbs up",
+                title: "Settings saved successfully!",
+                description: "Your changes have been saved. Close this message to return to home screen.",
+                time: 0,
+                onClick: () => { window.location.href = '/vendor' },
+                onClose: () => { window.location.href = '/vendor' }
+            }, 500);
+        });
+    }
+
+    showDeleteToast = () => {
+        setTimeout(() => {
+            toast({
+                type: "error",
+                icon: "warning sign",
+                title: "Account Deleted",
+                description: "You have deleted your account. Would you be kind enough to fill out this survey to rate us?",
+                time: 0,
+                onClick: () => { window.location.href = '/' },
+                onClose: () => { window.location.href = '/' }
+            }, 500);
+        });
+    }
+
     cancel = (event) => {
         event.preventDefault();
         console.log('cancelled');
         event.target.blur();
         window.location = '/vendor';
     }
+
+    onClose
 }
 
 export default Settings;
