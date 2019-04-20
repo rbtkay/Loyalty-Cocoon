@@ -151,14 +151,33 @@ class Transaction extends Component {
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
 
-            const source = purchases.map(object => {
-                return {
-                    key: object['purchase_id'],
-                    title: object['cust_id'],
-                    name: object['cust_id'],
-                    description: 'TxID: ' + object['purchase_id']
+            let source = [];
+            purchases.map(object => {
+                // const temp = {
+                //     title: object['user_username'],
+                //     name: object['user_username']
+                // }
+
+                const temp = source.findIndex(item => item.name === object['user_username']);
+
+                if (temp === -1) {
+                    console.log(temp);
+                    source.push({
+                        key: object['purchase_id'],
+                        title: object['user_username'],
+                        name: object['user_username'],
+                        // description: 'TxID: ' + object['purchase_id']
+                    });
                 }
+                // return {
+                //     key: object['purchase_id'],
+                //     title: object['product_name'],
+                //     name: object['user_username'],
+                //     description: 'TxID: ' + object['purchase_id']
+                // }
             })
+
+            console.log(source);
 
             this.setState({
                 isSearchLoading: false,
