@@ -25,7 +25,7 @@ exports.vendorSignUp = (req, res) => {
                     ], (err) => {
                         if (err) throw err;
                         else {
-                            mysqlConnection.query('insert into vendor_t (user_username, vendor_location) values (?, ?)',[username, location],(err)=>{
+                            mysqlConnection.query('insert into vendor_t (user_username, vendor_country) values (?, ?)',[username, location],(err)=>{
                             jwt.sign({
                                 username: username,
                                 email: email,

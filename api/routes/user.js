@@ -11,5 +11,6 @@ router.get('/all', User.getAllUser)
 router.get('/byEmail', User.getUserByEmail);
 router.get('/address', User.getVendorAddress);
 router.get('/byUsername', User.getUserByUsername);
+router.get('/update', User.updateUser);
 
 module.exports = router;

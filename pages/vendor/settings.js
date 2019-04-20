@@ -36,12 +36,6 @@ class Settings extends Component {
         this.setState({ user: user[0] });
     }
 
-    // FIXME: check whether to keep submits on pages or move into components
-
-    submit = () => {
-        console.log('vendor clicked');
-    }
-
     cancel = (event) => {
         event.preventDefault();
         console.log('cancelled');

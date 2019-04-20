@@ -3,6 +3,7 @@ import { Button, Form, Input, Segment, Icon, Modal, Divider, Popup, Message } fr
 import faker from 'faker';
 import _ from 'lodash';
 import { sha256 } from 'js-sha256';
+const cookie = require('../cookie');
 
 class CompSettings extends Component {
     constructor(props) {
@@ -23,8 +24,10 @@ class CompSettings extends Component {
         profession: '',
         organization: '',
         // vendor
-        location: '',
-        tag: '',
+        locCountry: '',
+        locCity: '',
+        locStreet: '',
+        locBldg: '',
         // errorHandling
         errorMessage: '',
         passwordMessage: '',
@@ -118,7 +121,7 @@ class CompSettings extends Component {
                                 negative
                                 content='Delete Account'
                                 icon='times circle'
-                                />
+                                onClick={this.handleDelOpen} />
                         </Form.Group>
                     </Segment>
                 </Form>
@@ -127,6 +130,7 @@ class CompSettings extends Component {
                     open={this.state.isOpen}
                     onOpen={this.handleOpen}
                     onClose={this.handleClose}
+                    closeOnDimmerClick={false}
                     size='mini'>
                     <Modal.Header>
                         <Icon name='key' /> Change Password
@@ -175,6 +179,34 @@ class CompSettings extends Component {
                         </Form>
                     </Modal.Content>
                 </Modal>
+
+                <Modal
+                    open={this.state.isDelOpen}
+                    onOpen={this.handleDelOpen}
+                    onClose={this.handleDelClose}
+                    closeOnDimmerClick={false}
+                    dimmer='blurring'
+                    size='mini'>
+                    <Modal.Header>
+                        <Icon name='warning sign' color='red' /> Delete Account
+                    </Modal.Header>
+
+                    <Modal.Content>
+                        <h4>Are you sure you want to permanently delete your account?</h4>
+                    </Modal.Content>
+
+                    <Modal.Actions>
+                        <Button
+                            onClick={this.handleDelClose}
+                            content='Cancel' />
+                        <Button
+                            onClick={this.deleteAccount}
+                            content='Yes'
+                            negative
+                            floated='right' />
+                    </Modal.Actions>
+                    <br />
+                </Modal>
             </div>
         );
     }
@@ -201,8 +233,6 @@ class CompSettings extends Component {
                         <Form.Field>
                             <label>Country</label>
                             <Form.Dropdown
-                                name="country"
-                                value={this.state.country}
                                 fluid
                                 search
                                 selection
@@ -250,22 +280,37 @@ class CompSettings extends Component {
                 return (
                     <div>
                         <h4>Location</h4>
-                        <Form.Group widths='3'>
+                        <Form.Group widths='4'>
                             <Form.Field>
                                 <label>Country</label>
-                                <Form.Input
-                                    placeholder={user.vendor_location}
-                                    onChange={event => this.setState({ locCountry: event.target.location })} />
+                                <Form.Dropdown
+                                    name="country"
+                                    value={this.state.locCountry}
+                                    fluid
+                                    search
+                                    selection
+                                    options={countryOptions}
+                                    placeholder={user.vendor_country}
+                                    onChange={(event, data) => this.setState({ locCountry: data.value })}
+                                />
                             </Form.Field>
                             <Form.Field>
                                 <label>City</label>
                                 <Form.Input
-                                    onChange={event => this.setState({ locCity })} />
+                                    onChange={event => this.setState({ locCity:event.target.value })}
+                                    placeholder={user.vendor_city} />
                             </Form.Field>
                             <Form.Field>
-                                <label>Street, Bldg</label>
+                                <label>Street</label>
                                 <Form.Input
-                                    onChange={event => this.setState({ locStreetBldg })} />
+                                    onChange={event => this.setState({ locStreet: event.target.value })}
+                                    placeholder={user.vendor_street} />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Building</label>
+                                <Form.Input
+                                    onChange={event => this.setState({ locBldg: event.target.value })}
+                                    placeholder={user.vendor_building} />
                             </Form.Field>
                         </Form.Group>
                     </div>
@@ -282,8 +327,18 @@ class CompSettings extends Component {
 
     handleClose = (event) => {
         event.preventDefault();
-        event.target.blur();
         this.setState({ isOpen: false, oldPassword: '', newPassword: '', confPassword: '' });
+    }
+
+    handleDelOpen = (event) => {
+        event.preventDefault();
+        event.target.blur();
+        this.setState({ isDelOpen: true });
+    }
+
+    handleDelClose = (event) => {
+        event.preventDefault();
+        this.setState({ isDelOpen: false });
     }
 
     changePassword = () => {
@@ -335,8 +390,125 @@ class CompSettings extends Component {
         }
     }
 
-    onSubmit = () => {
-        console.log('alo? SUBMITFORM');
+    onSubmit = async () => {
+        const { username, email, name, newPassword, usernameError, emailError, isFormValid } = this.state;
+
+        const user = this.props.user;
+
+        if (isFormValid) {
+            let qUsername, qEmail, qName, qNewPassword;
+            if (username == '') {
+                qUsername = user.user_username;
+            } else {
+                qUsername = username;
+            }
+            if (email == '') {
+                qEmail = user.user_email;
+            } else {
+                qEmail = email;
+            }
+            if (name == '') {
+                qName = user.user_name;
+            } else {
+                qName = name;
+            }
+            if (newPassword == '') {
+                qNewPassword = user.user_password;
+            } else {
+                qNewPassword = sha256(newPassword);
+            }
+
+            // user
+            if (user.user_isVendor.data[0] == 0) {
+                const { gender, phone, country, profession, organization } = this.state;
+                let qGender, qPhone, qCountry, qProfession, qOrganization;
+                if (gender == '') {
+                    qGender = user.cust_gender;
+                } else {
+                    qGender = gender;
+                }
+                if (phone == '') {
+                    qPhone = user.cust_phone;
+                } else {
+                    qPhone = phone;
+                }
+                if (country == '') {
+                    qCountry = user.cust_country;
+                } else {
+                    qCountry = country;
+                }
+                if (profession == '') {
+                    qProfession = user.cust_profession;
+                } else {
+                    qProfession = profession;
+                }
+                if (organization == '') {
+                    qOrganization = user.cust_organization;
+                } else {
+                    qOrganization = organization;
+                }
+
+                const response = await fetch(`/api/user/update?profile=${user.user_username}&username=${qUsername}&email=${qEmail}&name=${qName}&password=${qNewPassword}&gender=${qGender}&phone=${qPhone}&country=${qCountry}&profession=${qProfession}&organization=${qOrganization}`, {
+                    headers: new Headers({
+                        'authorization': cookie.getCookie('authorization')
+                    })
+                });
+
+                if (response.status == 200) {
+                    // FIXME:
+                    console.log('astaze!');
+                }
+            } else {
+                const { locCountry, locCity, locStreet, locBldg } = this.state;
+                let qCountry, qCity, qStreet, qBldg;
+                if (locCountry == '') {
+                    qCountry = user.vendor_country;
+                } else {
+                    qCountry = locCountry;
+                }
+                if (locCity == '') {
+                    qCity = user.vendor_city;
+                } else {
+                    qCity = locCity;
+                }
+                if (locStreet == '') {
+                    qStreet = user.vendor_street;
+                } else {
+                    qStreet = locStreet;
+                }
+                if (locBldg == '') {
+                    qBldg = user.vendor_building;
+                } else {
+                    qBldg = locBldg;
+                }
+
+                const response = await fetch(`/api/vendor/update?username=${qUsername}&email=${qEmail}&name=${qName}&password=${qNewPassword}&country=${qCountry}&city=${qCity}&street=${qStreet}&building=${qBldg}`, {
+                    headers: new Headers({
+                        'authorization': cookie.getCookie('authorization')
+                    })
+                });
+
+                if (response.status == 200) {
+                    console.log('astaze');
+                }
+            }
+        }
+    }
+
+    deleteAccount = async () => {
+        const user = this.props.user;
+
+        if (user.isVendor.data[0] == 0) {
+            const response = await fetch(`/api/user/delete?id=${user.user_id}`);
+            if (response.status == 200) {
+                // FIXME:
+            }
+        } else {
+            const response = await fetch(`/api/vendor/delete?id=${user.user_id}`);
+            if (response.status == 200) {
+                // FIXME: 
+            }
+        }
     }
 
 }

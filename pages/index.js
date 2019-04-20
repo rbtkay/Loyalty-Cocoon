@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Form, Button, Message, Input, Container, Divider, Segment, Grid, Table, Image } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import NavigationBar from '../components/NavigationBar';
-import { Router } from '../routes';
+import { Router, Link } from '../routes';
 import { sha256 } from 'js-sha256';
-import { Link } from '../routes';
 import loco from '../ethereum/loco';
 import fetch from 'isomorphic-fetch';
 let cookie = require('../cookie');
@@ -104,10 +103,12 @@ class SignIn extends Component {
                                 </Container>
                                 <br />
                                 <br />
-                                <Button
-                                    size="big"
-                                    color='violet'
-                                    onClick={this.triggerEvent} >Sign Up</Button>
+                                <Link href='/user/signup'>
+                                    <Button
+                                        size="big"
+                                        color='violet'
+                                        onClick={this.triggerEvent} >Sign Up</Button>
+                                </Link>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
                                 <Image src='/static/default_product_image.jpg' centered rounded size='large' />
@@ -237,7 +238,6 @@ class SignIn extends Component {
     }
 
     triggerEvent = () => {
-        console.log('CLICKME');
         ReactGA.event({
             category: 'User',
             action: `SignUp`
@@ -246,7 +246,6 @@ class SignIn extends Component {
             category: 'Test',
             action: 'ClickTest'
         });
-        Router.pushRoute('/user/signup');
     }
 }
 
