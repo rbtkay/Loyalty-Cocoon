@@ -224,39 +224,44 @@ class Manage extends Component {
                                     <Grid.Column width='4'>
                                     </Grid.Column>
                                     <Grid.Column width='8'>
-                                        <Segment>
-                                            <Segment className='header' color='violet' >Login to Continue...</Segment>
+                                        <Segment color='violet' inverted>
+                                            <Segment className='header' color='violet' inverted textAlign='center'><h1>Login to Continue...</h1></Segment>
                                             <Divider />
-                                            <Form error={!this.state.isFormValid}>
-                                                <Form.Field>
-                                                    <label floated='right'>Username</label>
-                                                    <Input
-                                                        fluid
-                                                        error
-                                                        name="verificationUser"
-                                                        placeholder="Username"
-                                                        value={this.state.verificationUser}
-                                                        onChange={event => {
-                                                            this.setState({ verificationUser: event.target.value })
-                                                        }}
-                                                    />
-                                                </Form.Field>
-                                                <Form.Field>
-                                                    <label>Password</label>
-                                                    <Input
-                                                        type="password"
-                                                        fluid
-                                                        name="verificationPassword"
-                                                        placeholder="Password"
-                                                        value={this.state.verificationPassword}
-                                                        onChange={event => this.setState({ verificationPassword: event.target.value })}
-                                                    />
-                                                </Form.Field>
-                                                <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
-                                                <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
-                                                <br />
-                                                <br />
-                                            </Form>
+                                            <Segment >
+                                                <Form error={!this.state.isFormValid}>
+                                                    <Form.Field>
+                                                        <label floated='right'>Username</label>
+                                                        <Input
+                                                            fluid
+                                                            error
+                                                            name="verificationUser"
+                                                            placeholder="Username"
+                                                            value={this.state.verificationUser}
+                                                            onChange={event => {
+                                                                this.setState({ verificationUser: event.target.value })
+                                                            }}
+                                                        />
+                                                    </Form.Field>
+                                                    <Form.Field>
+                                                        <label>Password</label>
+                                                        <Input
+                                                            type="password"
+                                                            fluid
+                                                            name="verificationPassword"
+                                                            placeholder="Password"
+                                                            value={this.state.verificationPassword}
+                                                            onChange={event => this.setState({ verificationPassword: event.target.value })}
+                                                        />
+                                                    </Form.Field>
+                                                    <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
+                                                    <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                </Form>
+                                            </Segment>
                                         </Segment>
                                     </Grid.Column>
                                     <Grid.Column width='4'>
