@@ -130,7 +130,6 @@ class Transaction extends Component {
     })
 
     handleResultSelect = (e, { result }) => {
-        //TODO: check how the search result is displayed.'
         this.setState(({ searchValue: result.name }), () => {
             this.refresh();
         });
@@ -153,11 +152,6 @@ class Transaction extends Component {
 
             let source = [];
             purchases.map(object => {
-                // const temp = {
-                //     title: object['user_username'],
-                //     name: object['user_username']
-                // }
-
                 const temp = source.findIndex(item => item.name === object['user_username']);
 
                 if (temp === -1) {
@@ -166,15 +160,9 @@ class Transaction extends Component {
                         key: object['purchase_id'],
                         title: object['user_username'],
                         name: object['user_username'],
-                        // description: 'TxID: ' + object['purchase_id']
                     });
                 }
-                // return {
-                //     key: object['purchase_id'],
-                //     title: object['product_name'],
-                //     name: object['user_username'],
-                //     description: 'TxID: ' + object['purchase_id']
-                // }
+
             })
 
             console.log(source);
@@ -238,7 +226,6 @@ class Transaction extends Component {
     }
 
     renderPurchases() {
-        //TODO: Order purchases to show non-finalized purchases first.'
         if (this.state.purchaseLength === '') {
             return (
                 <h3>Loading Your Purchases</h3>
