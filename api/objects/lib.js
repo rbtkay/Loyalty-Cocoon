@@ -3,7 +3,7 @@ const nodeMailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const mysqlConnection = require('../../database/connection');
 
-sendEmail = async (username, email, res, type) => {
+exports.sendEmail = async (username, email, res, type) => {
 
     console.log('in the email function: ', email);
 
@@ -87,15 +87,34 @@ sendEmail = async (username, email, res, type) => {
                 </body>
                 </html>`
             }
+        } else if (type === 'delete') {
+            const token = jwt.sign({ email: email }, 'emailKey');
+            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
+            content = {
+                to: email,
+                subject: `Account Deletion`,
+                html: `<html>
+                <head>
+                </head>
+
+                <body>
+                <div class="container">
+                    <h2>We're Sorry to see you leave the Cocoon</h2>
+                    <p>This Account no longer Exists</p><br />
+                    <span>To Recover your Account, Contact Us at Loyalty.Cocoon@gmail.com</span>
+                </div>
+                </body>
+                </html>`
+            }
+            const info = await transporter.sendMail(content);
+            if (code !== 0) {
+                res.status(200).send({ code });
+            } else {
+                res.status(200).send('sent');
+            }
+            console.log("sent the email");
+            console.log(info);
         }
-        const info = await transporter.sendMail(content);
-        if (code !== 0) {
-            res.status(200).send({ code });
-        } else {
-            res.status(200).send('sent');
-        }
-        console.log("sent the email");
-        console.log(info);
     } catch (e) {
         throw e;
     }
@@ -103,10 +122,8 @@ sendEmail = async (username, email, res, type) => {
 
 exports.sendConfirmEmail = async (req, res) => {
     const { username, email } = req.query;
-    // var email = req.query.email;
     const type = 'confirm';
 
-    // console.log(email);
     if (!email) {
         console.log('email has no type');
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {

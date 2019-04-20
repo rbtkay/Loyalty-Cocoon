@@ -51,8 +51,6 @@ exports.login = (req, res, next) => {
     var username = req.query.username;
     var password = req.query.password;
 
-    //TODO: Verify that user is not deleted
-
     if (username && password) {
         mysqlConnection.query('select * from user_t where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;

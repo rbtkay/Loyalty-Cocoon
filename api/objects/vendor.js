@@ -1,5 +1,6 @@
 const mysqlConnection = require('../../database/connection');
 const jwt = require('jsonwebtoken');
+const lib = require('./lib');
 
 exports.getAllVendors = (req, res) => {
     mysqlConnection.query('select * from vendor_t', (err, result, fields) => {
@@ -48,6 +49,7 @@ exports.deleteAccount = (req, res) => {
         if (err) throw err;
         mysqlConnection.query('UPDATE product_t SET product_t.product_isDeleted = 1, product_t.product_isOffered = 0 WHERE product_t.user_id = ?', [id], (err) => {
             if (err) throw err;
+            lib.sendEmail();
             res.status(200).send(' Account Deleted');
         })
     })

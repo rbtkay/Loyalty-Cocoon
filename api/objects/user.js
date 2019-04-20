@@ -1,5 +1,6 @@
 const mysqlConnection = require("../../database/connection");
 const jwt = require('jsonwebtoken');
+const lib = require('./lib');
 
 exports.getAllUser = (req, res) => {
     mysqlConnection.query('select * from user_t', (err, result, fields) => {
@@ -55,6 +56,7 @@ exports.deleteAccount = (req, res) => {
 
     mysqlConnection.query('UPDATE user_t SET user_isDeleted = 1 WHERE user_id = ?', [id], (err) => {
         if (err) throw err;
+        lib.sendEmail();
         res.status(200).send('Account Deleted');
     })
 }
