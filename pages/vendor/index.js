@@ -238,7 +238,7 @@ class Transaction extends Component {
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}
                                 productName={object['product_name']}
-                                username={object['cust_id']}
+                                username={object['user_username']}
                                 vendor={object['vendor_id']}
                                 time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
