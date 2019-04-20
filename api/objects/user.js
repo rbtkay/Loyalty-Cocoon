@@ -52,11 +52,12 @@ exports.updateUser = (req, res) => {
 }
 
 exports.deleteAccount = (req, res) => {
-    const { id } = req.query;
+    const { id, username, email } = req.query;
 
     mysqlConnection.query('UPDATE user_t SET user_isDeleted = 1 WHERE user_id = ?', [id], (err) => {
         if (err) throw err;
-        lib.sendEmail();
+        const type = 'delete';
+        lib.sendEmail(username, email, res, type);
         res.status(200).send('Account Deleted');
     })
 }

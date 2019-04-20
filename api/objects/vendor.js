@@ -43,13 +43,14 @@ exports.updateVendor = (req, res) => {
 }
 
 exports.deleteAccount = (req, res) => {
-    const { id } = req.query;
+    const { id, username, email } = req.query;
 
     mysqlConnection.query('UPDATE user_t SET user_t.user_isDeleted = 1 WHERE user_t.user_id = ?', [id], (err, result) => {
         if (err) throw err;
         mysqlConnection.query('UPDATE product_t SET product_t.product_isDeleted = 1, product_t.product_isOffered = 0 WHERE product_t.user_id = ?', [id], (err) => {
             if (err) throw err;
-            lib.sendEmail();
+            const type = 'delete';
+            lib.sendEmail(username, email, res, type);
             res.status(200).send(' Account Deleted');
         })
     })
