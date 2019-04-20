@@ -48,4 +48,12 @@ exports.updateUser = (req, res) => {
             res.status(200).send('Account Updated Successfully');
         }
     });
+
+exports.deleteAccount = (req, res) => {
+    const { id } = req.query;
+
+    mysqlConnection.query('UPDATE user_t SET user_isDeleted = 1 WHERE user_id = ?', [id], (err) => {
+        if (err) throw err;
+        res.status(200).send('Account Deleted');
+    })
 }

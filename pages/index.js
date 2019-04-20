@@ -9,7 +9,6 @@ import fetch from 'isomorphic-fetch';
 let cookie = require('../cookie');
 import ReactGA from 'react-ga';
 
-
 class SignIn extends Component {
     state = {
         username: '',
@@ -66,7 +65,7 @@ class SignIn extends Component {
                                         />
                                     </Form.Field>
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a class='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a className='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
                                     <br />
                                     <Form.Button color="green" loading={this.state.loading} content='Sign In' />
                                     <br />

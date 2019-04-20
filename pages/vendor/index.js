@@ -130,7 +130,6 @@ class Transaction extends Component {
     })
 
     handleResultSelect = (e, { result }) => {
-        //TODO: check how the search result is displayed.'
         this.setState(({ searchValue: result.name }), () => {
             this.refresh();
         });
@@ -151,14 +150,22 @@ class Transaction extends Component {
             const re = new RegExp(_.escapeRegExp(this.state.searchValue), 'i');
             const isMatch = searchResult => re.test(searchResult.name);
 
-            const source = purchases.map(object => {
-                return {
-                    key: object['purchase_id'],
-                    title: object['cust_id'],
-                    name: object['cust_id'],
-                    description: 'TxID: ' + object['purchase_id']
+            let source = [];
+            purchases.map(object => {
+                const temp = source.findIndex(item => item.name === object['user_username']);
+
+                if (temp === -1) {
+                    console.log(temp);
+                    source.push({
+                        key: object['purchase_id'],
+                        title: object['user_username'],
+                        name: object['user_username'],
+                    });
                 }
+
             })
+
+            console.log(source);
 
             this.setState({
                 isSearchLoading: false,
@@ -219,7 +226,6 @@ class Transaction extends Component {
     }
 
     renderPurchases() {
-        //TODO: Order purchases to show non-finalized purchases first.'
         if (this.state.purchaseLength === '') {
             return (
                 <h3>Loading Your Purchases</h3>
@@ -238,7 +244,7 @@ class Transaction extends Component {
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}
                                 productName={object['product_name']}
-                                username={object['cust_id']}
+                                username={object['user_username']}
                                 vendor={object['vendor_id']}
                                 time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}

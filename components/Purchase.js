@@ -13,7 +13,6 @@ class Purchase extends Component {
         const { purchaseId, productId, username, vendor, time, productName, type, isFinalized } = this.props;
 
         if (type === 'vendor') {
-            console.log('isFinalized', isFinalized);
             return (
                 <div>
                     <Item.Group divided>
@@ -48,7 +47,6 @@ class Purchase extends Component {
                 </div>
             );
         } else {
-            console.log(isFinalized)
             return (
                 <div>
                     <Item.Group divided>

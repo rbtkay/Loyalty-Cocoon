@@ -11,5 +11,6 @@ router.get('/all', Vendor.getAllVendors);
 router.get('/address', Vendor.getCustomerAddress);
 router.get('/byUsername', Vendor.getVendorByUsername);
 router.get('/update', Vendor.updateVendor);
+router.get('/delete', Vendor.deleteAccount);
 
 module.exports = router;

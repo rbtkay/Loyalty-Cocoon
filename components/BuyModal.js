@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Icon, Button, Message, Form } from 'semantic-ui-react';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
+import NavigationBar from './NavigationBar';
 let cookie = require('../cookie');
 
 class BuyModal extends Component {
@@ -15,76 +16,76 @@ class BuyModal extends Component {
             if (!this.props.affordable) {
                 return (
                     <Modal
-                    open={this.props.isConfirmOpen}
-                    onClose={this.props.confirmClose}
-                    size='tiny'
-                    basic>
-                    <Modal.Header>
-                        <Icon name='times circle' /> Not enough LOCO
+                        open={this.props.isConfirmOpen}
+                        onClose={this.props.confirmClose}
+                        size='tiny'
+                        basic>
+                        <Modal.Header>
+                            <Icon name='times circle' /> Not enough LOCO
                     </Modal.Header>
-                    <Modal.Content>
-                        <h3>Sorry you do not own enough LOCO. (Shop at Loyalty Cocoon Vendors to earn more LOCO).</h3>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button
-                            inverted
-                            onClick={this.props.confirmClose}>
-                            <Icon name='checkmark' /> Ok
+                        <Modal.Content>
+                            <h3>Sorry you do not own enough LOCO. (Shop at Loyalty Cocoon Vendors to earn more LOCO).</h3>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button
+                                inverted
+                                onClick={this.props.confirmClose}>
+                                <Icon name='checkmark' /> Ok
                         </Button>
-                    </Modal.Actions>
-                </Modal>
+                        </Modal.Actions>
+                    </Modal>
                 );
             } else {
                 return (
                     <Modal
-                    open={this.props.isConfirmOpen}
-                    onClose={this.props.confirmClose}
-                    size='tiny'
-                    dimmer='blurring'
-                    closeOnEscape={false}
-                    closeOnDimmerClick={false}>
-                    <Modal.Header>
-                        <Icon name='shopping cart' /> Confirm Purchase
+                        open={this.props.isConfirmOpen}
+                        onClose={this.props.confirmClose}
+                        size='tiny'
+                        dimmer='blurring'
+                        closeOnEscape={false}
+                        closeOnDimmerClick={false}>
+                        <Modal.Header>
+                            <Icon name='shopping cart' /> Confirm Purchase
                     </Modal.Header>
-                    <Modal.Content>
-                        <h3>Are you sure you want to purchase this product from {this.props.vendorUsername} at {this.props.price} LOCO</h3>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button
-                            onClick={!this.state.loading ? this.props.confirmClose : null}>Cancel</Button>
-                        <Button
-                            loading={this.state.loading}
-                            color='violet'
-                            onClick={this.purchaseProduct}>
-                            <Icon name='checkmark' /> Yes
+                        <Modal.Content>
+                            <h3>Are you sure you want to purchase this product from {this.props.vendorUsername} at {this.props.price} LOCO</h3>
+                        </Modal.Content>
+                        <Modal.Actions>
+                            <Button
+                                onClick={!this.state.loading ? this.props.confirmClose : null}>Cancel</Button>
+                            <Button
+                                loading={this.state.loading}
+                                color='violet'
+                                onClick={this.purchaseProduct}>
+                                <Icon name='checkmark' /> Yes
                         </Button>
-                    </Modal.Actions>
+                        </Modal.Actions>
 
-                    {this.renderMessage()}
+                        {this.renderMessage()}
 
-                </Modal>
+                    </Modal>
                 );
             }
         } else {
             return (
                 <Modal
-                open={this.props.isConfirmOpen}
-                onClose={this.props.confirmClose}
-                size='tiny'
-                dimmer='blurring'>
-                <Modal.Header>
-                    <Icon name='times circle' /> Verify Account
+                    open={this.props.isConfirmOpen}
+                    onClose={this.props.confirmClose}
+                    size='tiny'
+                    dimmer='blurring'>
+                    <Modal.Header>
+                        <Icon name='times circle' /> Verify Account
                 </Modal.Header>
-                <Modal.Content>
-                    <h3>Please verify your account in order to make purchases.</h3>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button
-                        onClick={this.props.confirmClose}>
-                        <Icon name='checkmark' /> OK
+                    <Modal.Content>
+                        <h3>Please verify your account in order to make purchases.</h3>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button
+                            onClick={this.props.confirmClose}>
+                            <Icon name='checkmark' /> OK
                     </Button>
-                </Modal.Actions>
-            </Modal>
+                    </Modal.Actions>
+                </Modal>
             );
         }
     }
@@ -137,8 +138,6 @@ class BuyModal extends Component {
 
                 const send = await fetch(`/api/lib/receipt?username=${username}&vendorUsername=${vendorUsername}&productId=${this.props.productId}&txHash=${result.transactionHash}`);
 
-                // TODO: Update user's balance in navbar
-
                 let balance = cookie.getCookie('balance');
                 balance -= this.props.price;
 
@@ -149,6 +148,7 @@ class BuyModal extends Component {
             } catch (err) {
                 this.props.errorMessage(err.message);
             }
+            NavigationBar.refreshNavBar(this.props.price);
             this.setState({ loading: false });
         }
     }
