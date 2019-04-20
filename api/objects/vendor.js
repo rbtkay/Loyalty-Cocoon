@@ -16,3 +16,16 @@ exports.getCustomerAddress = (req, res, next) => {
         res.status(200).send(result);
     });
 }
+
+exports.deleteAccount = (req, res) => {
+    const { id } = req.query;
+
+    mysqlConnection.query('UPDATE user_t SET user_t.user_isDeleted = 1 WHERE user_t.user_id = ?', [id], (err, result) => {
+        if (err) throw err;
+        mysqlConnection.query('UPDATE product_t SET product_t.product_isDeleted = 1, product_t.product_isOffered = 0 WHERE product_t.user_id = ?', [id], (err) => {
+            if (err) throw err;
+            res.status(200).send(' Account Deleted');
+        })
+    })
+}
+
