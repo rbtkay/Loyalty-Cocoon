@@ -92,12 +92,15 @@ exports.login = (req, res, next) => {
     var username = req.query.username;
     var password = req.query.password;
 
+    //TODO: Verify that user is not deleted
+
     if (username && password) {
         mysqlConnection.query('select * from user_t where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
                 const verifyResult = result[0]['user_isVerified'].toJSON();
                 const isverified = verifyResult.data[0];
+                console.log(result);
 
                 if (isverified === 0) {
                     res.status(403).send('Email Confirmation Needed');
