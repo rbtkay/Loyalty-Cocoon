@@ -25,17 +25,19 @@ exports.vendorSignUp = (req, res) => {
                     ], (err) => {
                         if (err) throw err;
                         else {
-                            mysqlConnection.query('insert into vendor_t (user_username, vendor_location) values (?, ?)',[username, location],(err)=>{
-                            jwt.sign({
-                                username: username,
-                                email: email,
-                                type: 'vendor'
-                            }, process.env.JWT_KEY, (err, token) => {
-                                res.json({
-                                    token
+                            mysqlConnection.query('insert into vendor_t (user_id, vendor_country) values ((select user_t.user_id from user_t where user_t.user_username = ?), ?)', [username, location], (err, result2) => {
+                                if (err) throw err;
+                                console.log(result2);
+                                jwt.sign({
+                                    username: username,
+                                    email: email,
+                                    type: 'vendor'
+                                }, process.env.JWT_KEY, (err, token) => {
+                                    res.json({
+                                        token
+                                    })
                                 })
-                            })
-                        });
+                            });
                         }
                     })
                 }
@@ -101,14 +103,14 @@ exports.login = (req, res, next) => {
                     res.status(403).send('Email Confirmation Needed');
                 } else {
                     const isVendor = result[0]['user_isVendor'].toJSON();
-                    const type = isVendor.data[0] === 0 ? 'user' : 'vendor' ;
+                    const type = isVendor.data[0] === 0 ? 'user' : 'vendor';
                     console.log(type);
                     const token = jwt.sign({
                         username: result[0].user_username,
                         email: result[0].user_email,
                         type: type
                     },
-                    process.env.JWT_KEY);
+                        process.env.JWT_KEY);
 
                     res.status(200).json({
                         token,
@@ -158,7 +160,7 @@ exports.userSignUp = (req, res) => {
                     ], (err) => {
                         if (err) throw err;
                         else {
-                            mysqlConnection.query('insert into customer_t (user_username, cust_gender, cust_phone, cust_country, cust_prefs, cust_dob, cust_profession, cust_organization) values (?,?,?,?,?,?,?,?)',[
+                            mysqlConnection.query('insert into customer_t (user_id, cust_gender, cust_phone, cust_country, cust_prefs, cust_dob, cust_profession, cust_organization) values ((select user_t.user_id from user_t where user_t.user_username = ?),?,?,?,?,?,?,?)', [
                                 username,
                                 gender,
                                 phone,
@@ -167,9 +169,9 @@ exports.userSignUp = (req, res) => {
                                 dob,
                                 profession,
                                 organization
-                            ], (err)=>{
-                                if(err)throw err;
-                                else{
+                            ], (err) => {
+                                if (err) throw err;
+                                else {
                                     jwt.sign({
                                         username: username,
                                         email: email,
