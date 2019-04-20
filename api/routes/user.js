@@ -10,6 +10,8 @@ router.use('/purchase', purchaseRoutes);
 router.get('/all', User.getAllUser)
 router.get('/byEmail', User.getUserByEmail);
 router.get('/address', User.getVendorAddress);
+router.get('/byUsername', User.getUserByUsername);
+router.get('/update', User.updateUser);
 router.get('/delete', User.deleteAccount);
 
 module.exports = router;

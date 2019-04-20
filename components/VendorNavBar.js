@@ -100,7 +100,9 @@ class VendorNavBar extends Component {
         }
     }
 
-    handleRefClick = () => {
+    handleRefClick = (event) => {
+        event.preventDefault();
+        event.target.blur();
         if (!this.state.referralOpen) {
             this.renderReferral();
             this.setState({ referralOpen: true, referralEmail: '' });

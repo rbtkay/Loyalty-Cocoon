@@ -89,8 +89,6 @@ class Dashboard extends Component {
     async componentDidMount() {
 
         this.getLineStats();
-
-
     }
 
     async getLineStats() {

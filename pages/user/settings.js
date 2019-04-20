@@ -1,30 +1,48 @@
 import React, { Component } from 'react';
 import NavigationBar from '../../components/NavigationBar';
 import Layout from '../../components/Layout';
+import CompSettings from '../../components/CompSettings';
 import { Segment } from 'semantic-ui-react';
+import { getCookie } from '../../cookie';
 
 class Settings extends Component {
-
-    static async getInitialProps(props) {
-        const { username } = props.query;
-
-        return { username };
-    }
+    state = {
+        user: {}
+    };
 
     render() {
         return (
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-                <br />
-                <Segment textAlign='center'>
-                    <h1>Page Under Construction...</h1>
+                <br /> <br /> <br /> <br />
+                <Segment color='violet' inverted>
+                    <Segment>
+                        <CompSettings user={this.state.user} cancelChanges={this.cancel}/>
+                        <br /> <br /> <br />
+                    </Segment>
                 </Segment>
             </div>
         )
+    }
+
+    async componentDidMount() {
+        const username = getCookie('username');
+        const response = await fetch(`/api/user/byUsername?username=${username}`, {
+            headers: new Headers({
+                'authorization': getCookie('authorization')
+            })
+        });
+
+        const user = await response.json();
+        this.setState({ user: user[0] });
+    }
+
+    cancel = (event) => {
+        event.preventDefault();
+        console.log('cancel');
+        event.target.blur();
+        window.location = '/user';
     }
 }
 

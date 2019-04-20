@@ -346,7 +346,8 @@ class Manage extends Component {
         this.componentDidMount();
     }
 
-    addOffers = async () => {
+    addOffers = async (event) => {
+        event.target.blur();
         const { active, products } = this.state;
         const temp = active.map((index) => {
             return parseInt(products[index]['product_id']);
@@ -362,7 +363,8 @@ class Manage extends Component {
         this.componentDidMount();
     }
 
-    removeOffers = async () => {
+    removeOffers = async (event) => {
+        event.target.blur();
         const { activeOffered, offered } = this.state;
         const temp = activeOffered.map((index) => {
             return parseInt(offered[index]['product_id']);

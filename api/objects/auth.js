@@ -27,7 +27,6 @@ exports.vendorSignUp = (req, res) => {
                         else {
                             mysqlConnection.query('insert into vendor_t (user_id, vendor_country) values ((select user_t.user_id from user_t where user_t.user_username = ?), ?)', [username, location], (err, result2) => {
                                 if (err) throw err;
-                                console.log(result2);
                                 jwt.sign({
                                     username: username,
                                     email: email,
@@ -47,46 +46,6 @@ exports.vendorSignUp = (req, res) => {
         res.send('Some fields are missing');
     }
 }
-//
-// exports.vendorAuth = (req, res, next) => {
-//     var username = req.query.username;
-//     var password = req.query.password;
-//
-//     if (username && password) {
-//         mysqlConnection.query('select * from vendor_t where vendor_username = ? and vendor_password = ?', [username, password], (err, result, fields) => {
-//             if (err) throw err;
-//             if (result.length > 0) {
-//                 const verifyResult = result[0]['vendor_verified'].toJSON();
-//                 const isverified = verifyResult.data[0];
-//
-//                 if (isverified === 0) {
-//                     res.status(403).send('Email Confirmation Needed');
-//                 }
-//                 else {
-//                     const token = jwt.sign({
-//                         username: result['vendor_username'],
-//                         email: result['vendor_email'],
-//                         type: "vendor"
-//                     },
-//                         process.env.JWT_KEY);
-//
-//                     res.status(200).json({
-//                         token,
-//                         result
-//                     })
-//                 }
-//             } else {
-//                 const errorObj = {
-//                     'message': 'Invalid Username/Password'
-//                 }
-//                 res.status(401).send(errorObj)
-//             }
-//         });
-//     } else {
-//         res.status(400).send('Some inputs are missing');
-//     }
-// }
-
 
 exports.login = (req, res, next) => {
     var username = req.query.username;
@@ -100,7 +59,6 @@ exports.login = (req, res, next) => {
             if (result.length > 0) {
                 const verifyResult = result[0]['user_isVerified'].toJSON();
                 const isverified = verifyResult.data[0];
-                console.log(result);
 
                 if (isverified === 0) {
                     res.status(403).send('Email Confirmation Needed');
