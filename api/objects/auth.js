@@ -57,26 +57,33 @@ exports.login = (req, res, next) => {
         mysqlConnection.query('select * from user_t where user_username = ? and user_password = ?', [username, password], (err, result, fields) => {
             if (err) throw err;
             if (result.length > 0) {
+                const deleteResult = result[0]['user_isDeleted'].toJSON();
                 const verifyResult = result[0]['user_isVerified'].toJSON();
                 const isverified = verifyResult.data[0];
+                const isDeleted = deleteResult.data[0];
 
-                if (isverified === 0) {
-                    res.status(403).send('Email Confirmation Needed');
+                // console.log(result);
+                if (isDeleted === 0) {
+                    if (isverified === 0) {
+                        res.status(403).send('Email Confirmation Needed');
+                    } else {
+                        const isVendor = result[0]['user_isVendor'].toJSON();
+                        const type = isVendor.data[0] === 0 ? 'user' : 'vendor';
+                        console.log(type);
+                        const token = jwt.sign({
+                            username: result[0].user_username,
+                            email: result[0].user_email,
+                            type: type
+                        },
+                            process.env.JWT_KEY);
+
+                        res.status(200).json({
+                            token,
+                            result
+                        });
+                    }
                 } else {
-                    const isVendor = result[0]['user_isVendor'].toJSON();
-                    const type = isVendor.data[0] === 0 ? 'user' : 'vendor';
-                    console.log(type);
-                    const token = jwt.sign({
-                        username: result[0].user_username,
-                        email: result[0].user_email,
-                        type: type
-                    },
-                        process.env.JWT_KEY);
-
-                    res.status(200).json({
-                        token,
-                        result
-                    });
+                    res.status(401).json('Invalid Username/Password');
                 }
             } else {
                 const errorObj = {
