@@ -127,7 +127,7 @@ class VendorNavBar extends Component {
 
     refer = async () => {
         const { referralEmail } = this.state;
-        const response = await fetch(`/api/lib/referral?email=${referralEmail}&vendorUsername=${cookie.getCookie('username')}`);
+        const response = await fetch(`/api/auth/referral?email=${referralEmail}&vendorUsername=${cookie.getCookie('username')}`);
 
         if (response.status === 200) {
             alert(`Referral Email Sent to ${this.state.referralEmail}`);

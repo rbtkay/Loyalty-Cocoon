@@ -82,7 +82,7 @@ class SignUp extends Component {
                         cookie.setCookie('username', username, 100);
                         cookie.setCookie('address', newAccount['address'], 100);
 
-                        this.sendConfirmation();
+                        // this.sendConfirmation();
                         this.setState({ successMessage: "We've sent you a Confirmation Email" });
 
                     } else {
@@ -236,16 +236,16 @@ class SignUp extends Component {
         }
     }
 
-    async sendConfirmation() {
-        const { username, email } = this.state;
+    // async sendConfirmation() {
+    //     const { username, email } = this.state;
 
-        try {
-            var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);
+    //     try {
+    //         var response = await fetch(`/api/lib/confirmEmail?username=${username}&email=${email}`);
 
-        } catch (err) {
-            throw err;
-        }
-    }
+    //     } catch (err) {
+    //         throw err;
+    //     }
+    // }
 }
 
 export default SignUp;

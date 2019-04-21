@@ -265,7 +265,7 @@ class ResetPassword extends Component {
         } else {
             const securePass = sha256(password);
             try {
-                const response = await fetch(`/api/lib/changePassword?email=${email}&password=${securePass}`);
+                const response = await fetch(`/api/auth/resetPassword?email=${email}&password=${securePass}`);
 
                 if (response.status === 200) {
                     Router.pushRoute('/');

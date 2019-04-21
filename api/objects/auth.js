@@ -1,5 +1,62 @@
 const mysqlConnection = require('../../database/connection');
 const jwt = require('jsonwebtoken');
+const lib = require('./lib');
+
+exports.sendCode = (req, res) => {
+    const email = req.query.email;
+    const type = 'forgot';
+
+    mysqlConnection.query('select * from user_t where user_email = ?', [email], (err, result) => {
+        if (err) throw err;
+        else {
+            if (result.length > 0) {
+                const username = result[0]['user_username'];
+                const type = 'forgot';
+                lib.sendEmail(username, email, res, type);
+            } else {
+                res.status(404).send('Something Unexpected Happened...');
+            }
+        }
+    })
+}
+
+exports.sendReferral = async (req, res) => {
+    const { email, vendorUsername } = req.query;
+
+    try {
+        mysqlConnection.query('select user_email from user_t where user_email = ?', [email], (err, result) => {
+            if (result.length > 0) {
+                res.status(409).send(err);
+            } else {
+                lib.sendEmail(vendorUsername, email, res, 'refer');
+            }
+        })
+    } catch (err) {
+        res.status(404).send('Something Unexpected Happened');
+    }
+
+}
+
+exports.sendConfirmEmail = async (req, res) => {
+    const { username, email } = req.query;
+    const type = 'confirm';
+
+    if (!email) {
+        mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
+            if (err) throw err;
+            else {
+                if (result.length > 0) {
+                    const mail = result[0]['user_email'].toString();
+                    lib.sendEmail(username, mail, res, type);
+                } else {
+                    res.status(404).send('Something Unexpected Happened...');
+                }
+            }
+        })
+    } else {
+        lib.sendEmail(username, email, res, type);
+    }
+}
 
 exports.vendorSignUp = (req, res) => {
     var username = req.query.username;
@@ -27,6 +84,8 @@ exports.vendorSignUp = (req, res) => {
                         else {
                             mysqlConnection.query('insert into vendor_t (user_id, vendor_country) values ((select user_t.user_id from user_t where user_t.user_username = ?), ?)', [username, location], (err, result2) => {
                                 if (err) throw err;
+                                const type = 'confirm';
+                                lib.sendEmail(username, email, res, type);
                                 jwt.sign({
                                     username: username,
                                     email: email,
@@ -136,6 +195,8 @@ exports.userSignUp = (req, res) => {
                             ], (err) => {
                                 if (err) throw err;
                                 else {
+                                    const type = 'confirm';
+                                    lib.sendEmail(username, email, res, type);
                                     jwt.sign({
                                         username: username,
                                         email: email,
