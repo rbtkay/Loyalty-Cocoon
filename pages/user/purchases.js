@@ -75,7 +75,7 @@ class Purchases extends Component {
                                 purchaseId={object['purchase_id']}
                                 productName={object['product_name']}
                                 username={object['user_email']}
-                                vendor={object['vendor_id']}
+                                vendor={object['user_username']}
                                 time={object['purchase_date']}
                                 isFinalized={object['purchase_finalized']}
                                 type={'regular'}
