@@ -40,8 +40,15 @@ class SignIn extends Component {
                             <Grid.Column width='4' textAlign='center'>
 
                                 <br />
+                                <Form.Field >
+                                    <Input
+                                        placeholder="Username"
+                                        name="username"
+                                        value={this.state.username}
+                                        onChange={event => this.setState({ username: event.target.value })}
+                                    />
+                                </Form.Field>
                                 <br />
-
                                 <Form error={!!this.state.errorMessage} onSubmit={this.onSubmit}>
                                     <h1>Sign In</h1>
                                     <br />
@@ -86,50 +93,38 @@ class SignIn extends Component {
                                     Join Us
                                 </h3>
                                 <br />
-                                <Container textAlign='center' text>
-                                    Too cultivated use solicitude frequently.
-                                    Dashwood likewise up consider continue entrance
-                                    ladyship oh. Wrong guest given purse power is
-                                    no. Friendship to connection an am considered
-                                    difficulty. Country met pursuit lasting moments
-                                    why calling certain the. Middletons boisterous
-                                    our way understood law. Among state cease how
-                                    and sight since shall. Material did pleasure
-                                    breeding our humanity she contempt had. So
-                                    ye really mutual no cousin piqued summer result.
-                                </Container>
+                                <Form.Button color="green" loading={this.state.loading} content='Sign In' />
                                 <br />
                                 <br />
-                                <Link href='/user/signup'>
-                                    <Button
-                                        size="big"
-                                        color='violet'
-                                        onClick={this.triggerEvent} >Sign Up</Button>
-                                </Link>
-                            </Grid.Column>
-                            <Grid.Column textAlign='center' verticalAlign='middle'>
-                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
-                            </Grid.Column>
-                        </Grid>
+                            </Form>
+                            <Link href='/resetPassword'><a>Forgot Password ?</a></Link>
+                        </Grid.Column>
+                        {/* <Grid.Column width='2'></Grid.Column> */}
 
-                    </Segment>
+                    </Grid>
+                    <br />
+                    <br />
+                    <br />
+                </Segment>
 
-                    <Segment inverted color='violet'>
-                        <Grid columns={2} >
-                            <Grid.Column>
-                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
-                            </Grid.Column>
-                            <Grid.Column textAlign='center' verticalAlign='middle'>
-                                <h3>
-                                    Become a Vendor
+                <Segment>
+                    <Grid columns={2} >
+                        <Grid.Column verticalAlign='middle' textAlign='center'>
+                            <h3>
+                                Join Us
                                 </h3>
-                                <Container textAlign='center' text>
-                                    Too cultivated use solicitude frequently. Dashwood likewise up consider
-                                    continue entrance ladyship oh. Wrong guest given purse power is no. Friendship
-                                    to connection an am considered difficulty. Country met pursuit lasting moments
-                                    why calling certain the. Middletons boisterous our way understood law. Among
-                                    state cease how and sight since shall. Material did pleasure breeding our
-                                    humanity she contempt had. So ye really mutual no cousin piqued summer result.
+                            <br />
+                            <Container textAlign='center' text>
+                                Too cultivated use solicitude frequently.
+                                Dashwood likewise up consider continue entrance
+                                ladyship oh. Wrong guest given purse power is
+                                no. Friendship to connection an am considered
+                                difficulty. Country met pursuit lasting moments
+                                why calling certain the. Middletons boisterous
+                                our way understood law. Among state cease how
+                                and sight since shall. Material did pleasure
+                                breeding our humanity she contempt had. So
+                                ye really mutual no cousin piqued summer result.
                                 </Container>
                                 <br />
                                 <br />
@@ -209,7 +204,7 @@ class SignIn extends Component {
     sendEmail = async () => {
         const { username } = this.state;
         try {
-            const response = await fetch(`/api/lib/confirmEmail?username=${username}`);
+            const response = await fetch(`/api/auth/confirmEmail?username=${username}`);
 
             if (response.status === 200) {
                 alert('Confirmation Email Sent...');

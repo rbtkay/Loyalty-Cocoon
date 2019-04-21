@@ -235,7 +235,7 @@ class SignUp extends Component {
     onSubmit = async (req, res, event) => {
         await this.setState({ loading: true, errorMessage: '', isFormEmpty: false, isFormValid: true });
 
-        const { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
+        let { username, email, password, name, dob, gender, phone, preferences, country, profession, organization } = this.state;
 
         if (username === '') {
             await this.setState({ usernameError: true, isFormEmpty: true });
@@ -248,6 +248,27 @@ class SignUp extends Component {
         }
         if (name === '') {
             await this.setState({ nameError: true, isFormEmpty: true });
+        }
+        if (dob === '') {
+            dob = ' ';
+        }
+        if (gender === '') {
+            gender = ' ';
+        }
+        if (phone === '') {
+            phone = ' ';
+        }
+        if (preferences === '') {
+            preferences = ' ';
+        }
+        if (country === '') {
+            country = ' ';
+        }
+        if (profession === '') {
+            profession = ' ';
+        }
+        if (organization === '') {
+            organization = ' ';
         }
 
         if (this.state.isFormEmpty === false) {
@@ -284,7 +305,7 @@ class SignUp extends Component {
                         cookie.setCookie('address', newAccount["address"], 100);
                         cookie.setCookie('authorization', data.token, 100);
 
-                        this.sendConfirmation();
+                        // this.sendConfirmation();
                         this.setState(({ successMessage: "We've sent you a Confirmation Email" }), () => {
                             Router.pushRoute('/user/index');
                         });
@@ -303,15 +324,15 @@ class SignUp extends Component {
         this.setState({ loading: false });
     }
 
-    async sendConfirmation() {
-        const { username } = this.state;
+    // async sendConfirmation() {
+    //     const { username } = this.state;
 
-        try {
-            var response = await fetch(`/api/lib/confirmEmail?username=${username}`);
-        } catch (err) {
-            throw err;
-        }
-    }
+    //     try {
+    //         var response = await fetch(`/api/lib/confirmEmail?username=${username}`);
+    //     } catch (err) {
+    //         throw err;
+    //     }
+    // }
 
     handleDate = (event, { name, value }) => {
         if (this.state.hasOwnProperty(name)) {
