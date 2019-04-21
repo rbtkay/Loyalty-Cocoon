@@ -27,7 +27,6 @@ class ResetPassword extends Component {
     }
 
     render() {
-        this.initializeReactGA();
         return (
             <div>
                 <Layout />
@@ -91,21 +90,14 @@ class ResetPassword extends Component {
 
                     </Segment>
 
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
+                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
                 </Segment>
             </div>
         )
     }
 
-    nextStep = async () => {
+    nextStep = async (event) => {
+        event.preventDefault();
         await this.setState({ isNextLoading: true });
 
         switch (this.state.step) {
@@ -124,7 +116,8 @@ class ResetPassword extends Component {
         }
     }
 
-    back = async () => {
+    back = async (event) => {
+        event.preventDefault()
         await this.setState({ isBackLoading: true });
         switch (this.state.step) {
             case 2:
@@ -146,7 +139,7 @@ class ResetPassword extends Component {
             await this.setState({ emailErr: 'You need to Provide your Email', isNextLoading: false });
         } else {
             try {
-                const response = await fetch(`/api/lib/code?email=${email}`);
+                const response = await fetch(`/api/auth/code?email=${email}`);
                 if (response.status === 404) {
                     await this.setState({ emailErr: 'Invalid Email!', isNextLoading: false });
                 } else {
@@ -177,11 +170,10 @@ class ResetPassword extends Component {
                     <h1>Email Verification</h1>
                     <br />
                     <Form.Field>
-                        <Input
+                        <Form.Input
                             placeholder='Enter your Account Email'
                             size='medium'
                             onChange={event => this.setState({ email: event.target.value })}
-                            value={this.state.email}
                         />
                     </Form.Field>
                     <Message error header='Oops' content={this.state.emailErr} ></Message>
@@ -202,7 +194,6 @@ class ResetPassword extends Component {
                             placeholder='Enter Code'
                             size='medium'
                             onChange={event => this.setState({ code: event.target.value })}
-                            value={this.state.code}
                         />
                     </Form.Field>
                     <Message error header='Oops' content={this.state.codeErr} ></Message>
@@ -236,7 +227,6 @@ class ResetPassword extends Component {
                             placeholder='Enter new Password'
                             size='medium'
                             onChange={event => this.setState({ password: event.target.value })}
-                            value={this.state.password}
                         />
                     </Form.Field>
 
@@ -246,7 +236,6 @@ class ResetPassword extends Component {
                             placeholder='Confirm Password'
                             size='medium'
                             onChange={event => this.setState({ passwordConfirm: event.target.value })}
-                            value={this.state.passwordConfirm}
                         />
 
                     </Form.Field>
@@ -276,11 +265,6 @@ class ResetPassword extends Component {
                 throw e;
             }
         }
-    }
-
-    initializeReactGA = () => {
-        ReactGA.initialize('UA-138219487-1');
-        ReactGA.pageview('/resetPassword');
     }
 }
 

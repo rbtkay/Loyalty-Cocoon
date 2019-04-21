@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Head from 'next/head';
 import MetaTags from 'react-meta-tags';
+import ReactGA from 'react-ga';
 
 class Layout extends Component {
 
     render() {
+
         return (
             <Head>
                 <MetaTags>
@@ -20,6 +22,14 @@ class Layout extends Component {
                 />
             </Head>
         );
+    }
+
+    componentDidMount() {
+        ReactGA.initialize('UA-138219487-1');
+        let href = window.location.href;
+        let gaLink = href.slice(href.indexOf('/')[2]);
+
+        ReactGA.pageview(`/${gaLink}`);
     }
 }
 
