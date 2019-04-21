@@ -28,7 +28,6 @@ class SignIn extends Component {
         return (
             <div  >
                 <Layout />
-                <div >
                     <Segment color='violet' inverted>
                         <br />
                         <br />
@@ -36,7 +35,7 @@ class SignIn extends Component {
                         <Grid>
                             <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
                                 <Image circular rounded src='../static/Logo.gif' centered size='small' />
-                                <h1>Loyalty Cocoon</h1>
+                                <h1><i>Loyalty Cocoon</i></h1>
                             </Grid.Column>
                             <Grid.Column width='4' textAlign='center'>
 
@@ -141,7 +140,6 @@ class SignIn extends Component {
                         </Grid>
 
                     </Segment>
-                </div>
             </div>
         );
     }
