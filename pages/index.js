@@ -28,22 +28,17 @@ class SignIn extends Component {
         return (
             <div  >
                 <Layout />
-                <Segment color='violet' inverted>
-                    <br />
-                    <br />
-                    <br />
-                    <Grid>
-                        <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
-                            <Image circular rounded src='../static/Logo.gif' centered size='small' />
-                            <h1>Loyalty Cocoon</h1>
-                        </Grid.Column>
-                        <Grid.Column width='4' textAlign='center'>
+                    <Segment color='violet' inverted>
+                        <br />
+                        <br />
+                        <br />
+                        <Grid>
+                            <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
+                                <Image circular rounded src='../static/Logo.gif' centered size='small' />
+                                <h1><i>Loyalty Cocoon</i></h1>
+                            </Grid.Column>
+                            <Grid.Column width='4' textAlign='center'>
 
-                            <br />
-                            <br />
-
-                            <Form error={!!this.state.errorMessage} onSubmit={this.onSubmit}>
-                                <h1>Sign In</h1>
                                 <br />
                                 <Form.Field >
                                     <Input
@@ -54,17 +49,49 @@ class SignIn extends Component {
                                     />
                                 </Form.Field>
                                 <br />
-                                <Form.Field>
-                                    <Input
-                                        type='password'
-                                        placeholder="Password"
-                                        name="password"
-                                        value={this.state.password}
-                                        onChange={event => this.setState({ password: event.target.value })}
-                                    />
-                                </Form.Field>
-                                <Message error header="Oops!" content={this.state.errorMessage}></Message>
-                                <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a className='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
+                                <Form error={!!this.state.errorMessage} onSubmit={this.onSubmit}>
+                                    <h1>Sign In</h1>
+                                    <br />
+                                    <Form.Field >
+                                        <Input
+                                            placeholder="Username"
+                                            name="username"
+                                            value={this.state.username}
+                                            onChange={event => this.setState({ username: event.target.value })}
+                                        />
+                                    </Form.Field>
+                                    <br />
+                                    <Form.Field>
+                                        <Input
+                                            type='password'
+                                            placeholder="Password"
+                                            name="password"
+                                            value={this.state.password}
+                                            onChange={event => this.setState({ password: event.target.value })}
+                                        />
+                                    </Form.Field>
+                                    <Message error header="Oops!" content={this.state.errorMessage}></Message>
+                                    <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a className='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
+                                    <br />
+                                    <Form.Button color="green" loading={this.state.loading} content='Sign In' />
+                                    <br />
+                                    <br />
+                                </Form>
+                                <Link href='/resetPassword'><a>Forgot Password ?</a></Link>
+                            </Grid.Column>
+
+                        </Grid>
+                        <br />
+                        <br />
+                        <br />
+                    </Segment>
+
+                    <Segment>
+                        <Grid columns={2} >
+                            <Grid.Column verticalAlign='middle' textAlign='center'>
+                                <h3>
+                                    Join Us
+                                </h3>
                                 <br />
                                 <Form.Button color="green" loading={this.state.loading} content='Sign In' />
                                 <br />
@@ -99,48 +126,15 @@ class SignIn extends Component {
                                 breeding our humanity she contempt had. So
                                 ye really mutual no cousin piqued summer result.
                                 </Container>
-                            <br />
-                            <br />
-                            <Link href='/user/signup'>
-                                <Button
-                                    size="big"
-                                    color='violet'
-                                    onClick={this.triggerEvent} >Sign Up</Button>
-                            </Link>
-                        </Grid.Column>
-                        <Grid.Column textAlign='center' verticalAlign='middle'>
-                            <Image src='/static/default_product_image.jpg' centered rounded size='large' />
-                        </Grid.Column>
-                    </Grid>
+                                <br />
+                                <br />
+                                <Link href='/vendor/signup'>
+                                    <Button color='green' size="big">Sign Up</Button>
+                                </Link>
+                            </Grid.Column>
+                        </Grid>
 
-                </Segment>
-
-                <Segment inverted color='violet'>
-                    <Grid columns={2} >
-                        <Grid.Column>
-                            <Image src='/static/default_product_image.jpg' centered rounded size='large' />
-                        </Grid.Column>
-                        <Grid.Column textAlign='center' verticalAlign='middle'>
-                            <h3>
-                                Become a Vendor
-                                </h3>
-                            <Container textAlign='center' text>
-                                Too cultivated use solicitude frequently. Dashwood likewise up consider
-                                continue entrance ladyship oh. Wrong guest given purse power is no. Friendship
-                                to connection an am considered difficulty. Country met pursuit lasting moments
-                                why calling certain the. Middletons boisterous our way understood law. Among
-                                state cease how and sight since shall. Material did pleasure breeding our
-                                humanity she contempt had. So ye really mutual no cousin piqued summer result.
-                                </Container>
-                            <br />
-                            <br />
-                            <Link href='/vendor/signup'>
-                                <Button color='green' size="big">Sign Up</Button>
-                            </Link>
-                        </Grid.Column>
-                    </Grid>
-
-                </Segment>
+                    </Segment>
             </div>
         );
     }
