@@ -210,7 +210,7 @@ class SignIn extends Component {
     sendEmail = async () => {
         const { username } = this.state;
         try {
-            const response = await fetch(`/api/lib/confirmEmail?username=${username}`);
+            const response = await fetch(`/api/auth/confirmEmail?username=${username}`);
 
             if (response.status === 200) {
                 alert('Confirmation Email Sent...');
