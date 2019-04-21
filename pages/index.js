@@ -33,7 +33,7 @@ class SignIn extends Component {
                         <br />
                         <br />
                         <br />
-                        <Grid columns={2}>
+                        <Grid>
                             <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
                                 <Image circular rounded src='../static/Logo.gif' centered size='small' />
                                 <h1>Loyalty Cocoon</h1>
@@ -73,7 +73,6 @@ class SignIn extends Component {
                                 </Form>
                                 <Link href='/resetPassword'><a>Forgot Password ?</a></Link>
                             </Grid.Column>
-                            <Grid.Column width='2'></Grid.Column>
 
                         </Grid>
                         <br />
