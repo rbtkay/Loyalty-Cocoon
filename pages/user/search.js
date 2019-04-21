@@ -93,7 +93,8 @@ class search extends Component {
                 icon: "thumbs up",
                 title: "Transaction Successful",
                 description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
-                time: 0
+                time: 0,
+                onClose: () => { return; }
             });
         }, 500);
     }

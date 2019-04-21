@@ -112,8 +112,6 @@ exports.sendEmail = async (username, email, res, type) => {
             } else {
                 res.status(200).send('sent');
             }
-            console.log("sent the email");
-            console.log(info);
         }
     } catch (e) {
         throw e;
@@ -125,12 +123,10 @@ exports.sendConfirmEmail = async (req, res) => {
     const type = 'confirm';
 
     if (!email) {
-        console.log('email has no type');
         mysqlConnection.query('select user_email from user_t where user_username = ?', [username], (err, result) => {
             if (err) throw err;
             else {
                 if (result.length > 0) {
-                    console.log(result[0]['user_email']);
                     const mail = result[0]['user_email'].toString();
                     sendEmail(username, mail, res, type);
                 } else {
@@ -252,8 +248,6 @@ exports.sendReceiptEmail = async (req, res) => {
                             </div>
                             `
                         })
-                        console.log("sent the email");
-                        console.log(info);
                         res.status(200).send('sent');
                     } catch (e) {
                         throw e;

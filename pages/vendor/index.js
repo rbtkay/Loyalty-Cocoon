@@ -155,7 +155,6 @@ class Transaction extends Component {
                 const temp = source.findIndex(item => item.name === object['user_username']);
 
                 if (temp === -1) {
-                    console.log(temp);
                     source.push({
                         key: object['purchase_id'],
                         title: object['user_username'],
@@ -164,8 +163,6 @@ class Transaction extends Component {
                 }
 
             })
-
-            console.log(source);
 
             this.setState({
                 isSearchLoading: false,
@@ -239,7 +236,7 @@ class Transaction extends Component {
             return (
                 purchases.map(object => {
                     return (
-                        <Segment color='violet'>
+                        <Segment color='violet' key={object['purchase_id']}>
                             <Purchase
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}

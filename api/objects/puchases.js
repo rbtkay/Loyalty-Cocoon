@@ -6,7 +6,6 @@ exports.getPurchasesByVendor = (req, res) => {
     mysqlconnection.query('select purchase_t.*, product_t.product_name, user_t.user_username from purchase_t, product_t, user_t where purchase_t.vendor_id = (select user_id from user_t where user_username = ?) and purchase_t.product_id = product_t.product_id and purchase_t.cust_id = user_t.user_id order by purchase_t.purchase_finalized', [vendor], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
-            console.log(result);
             res.status(200).send(result);
         } else {
             res.status(404).send('No Result Found');

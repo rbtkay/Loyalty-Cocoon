@@ -66,7 +66,6 @@ class Settings extends Component {
 
     cancel = (event) => {
         event.preventDefault();
-        console.log('cancelled');
         event.target.blur();
         window.location = '/vendor';
     }

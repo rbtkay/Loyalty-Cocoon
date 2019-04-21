@@ -60,14 +60,12 @@ exports.login = (req, res, next) => {
                 const isverified = verifyResult.data[0];
                 const isDeleted = deleteResult.data[0];
 
-                // console.log(result);
                 if (isDeleted === 0) {
                     if (isverified === 0) {
                         res.status(403).send('Email Confirmation Needed');
                     } else {
                         const isVendor = result[0]['user_isVendor'].toJSON();
                         const type = isVendor.data[0] === 0 ? 'user' : 'vendor';
-                        console.log(type);
                         const token = jwt.sign({
                             username: result[0].user_username,
                             email: result[0].user_email,

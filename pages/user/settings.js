@@ -70,7 +70,6 @@ class Settings extends Component {
 
     cancel = (event) => {
         event.preventDefault();
-        console.log('cancel');
         event.target.blur();
         window.location = '/user';
     }

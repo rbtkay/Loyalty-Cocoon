@@ -18,7 +18,7 @@ class CategoryCard extends Component {
             const divisionProduct = this.divide(products);
             return divisionProduct.map((object) => {
                 return (
-                    <Grid.Row key={object.toString()} columns={4}>
+                    <Grid.Row key={divisionProduct.indexOf(object)} columns={4}>
                         {this.renderDivision(object)}
                     </Grid.Row>
                 );
@@ -35,18 +35,18 @@ class CategoryCard extends Component {
     }
 
     renderDivision(object) {
-        return object.map((object) => {
+        return object.map((item, index) => {
             return (
-                <Grid.Column key={object["product_id"]}>
+                <Grid.Column key={item.product_id}>
                     <ProductCard
                         handleSuccess={this.props.handleSuccess}
-                        key={object["product_id"]}
-                        id={object["product_id"]}
-                        name={object["product_name"]}
-                        description={object["product_description"]}
-                        vendor={object["user_username"]}
-                        priceLoco={object["product_loco"] + " Loco"}
-                        category={object["product_category"]}
+                        key={item["product_id"]}
+                        id={item["product_id"]}
+                        name={item["product_name"]}
+                        description={item["product_description"]}
+                        vendor={item["user_username"]}
+                        priceLoco={item["product_loco"] + " Loco"}
+                        category={item["product_category"]}
                     />
                 </Grid.Column>
             );

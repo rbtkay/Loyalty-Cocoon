@@ -509,6 +509,7 @@ class CompSettings extends Component {
             if (response.status == 200) {
                 this.props.delete();
                 cookie.deleteCookie();
+                this.setState({ isDelOpen: false });
             }
         } else {
             const response = await fetch(`/api/vendor/delete?id=${user.user_id}&username=${user.user_username}&email=${user.user_email}`, {
@@ -519,6 +520,7 @@ class CompSettings extends Component {
             if (response.status == 200) {
                 this.props.delete();
                 cookie.deleteCookie();
+                this.setState({ isDelOpen: false });
             }
         }
     }

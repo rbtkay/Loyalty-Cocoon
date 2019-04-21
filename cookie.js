@@ -24,7 +24,6 @@ function getCookie(cname) {
 function checkCookie() {
     var username = getCookie("username");
     if (username != "") {
-        console.log('Welcome Back', username);
     } else {
         username = prompt('Please sign in to continue', '');
     }

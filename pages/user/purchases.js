@@ -69,7 +69,7 @@ class Purchases extends Component {
             return (
                 purchases.map(object => {
                     return (
-                        <Segment color='violet'>
+                        <Segment color='violet' key={object['purchase_id']}>
                             <Purchase
                                 key={object['purchase_id']}
                                 purchaseId={object['purchase_id']}
