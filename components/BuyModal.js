@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Modal, Icon, Button, Message, Form } from 'semantic-ui-react';
 import loco from '../ethereum/loco';
 import { sha256 } from 'js-sha256';
-import NavigationBar from './NavigationBar';
 let cookie = require('../cookie');
 
 class BuyModal extends Component {
@@ -122,13 +121,10 @@ class BuyModal extends Component {
                 });
 
                 const receiver = await response.json();
-                console.log(receiver[0].user_ethAddress);
-                console.log('price', this.props.price);
 
                 const res = await fetch(`/api/contract/transfer?address=${sender}&amount=${this.props.price}&toAddress=${receiver[0].user_ethAddress}`);
 
                 const result = await res.json();
-                console.log(result.transactionHash);
 
                 const insertPurchase = await fetch(`/api/user/purchase/add?username=${username}&productId=${productId}&vendorUsername=${vendorUsername}&purchaseTime=${DateTime}`, {
                     headers: new Headers({
@@ -148,7 +144,6 @@ class BuyModal extends Component {
             } catch (err) {
                 this.props.errorMessage(err.message);
             }
-            NavigationBar.refreshNavBar(this.props.price);
             this.setState({ loading: false });
         }
     }

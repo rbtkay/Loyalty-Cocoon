@@ -19,7 +19,6 @@ class VendorNavBar extends Component {
 
     constructor(props) {
         super(props);
-        console.log('in the vendor navbar!!!');
     };
 
     render() {
@@ -63,7 +62,7 @@ class VendorNavBar extends Component {
                     </Menu.Menu>
                 </Menu>
 
-                
+
             </div>
         );
     }
@@ -85,13 +84,13 @@ class VendorNavBar extends Component {
         Router.pushRoute(`/vendor/settings/${this.state.username}`);
     }
 
-    
-    
+
+
 
     async componentDidMount() {
         const auth = cookie.getCookie('authorization');
 
-        if (auth === null) {
+        if (typeof auth === undefined) {
             Router.pushRoute('/');
         } else {
             const account = cookie.getCookie('address');

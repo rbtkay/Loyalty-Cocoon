@@ -273,7 +273,6 @@ class SignUp extends Component {
                         const jwt = require('jsonwebtoken');
                         const decodedToken = jwt.decode(token);
                         const emailToken = decodedToken.email;
-                        console.log(emailToken);
                         if (emailToken === email) {
                             boost = 25000;
                             await fetch(`/api/contract/grant?address=${newAccount['address']}&amount=${boost}`);

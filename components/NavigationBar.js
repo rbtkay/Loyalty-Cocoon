@@ -69,13 +69,12 @@ class NavigationBar extends Component {
     }
 
     updateBalance = () => {
-        console.log('hello')
         this.componentDidMount();
     }
 
     async componentDidMount() {
         const auth = cookie.getCookie('authorization');
-        if (auth === null) {
+        if (auth === undefined) {
             Router.pushRoute("/");
         } else {
             const account = cookie.getCookie('address');

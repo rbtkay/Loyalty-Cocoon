@@ -41,7 +41,6 @@ exports.getLocoPerMonth = (req, res) => {
             if (err) throw err;
 
             if (result.length > 0) {
-                console.log(result);
                 res.status(200).send(result);
             } else {
                 res.status(404).send('No Purchase available');

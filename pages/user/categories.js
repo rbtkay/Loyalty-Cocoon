@@ -17,7 +17,9 @@ class Categories extends Component {
 
 
     state = {
-        successful: false
+        successful: false,
+        products: [],
+        category: ''
     };
 
     render() {
@@ -25,10 +27,7 @@ class Categories extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-                <br />
+                <br /> <br /> <br /> <br />
                 <Segment>
                     <h1>{this.props.category}</h1>
                 </Segment>
@@ -74,7 +73,7 @@ class Categories extends Component {
     renderProducts = () => {
         if (this.state.products) {
             if (this.state.products.length > 0) {
-                return (<CategoryCard {...this.state} handleSuccess={this.flipSuccess} />);
+                return (<CategoryCard products={this.state.products}  handleSuccess={this.flipSuccess} />);
             } else {
                 return (<h4>No Product are Available for this Category.</h4>);
             }
@@ -91,7 +90,8 @@ class Categories extends Component {
                 icon: "thumbs up",
                 title: "Transaction Successful",
                 description: "Congratulations! Your transaction is successful, please visit the vendor to claim your reward.",
-                time: 0
+                time: 0,
+                onClose: () => { return; }
             });
         }, 500);
     }

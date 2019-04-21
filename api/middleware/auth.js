@@ -11,7 +11,6 @@ exports.verifyToken = (req, res, next) => {
         const url = req.originalUrl;
 
         const type = url.split('/')[2];
-        console.log(type);
 
         if (userType === type) {
             next();

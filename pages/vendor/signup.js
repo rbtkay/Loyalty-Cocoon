@@ -73,7 +73,6 @@ class SignUp extends Component {
                 const hashedPassword = sha256(password);
                 try {
                     const newAccount = web3.eth.accounts.create();
-                    console.log("this.state.isFormEmpty");
 
                     var response = await fetch(`/api/auth/vendorSignUp?username=${username}&email=${email}&password=${hashedPassword}&name=${name}&phone=${phone}&location=${location}&address=${newAccount["address"]}`);
                     var data = await response.json();
