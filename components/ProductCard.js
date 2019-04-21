@@ -3,6 +3,7 @@ import { Card, Button, Modal, Image, Header, Label, Grid } from 'semantic-ui-rea
 import Layout from './Layout';
 import BuyModal from './BuyModal';
 let cookie = require('../cookie');
+import ReactGA from 'react-ga';
 
 class ProductCard extends Component {
 
@@ -71,6 +72,11 @@ class ProductCard extends Component {
 
     show = () => {
         this.setState({ isOpen: true });
+        ReactGA.event({
+            category: 'User',
+            action: `Description Modal`,
+            label: `${this.props.id}`
+        });
     }
 
     close = () => {

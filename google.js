@@ -12,11 +12,13 @@ jwt.authorize((err, response) => {
             ids: 'ga:' + view_id,
             'start-date': '30daysAgo',
             'end-date': 'today',
-            'dimentions': 'ga:eventCategory:User',
-            'metrics': 'ga:eventValue' // ga:pageviews
+            'dimentions': 'ga:eventCategory', // 'ga:browser', // 'ga:userType, ga:sessionCount',
+            'metrics': 'ga:totalEvents, ga:uniqueEvents', // 'ga:users, ga:newUsers', // ga:pageviews
+            //'filters': 'ga:browser==Chrome'
         },
         (err, result) => {
-            console.log(err, result);
+            // console.log(err, result);
+            console.dir(result.data.rows.sort((a, b) => b[1] - a[1]));
         }
     )
-})
+});

@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import { Router } from '../routes';
 import NavBar from '../components/NavBar';
 import { sha256 } from 'js-sha256';
+import ReactGA from 'react-ga';
 
 class ResetPassword extends Component {
 
@@ -26,6 +27,7 @@ class ResetPassword extends Component {
     }
 
     render() {
+        this.initializeReactGA();
         return (
             <div>
                 <Layout />
@@ -274,6 +276,11 @@ class ResetPassword extends Component {
                 throw e;
             }
         }
+    }
+
+    initializeReactGA = () => {
+        ReactGA.initialize('UA-138219487-1');
+        ReactGA.pageview('/resetPassword');
     }
 }
 
