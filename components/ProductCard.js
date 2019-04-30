@@ -72,10 +72,11 @@ class ProductCard extends Component {
 
     show = () => {
         this.setState({ isOpen: true });
+        let user = cookie.getCookie('username');
         ReactGA.event({
             category: 'User',
             action: `Description Modal`,
-            label: `${this.props.id}`
+            label: user + ' ' + this.props.id
         });
     }
 

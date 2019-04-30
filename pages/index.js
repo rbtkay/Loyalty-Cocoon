@@ -81,18 +81,16 @@ class SignIn extends Component {
                                     Join Us
                                 </h3>
                                 <br />
-                                <Container textAlign='center' text>
-                                    Too cultivated use solicitude frequently.
-                                    Dashwood likewise up consider continue entrance
-                                    ladyship oh. Wrong guest given purse power is
-                                    no. Friendship to connection an am considered
-                                    difficulty. Country met pursuit lasting moments
-                                    why calling certain the. Middletons boisterous
-                                    our way understood law. Among state cease how
-                                    and sight since shall. Material did pleasure
-                                    breeding our humanity she contempt had. So
-                                    ye really mutual no cousin piqued summer result.
-                                </Container>
+                                <p>Too cultivated use solicitude frequently.
+                                Dashwood likewise up consider continue entrance
+                                ladyship oh. Wrong guest given purse power is
+                                no. Friendship to connection an am considered
+                                difficulty. Country met pursuit lasting moments
+                                why calling certain the. Middletons boisterous
+                                our way understood law. Among state cease how
+                                and sight since shall. Material did pleasure
+                                breeding our humanity she contempt had. So
+                                ye really mutual no cousin piqued summer result. </p>
                                 <br />
                                 <br />
                                 <Link href='/user/signup'>
@@ -118,14 +116,12 @@ class SignIn extends Component {
                                 <h3>
                                     Become a Vendor
                                 </h3>
-                                <Container textAlign='center' text>
-                                    Too cultivated use solicitude frequently. Dashwood likewise up consider
-                                    continue entrance ladyship oh. Wrong guest given purse power is no. Friendship
-                                    to connection an am considered difficulty. Country met pursuit lasting moments
-                                    why calling certain the. Middletons boisterous our way understood law. Among
-                                    state cease how and sight since shall. Material did pleasure breeding our
-                                    humanity she contempt had. So ye really mutual no cousin piqued summer result.
-                                </Container>
+                                <p>Too cultivated use solicitude frequently. Dashwood likewise up consider
+                                continue entrance ladyship oh. Wrong guest given purse power is no. Friendship
+                                to connection an am considered difficulty. Country met pursuit lasting moments
+                                why calling certain the. Middletons boisterous our way understood law. Among
+                                state cease how and sight since shall. Material did pleasure breeding our
+                                humanity she contempt had. So ye really mutual no cousin piqued summer result.</p>
                                 <br />
                                 <br />
                                 <Link href='/vendor/signup'>
