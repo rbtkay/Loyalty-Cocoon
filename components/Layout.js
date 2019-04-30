@@ -16,6 +16,8 @@ class Layout extends Component {
                     <br /> <br />
                     <h1>You need to enable JavaScript to run this app.</h1>
                 </noscript>
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-138219487-1"></script>
+
                 <link
                     rel="stylesheet"
                     href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
@@ -24,11 +26,23 @@ class Layout extends Component {
         );
     }
 
+    getScript = () => {
+        window.dataLayer = window.dataLayer || [];
+        console.log('alo??', window.dataLayer);
+        window.dataLayer.push('js', new Date());
+        window.dataLayer.push('config', 'UA-138219487-1');
+        console.log('shou el wade3??', window.dataLayer);
+    }
+
+    gtag() {
+        window.dataLayer.push(arguments);
+    }
+
     componentDidMount() {
         ReactGA.initialize('UA-138219487-1');
         let href = window.location.href;
         let gaLink = href.slice(href.indexOf('/')[2]);
-
+        this.getScript();
         ReactGA.pageview(`/${gaLink}`);
     }
 }

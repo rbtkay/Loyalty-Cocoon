@@ -17,8 +17,8 @@ jwt.authorize((err, response) => {
             //'filters': 'ga:browser==Chrome'
         },
         (err, result) => {
-            // console.log(err, result);
-            console.dir(result.data.rows.sort((a, b) => b[1] - a[1]));
+            console.log(err, result);
+            // console.dir(result.data.rows.sort((a, b) => b[1] - a[1]));
         }
     )
 });
