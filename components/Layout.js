@@ -28,10 +28,8 @@ class Layout extends Component {
 
     getScript = () => {
         window.dataLayer = window.dataLayer || [];
-        console.log('alo??', window.dataLayer);
         window.dataLayer.push('js', new Date());
         window.dataLayer.push('config', 'UA-138219487-1');
-        console.log('shou el wade3??', window.dataLayer);
     }
 
     gtag() {
