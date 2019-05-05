@@ -18,13 +18,24 @@ class ProductRow extends Component {
             return (
 
                 <Grid.Row>
-                    <Grid.Row>
-                        <h1>Top Deals</h1>
-                    </Grid.Row>
-
+                    <Segment textAlign='center'>
+                        <h1>Top  Deals</h1>
+                    </Segment>
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.topDeals.length}>
                             {this.renderProducts(this.state.topDeals)}
+                        </Grid>
+                    </Segment>
+
+                    <Grid.Row>
+                        <Segment textAlign='center'>
+                            <h1>Best Seller</h1>
+                        </Segment>
+                    </Grid.Row>
+
+                    <Segment inverted color='violet'>
+                        <Grid columns={this.state.bestSeller.length}>
+                            {this.renderProducts(this.state.bestSeller)}
                         </Grid>
                     </Segment>
 
@@ -35,18 +46,16 @@ class ProductRow extends Component {
                     </Grid.Row>
 
                     <Segment inverted color='violet'>
-                        <Grid columns={this.state.recommended.length}>
-                            {this.renderRecommendation(this.state.recommended)}
-                        </Grid>
-                    </Segment>
-
-                    <Grid.Row>
-                        <h1>Best Seller</h1>
-                    </Grid.Row>
-
-                    <Segment inverted color='violet'>
-                        <Grid columns={this.state.bestSeller.length}>
-                            {this.renderProducts(this.state.bestSeller)}
+                        <Grid>
+                            <Grid.Column width='2'>
+                                <h2>Because you bought:</h2>
+                                <h5>Gin</h5>
+                            </Grid.Column>
+                            <Grid.Column width='14'>
+                                <Grid columns={this.state.recommended.length}>
+                                    {this.renderProducts(this.state.recommended)}
+                                </Grid>
+                            </Grid.Column>
                         </Grid>
                     </Segment>
 
