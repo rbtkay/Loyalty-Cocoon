@@ -11,5 +11,6 @@ router.get('/add', Product.insertProduct);
 router.get('/delete', Product.deleteProductById);
 router.get('/addOffer', Product.addOffersById);
 router.get('/removeOffer', Product.removeOffersById);
+router.get('/recommended', Product.recommended);
 
 module.exports = router;

@@ -82,6 +82,7 @@ class NavigationBar extends Component {
 
             try {
                 const balance = await loco.methods.balances(account).call();
+                cookie.setCookie('balance', balance, 100);
                 this.setState({ username, balance });
             } catch (e) {
                 const balance = 'NaN';

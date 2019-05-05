@@ -1,4 +1,6 @@
 const mysqlConnection = require('../../database/connection');
+const spawn = require('child_process').spawn;
+const { PythonShell } = require('python-shell');
 
 exports.getAllProducts = (req, res, next) => {
     mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.user_id = user_t.user_id', (err, result, fields) => {
@@ -137,4 +139,118 @@ exports.removeOffersById = (req, res) => {
             }
         })
     }
+}
+
+exports.recommended = async (req, res) => {
+    const username = req.query.username;
+
+    mysqlConnection.query('select purchase_t.*, product_name from purchase_t, product_t where purchase_t.cust_id = (select user_id from user_t where user_t.user_username = ?) and purchase_t.product_id = product_t.product_id'
+        , [username],
+        (err, result) => {
+            if (err) throw err;
+            if (result.length > 0) {
+                let productIds = [];
+                let pythonIds = [];
+                result.map(item => {
+                    const id = {
+                        id: item['product_id'],
+                        name: item['product_name']
+                    };
+                    if (!productIds.includes(id)) {
+                        productIds.push(id);
+                        pythonIds.push(id.id);
+                    }
+                })
+
+                // let recommendedProducts = [];
+                // productIds.map(id => {
+                //     // var object = 
+                //     let recommendation = {
+                //         name: id.name,
+                //         recommended: getRecommendation(id.id)
+                //     };
+                //     recommendedProducts.push(recommendation)
+                // })
+                const id = 126;
+                // const test = getRecommendation(id);
+                // res.status(200).send(test)
+                let index = 0;
+
+                getRecommendation(index, res, pythonIds, productIds)
+
+                // var spawn = require("child_process").spawn;
+                // var child = spawn('python', [`./api/recomendation.py`, productIds[index]]);
+                // child.stdout.on('data', (data) => {
+
+                //     index++;
+                //     if (index >= productIds.length - 1) {
+                //         res.status(200).send(data);
+                //     }else{
+
+                //     }
+                //     console.log(id);
+                //     console.log(data.toString());
+
+                //     // res.status(200).send(object);
+                //     // return data.toString();
+                // });
+
+                // child.stderr.on('data', (data) => {
+                //     console.log(data.toString());
+                // })
+                // child.on('exit', (code) => {
+                //     console.log("exit with code: " + code);
+                // })
+
+
+            } else {
+                res.status(404).send('no product found');
+            }
+        })
+}
+
+let finalArray = [];
+
+async function getRecommendation(index, res, pythonIds, productIds) {
+    var spawn = require("child_process").spawn;
+    var child = spawn('python', [`./api/recomendation.py`, pythonIds, productIds]);
+    child.stdout.on('data', (data) => {
+        console.log(data.toString());
+        const final =JSON.parse(data.toString());
+        console.log(final);
+        // let test = []
+        // data.json().then(
+
+
+        // data.map(item => {
+        //     // console.log(item.toString())
+        // })
+
+        // );
+        // datajson = JSON.parse(data);
+
+        // console.log(datajson);
+        // index++;
+        // if (index >= pythonIds, productIds.length - 1) {
+        //     res.status(200).send(finalArray);
+        // } else {
+        //     const object = {
+        //         id: productIds[index].name,
+        //         data: data.toString()
+        //     }
+        //     finalArray.push(object);
+        //     getRecommendation(index, res, productIds);
+        // }
+        // return data.toString();
+        res.status(200).send({productIds, final});
+        //TODO: fetch products !
+    });
+
+    child.stderr.on('data', (data) => {
+        console.log(data.toString());
+    })
+    child.on('exit', (code) => {
+        console.log("exit with code: " + code);
+
+    })
 }

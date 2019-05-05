@@ -9,7 +9,9 @@
     "build": "next build",
     "start": "SET NODE_ENV=production & node server.js",
     "deploy": "npm run build && gcloud app deploy",
-    "gcp-build": "npm install && npm run build"
+    "gcp-build": "npm install && npm run build",
+    "npip": "npip",
+    "nopy": "nopy"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
+    "child_process": "^1.0.2",
     "compression": "^1.7.4",
     "dotenv": "^7.0.0",
     "ethereumjs-tx": "^1.3.7",
@@ -39,6 +42,8 @@
     "next": "^4.1.4",
     "next-routes": "^1.4.2",
     "nodemailer": "^6.0.0",
+    "nopy": "^0.2.7",
+    "python-shell": "^1.0.7",
     "react": "^16.8.1",
     "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.8.1",
@@ -53,8 +58,14 @@
     "truffle-hdwallet-provider": "0.0.3",
     "web3": "^1.0.0-beta.35"
   },
+  "python": {
+    "dependencies": {
+      "pandas": ">= 0.4.2"
+    }
+  },
   "bugs": {
     "url": "https://github.com/rbtkay/Loyalty-Cocoon/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/rbtkay/Loyalty-Cocoon#readme"
 }
