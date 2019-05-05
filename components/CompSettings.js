@@ -454,6 +454,7 @@ class CompSettings extends Component {
                 });
 
                 if (response.status == 200) {
+                    cookie.setCookie('username', qUsername, 100);
                     this.props.success();
                 } else {
                     this.setState({ errorMessage: 'Something went wrong...' });
@@ -482,13 +483,14 @@ class CompSettings extends Component {
                     qBldg = locBldg;
                 }
 
-                const response = await fetch(`/api/vendor/update?username=${qUsername}&email=${qEmail}&name=${qName}&password=${qNewPassword}&country=${qCountry}&city=${qCity}&street=${qStreet}&building=${qBldg}`, {
+                const response = await fetch(`/api/vendor/update?profile=${user.user_username}&username=${qUsername}&email=${qEmail}&name=${qName}&password=${qNewPassword}&country=${qCountry}&city=${qCity}&street=${qStreet}&building=${qBldg}`, {
                     headers: new Headers({
                         'authorization': cookie.getCookie('authorization')
                     })
                 });
 
                 if (response.status == 200) {
+                    cookie.setCookie('username', qUsername, 100);
                     this.props.success();
                 } else {
                     this.setState({ errorMessage: 'Something went wrong...' });

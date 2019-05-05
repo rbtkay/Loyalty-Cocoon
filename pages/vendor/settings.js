@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import CompSettings from '../../components/CompSettings';
 import { Segment } from 'semantic-ui-react';
 import { getCookie } from '../../cookie';
+import { SemanticToastContainer, toast } from 'react-semantic-toasts';
 
 class Settings extends Component {
     state = {
@@ -16,9 +17,12 @@ class Settings extends Component {
                 <Layout />
                 <NavigationBar />
                 <br /> <br /> <br /> <br />
+                <SemanticToastContainer />
                 <Segment color='violet' inverted>
-                    <br />
-                    <CompSettings user={this.state.user} cancelChanges={this.cancel} success={this.showSuccessToast} delete={this.showDeleteToast}/>
+                    <Segment>
+                        <CompSettings user={this.state.user} cancelChanges={this.cancel} success={this.showSuccessToast} delete={this.showDeleteToast}/>
+                        <br /> <br /> <br />
+                    </Segment>
                 </Segment>
             </div>
         )
@@ -38,7 +42,7 @@ class Settings extends Component {
 
     showSuccessToast = () => {
         setTimeout(() => {
-            success({
+            toast({
                 type: "success",
                 icon: "thumbs up",
                 title: "Settings saved successfully!",
@@ -69,8 +73,6 @@ class Settings extends Component {
         event.target.blur();
         window.location = '/vendor';
     }
-
-    onClose
 }
 
 export default Settings;
