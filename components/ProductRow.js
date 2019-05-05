@@ -29,12 +29,14 @@ class ProductRow extends Component {
                     </Segment>
 
                     <Grid.Row>
-                        <h1>Recommended for You</h1>
+                        <Segment textAlign='center'>
+                            <h1>Recommended for You</h1>
+                        </Segment>
                     </Grid.Row>
 
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.recommended.length}>
-                            {this.renderProducts(this.state.recommended)}
+                            {this.renderRecommendation(this.state.recommended)}
                         </Grid>
                     </Segment>
 
@@ -77,6 +79,26 @@ class ProductRow extends Component {
         }
     }
 
+    // renderRecommendation(recommendation) {
+    //     // <Card.Group>/
+    //     return recommendation.map((object) => {
+    //         return (
+    //             <ProductCard
+    //                 handleSuccess={this.props.handleSuccess}
+    //                 key={object["product_id"]}
+    //                 id={object["product_id"]}
+    //                 name={object["product_name"]}
+    //                 description={object["product_description"]}
+    //                 vendor={object["user_username"]}
+    //                 priceLoco={object["product_loco"] + " Loco"}
+    //                 category={object["product_category"]}
+    //             />
+    //         );
+    //     })
+    //     // </Card.Group>
+    // }
+
+
     async componentDidMount() {
         const filter = this.state.filter;
 
@@ -93,12 +115,23 @@ class ProductRow extends Component {
             })
         });
 
+        const responseRecommended = await fetch(`http://localhost:8000/api/user/product/recommended?username=kvnbog`, {
+            headers: new Headers({
+                'authorization': cookie.getCookie('authorization')
+            })
+        });
+
+        // if (responseRecommended.status === 200) {
+        // console.log(recommendedJSON);
+        // }
+
         if (response.status === 401 || responseTopDeals.status === 401) {
             cookie.deleteCookie();
             window.location = '/';
-        } else {
+        } else if (response.status === 200) {
             const products = await response.json();
             const topDealsArray = await responseTopDeals.json();
+            const recommendedJSON = await responseRecommended.json();
 
             const topDeals = topDealsArray.slice(0, 3);
             //TODO: Make create the following arrays from api calls.
@@ -106,6 +139,9 @@ class ProductRow extends Component {
             const bestSeller = products.slice(7, 12);
             this.setState({ products, topDeals, recommended, bestSeller });
         }
+
+
+
     }
 }
 

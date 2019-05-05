@@ -209,41 +209,22 @@ exports.recommended = async (req, res) => {
         })
 }
 
-let finalArray = [];
-
 async function getRecommendation(index, res, pythonIds, productIds) {
     var spawn = require("child_process").spawn;
-    var child = spawn('python', [`./api/recomendation.py`, pythonIds, productIds]);
+    var child = spawn('python', [`./api/recomendation.py`, pythonIds]);
     child.stdout.on('data', (data) => {
-        console.log(data.toString());
-        const final =JSON.parse(data.toString());
-        console.log(final);
-        // let test = []
-        // data.json().then(
+        const pythonResult = JSON.parse(data.toString());
 
+        const recommendationList = pythonResult.map(item => {
+            const recommendedProduct = {};
 
-        // data.map(item => {
-        //     // console.log(item.toString())
-        // })
-
-        // );
-        // datajson = JSON.parse(data);
-
-        // console.log(datajson);
-        // index++;
-        // if (index >= pythonIds, productIds.length - 1) {
-        //     res.status(200).send(finalArray);
-        // } else {
-        //     const object = {
-        //         id: productIds[index].name,
-        //         data: data.toString()
-        //     }
-        //     finalArray.push(object);
-        //     getRecommendation(index, res, productIds);
-        // }
-        // return data.toString();
-        res.status(200).send({productIds, final});
-        //TODO: fetch products !
+            recommendedProduct['name'] = productIds.find((obj) => {
+                    return obj.id == item.id
+            })
+            recommendedProduct['recommended'] = item.recommended;
+            return recommendedProduct;
+        })
+        res.status(200).send({ recommendationList });
     });
 
     child.stderr.on('data', (data) => {

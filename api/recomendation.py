@@ -104,7 +104,8 @@ for item in ids:
     # returnArray.append(item)
     # caca = rec(int(item))
     npArray = rec(int(item)).tolist()
-    let = { item: npArray}
+    let = { "id": item, 
+            "recommended": npArray}
     obj.append(let)
     # li = npArray.tolist()
     # print(json.dumps(li))
