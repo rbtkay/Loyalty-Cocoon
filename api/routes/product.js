@@ -2,6 +2,7 @@ const Product = require('../objects/product');
 const router = require('express').Router();
 
 router.get('/all', Product.getAllProducts);
+router.get('/info', Product.getInfo);
 router.get('/offered', Product.getOfferedProducts);
 router.get('/search', Product.getProductSearch);
 router.get('/category', Product.getProductByCategory);

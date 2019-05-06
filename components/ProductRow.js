@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProductCard from './ProductCard';
-import { Card, CardGroup, Grid, GridColumn, Segment, Container } from 'semantic-ui-react';
+import { Card, CardGroup, Grid, GridColumn, Segment, Container, Divider } from 'semantic-ui-react';
 import { Router } from '../routes';
 let cookie = require('../cookie');
 
@@ -8,8 +8,8 @@ class ProductRow extends Component {
     state = {
         products: [],
         topDeals: [],
-        recommended: [],
         bestSeller: [],
+        recommended: [],
         filter: "all"
     }
 
@@ -18,13 +18,24 @@ class ProductRow extends Component {
             return (
 
                 <Grid.Row>
-                    <Grid.Row>
-                        <h1>Top Deals</h1>
-                    </Grid.Row>
-
+                    <Segment textAlign='center'>
+                        <h1>Top  Deals</h1>
+                    </Segment>
                     <Segment inverted color='violet'>
                         <Grid columns={this.state.topDeals.length}>
                             {this.renderProducts(this.state.topDeals)}
+                        </Grid>
+                    </Segment>
+
+                    <Grid.Row>
+                        <Segment textAlign='center'>
+                            <h1>Best Seller</h1>
+                        </Segment>
+                    </Grid.Row>
+
+                    <Segment inverted color='violet'>
+                        <Grid columns={this.state.bestSeller.length}>
+                            {this.renderProducts(this.state.bestSeller)}
                         </Grid>
                     </Segment>
 
@@ -34,20 +45,19 @@ class ProductRow extends Component {
                         </Segment>
                     </Grid.Row>
 
-                    <Segment inverted color='violet'>
-                        <Grid columns={this.state.recommended.length}>
-                            {this.renderRecommendation(this.state.recommended)}
-                        </Grid>
-                    </Segment>
-
-                    <Grid.Row>
-                        <h1>Best Seller</h1>
-                    </Grid.Row>
-
-                    <Segment inverted color='violet'>
-                        <Grid columns={this.state.bestSeller.length}>
-                            {this.renderProducts(this.state.bestSeller)}
-                        </Grid>
+                    <Segment color='violet'>
+                        {/* <Grid> */}
+                        {/* <Grid.Column width='2'>
+                                <h2>Because you bought:</h2>
+                                <h5>Gin</h5>
+                            </Grid.Column>
+                            <Grid.Column width='14'>
+                                <Grid columns={this.state.recommended.length}>
+                                    {this.renderRecommendation()}
+                                </Grid>
+                            </Grid.Column> */}
+                        {this.renderRecommendation()}
+                        {/* </Grid> */}
                     </Segment>
 
                 </Grid.Row>
@@ -79,30 +89,53 @@ class ProductRow extends Component {
         }
     }
 
-    // renderRecommendation(recommendation) {
-    //     // <Card.Group>/
-    //     return recommendation.map((object) => {
-    //         return (
-    //             <ProductCard
-    //                 handleSuccess={this.props.handleSuccess}
-    //                 key={object["product_id"]}
-    //                 id={object["product_id"]}
-    //                 name={object["product_name"]}
-    //                 description={object["product_description"]}
-    //                 vendor={object["user_username"]}
-    //                 priceLoco={object["product_loco"] + " Loco"}
-    //                 category={object["product_category"]}
-    //             />
-    //         );
-    //     })
-    //     // </Card.Group>
-    // }
+    renderRecommendation() {
+        if (this.state.recommended.length > 0) {
+            return (this.state.recommended.map((object) => {
+                return (
+                    <Segment color='violet' inverted key={Object.keys(object)}>
+                        <Grid columns={2}>
+                            <Grid.Column width='2'>
+                                <h3>Because you bought: <i>{Object.keys(object)}</i></h3>
+                            </Grid.Column>
+                            <Grid.Column width='14'>
+                                <Grid columns={5}>
+                                    {this.renderSection(object)}
+                                </Grid>
+                            </Grid.Column>
+                        </Grid>
+                    </Segment>)
+            }))
+        }
+    }
 
+    renderSection(object) {
+        return (Object.keys(object).map((item) => {
+            return object[item].map((value) => {
+                if (value.product_isOffered.data[0] == 1) {
+                    return (
+                        <Grid.Column key={(value["product_id"])}>
+                            <ProductCard
+                                handleSuccess={this.props.handleSuccess}
+                                key={(value["product_id"])}
+                                id={value["product_id"]}
+                                name={value["product_name"]}
+                                description={value["product_description"]}
+                                vendor={value["user_username"]}
+                                priceLoco={value["product_loco"] + " Loco"}
+                                category={value["product_category"]}
+                            />
+                        </Grid.Column>
+                    )
+                }
+            })
+        }))
+    }
 
     async componentDidMount() {
         const filter = this.state.filter;
+        const username = cookie.getCookie('username');
 
-        // try {
         const response = await fetch(`/api/user/product/offered`, {
             headers: new Headers({
                 'authorization': cookie.getCookie('authorization')
@@ -115,17 +148,13 @@ class ProductRow extends Component {
             })
         });
 
-        const responseRecommended = await fetch(`http://localhost:8000/api/user/product/recommended?username=kvnbog`, {
+        const responseRecommended = await fetch(`http://localhost:8000/api/user/product/recommended?username=${username}`, {
             headers: new Headers({
                 'authorization': cookie.getCookie('authorization')
             })
         });
 
-        // if (responseRecommended.status === 200) {
-        // console.log(recommendedJSON);
-        // }
-
-        if (response.status === 401 || responseTopDeals.status === 401) {
+        if (response.status === 401 || responseTopDeals.status === 401 || responseRecommended.status === 401) {
             cookie.deleteCookie();
             window.location = '/';
         } else if (response.status === 200) {
@@ -134,14 +163,37 @@ class ProductRow extends Component {
             const recommendedJSON = await responseRecommended.json();
 
             const topDeals = topDealsArray.slice(0, 3);
-            //TODO: Make create the following arrays from api calls.
-            const recommended = products.slice(3, 7);
             const bestSeller = products.slice(7, 12);
-            this.setState({ products, topDeals, recommended, bestSeller });
+
+            //TODO: Make create the following arrays from api calls.
+            const recommended = recommendedJSON;
+
+            let displayRec = [];
+            let count = 0;
+
+            Object.keys(recommended).map(async element => {
+                const rec = recommended[element].join(',');
+                const productInfoRes = await fetch(`http://localhost:8000/api/user/product/info?id=${rec}`, {
+                    headers: new Headers({
+                        'authorization': cookie.getCookie('authorization')
+                    })
+                });
+                const productInfo = await productInfoRes.json();
+
+                let recList = {};
+                recList[element] = productInfo;
+
+                displayRec.push(recList);
+                count++;
+                if (count === Object.keys(recommended).length) {
+                    this.callback(products, topDeals, displayRec, bestSeller);
+                }
+            })
         }
+    }
 
-
-
+    callback(products, topDeals, recommended, bestSeller) {
+        this.setState({ products, topDeals, recommended, bestSeller })
     }
 }
 
