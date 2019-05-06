@@ -9,6 +9,17 @@ exports.getAllProducts = (req, res, next) => {
     });
 }
 
+exports.getInfo = (req, res, next) => {
+    const { id } = req.query;
+    const temp = id.split(',')
+
+    console.log(temp);
+    mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.user_id = user_t.user_id and product_t.product_id in (?)', [temp], (err, result) => {
+        if (err) throw err;
+        res.status(200).send(result);
+    });
+}
+
 exports.getOfferedProducts = (req, res, next) => {
     const isOffered = 1;
 
@@ -214,17 +225,28 @@ async function getRecommendation(index, res, pythonIds, productIds) {
     var child = spawn('python', [`./api/recomendation.py`, pythonIds]);
     child.stdout.on('data', (data) => {
         const pythonResult = JSON.parse(data.toString());
+        let recommendedProduct = {};
 
-        const recommendationList = pythonResult.map(item => {
-            const recommendedProduct = {};
-
-            recommendedProduct['name'] = productIds.find((obj) => {
-                    return obj.id == item.id
+        console.log(pythonResult);
+        pythonResult.forEach(item => {
+            // console.log(item)
+            let product = {};
+            const name = productIds.find((obj) => {
+                if (obj.id == item.id) {
+                    return obj.name;
+                }
             })
-            recommendedProduct['recommended'] = item.recommended;
-            return recommendedProduct;
+            product[name.name] = item.recommended;
+            // console.log(product)
+
+            recommendedProduct = Object.assign(product, recommendedProduct);
+
+            //     recommendedProduct = Object.assign(product, recommendedProduct)
+            //     recommendedProduct = Object.assign(item.recommended, recommendedProduct);
+            //     return recommendedProduct;
         })
-        res.status(200).send({ recommendationList });
+        console.log(recommendedProduct);
+        res.status(200).send(recommendedProduct);
     });
 
     child.stderr.on('data', (data) => {
