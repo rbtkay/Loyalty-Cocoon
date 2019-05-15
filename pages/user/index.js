@@ -6,6 +6,7 @@ import ProductRow from '../../components/ProductRow';
 import NavigationBar from '../../components/NavigationBar';
 import { Router } from '../../routes';
 import { SemanticToastContainer, toast } from "react-semantic-toasts";
+import Footer from '../../components/Footer';
 
 class Loyalty extends Component {
     state = {
@@ -23,6 +24,7 @@ class Loyalty extends Component {
                 <SemanticToastContainer />
                 <ProductRow handleSuccess={this.flipSuccess}/>
                 <br />
+                <Footer />
             </div>
         );
     }

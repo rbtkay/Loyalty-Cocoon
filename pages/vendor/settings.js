@@ -5,6 +5,7 @@ import CompSettings from '../../components/CompSettings';
 import { Segment } from 'semantic-ui-react';
 import { getCookie } from '../../cookie';
 import { SemanticToastContainer, toast } from 'react-semantic-toasts';
+import Footer from '../../components/Footer';
 
 class Settings extends Component {
     state = {
@@ -24,6 +25,7 @@ class Settings extends Component {
                         <br /> <br /> <br />
                     </Segment>
                 </Segment>
+                <Footer />
             </div>
         )
     }

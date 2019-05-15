@@ -6,6 +6,7 @@ import { sha256 } from 'js-sha256';
 import web3 from '../../ethereum/web3';
 import NavBar from '../../components/NavBar';
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 class SignUp extends Component {
     state = {
@@ -106,9 +107,7 @@ class SignUp extends Component {
                 <Layout />
                 <NavBar />
                 <Segment inverted color='violet'>
-                    <br />
-                    <br />
-                    <br />
+                    <br /><br /><br />
                     <div className="ui raised very padded text container segment">
                         <h1>Sign Up</h1>
 
@@ -194,17 +193,8 @@ class SignUp extends Component {
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
                     </div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
                 </Segment>
+                <Footer />
             </div>
         );
     }

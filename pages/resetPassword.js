@@ -6,6 +6,7 @@ import { Router } from '../routes';
 import NavBar from '../components/NavBar';
 import { sha256 } from 'js-sha256';
 import ReactGA from 'react-ga';
+import Footer from '../components/Footer';
 
 class ResetPassword extends Component {
 
@@ -87,11 +88,9 @@ class ResetPassword extends Component {
                             </Grid>
                         </Container>
                         <br />
-
                     </Segment>
-
-                    <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
                 </Segment>
+                <Footer />
             </div>
         )
     }

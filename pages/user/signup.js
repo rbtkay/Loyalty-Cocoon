@@ -10,6 +10,7 @@ import { sha256 } from 'js-sha256';
 import web3 from '../../ethereum/web3';
 import NavBar from '../../components/NavBar';
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 const countryOptions = _.map(faker.definitions.address.country, country => ({
     key: country,
@@ -196,11 +197,9 @@ class SignUp extends Component {
                             <Message success header="Congrats!" content={this.state.successMessage}></Message>
                             <Button color="violet" onClick={this.onSubmit} loading={this.state.loading}>Sign Up!</Button>
                         </Form>
-
-
                     </div>
-                    <br /> <br /> <br />
                 </Segment>
+                <Footer />
             </div>
         );
     }
