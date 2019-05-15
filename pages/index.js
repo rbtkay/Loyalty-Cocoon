@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Input, Container, Divider, Segment, Grid, Table, Image } from 'semantic-ui-react';
+import { Form, Button, Message, Input, Container, Divider, Segment, Grid, Table, Image, Icon } from 'semantic-ui-react';
 import Layout from '../components/Layout';
 import NavigationBar from '../components/NavigationBar';
 import { Router, Link } from '../routes';
@@ -38,7 +38,7 @@ class SignIn extends Component {
                                 <br /> <br />
 
                                 <Form error={!!this.state.errorMessage} onSubmit={this.onSubmit}>
-                                    <h1>Sign In</h1>
+                                    <h1><Icon name='sign in' />Welcome Back</h1>
                                     <br />
                                     <Form.Field >
                                         <Input
@@ -61,47 +61,66 @@ class SignIn extends Component {
                                     <Message error header="Oops!" content={this.state.errorMessage}></Message>
                                     <Message warning visible={this.state.needConfirm}><h5>Verify your Email</h5><p>if you did not receive a confirmation email, click <a className='button' style={{ border: 'none', background: 'transparent' }} onClick={this.sendEmail}>here</a></p></Message>
                                     <br />
-                                    <Form.Button color="green" loading={this.state.loading} content='Sign In' />
-                                    <br />
-                                    <br />
+                                    <Form.Button color="green" loading={this.state.loading} size='big' content='Sign In' />
+                                    <br /><br />
                                 </Form>
                                 <Link href='/resetPassword'><a>Forgot Password ?</a></Link>
                             </Grid.Column>
 
                         </Grid>
-                        <br />
-                        <br />
-                        <br />
+                        <br /><br /><br />
+                    </Segment>
+
+                    <Segment textAlign='center' color='violet'>
+                        <h2>How It Works</h2>
+                        <Image src='/static/shop-earn-redeem.png' size='large' verticalAlign='middle'/>
+                        <Grid columns={3}>
+                            <Grid.Column>
+                                <Segment color='violet' inverted>
+                                    <h3><u>1 - Shop at Registered Vendors</u></h3>
+                                    <p>Continue shopping as you normally would... Vendors from all over the world will want to be part of Loyalty Cocoon once word gets out ;)</p>
+                                </Segment>
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <Segment color='violet' inverted>
+                                    <h3><u>2 - Earn LOCO from ALL Vendors</u></h3>
+                                    <p>Being a cardless loyalty program, your balance and all transactions are stored on a decentralized network</p>
+                                </Segment>
+                            </Grid.Column>
+
+                            <Grid.Column>
+                                <Segment color='violet' inverted>
+                                    <h3><u>3 - Redeem Offered Products</u></h3>
+                                    <p>Spend your LOCO through the platform on items of your choosing; and what's better than having spendable points anywhere, right?</p>
+                                </Segment>
+                            </Grid.Column>
+                        </Grid>
                     </Segment>
 
                     <Segment>
                         <Grid columns={2} >
                             <Grid.Column verticalAlign='middle' textAlign='center'>
-                                <h3>
-                                    Join Us
-                                </h3>
+                                <h2>
+                                    <Icon name='signup' />Join the Cocoon
+                                </h2>
                                 <br />
-                                <p>Too cultivated use solicitude frequently.
-                                Dashwood likewise up consider continue entrance
-                                ladyship oh. Wrong guest given purse power is
-                                no. Friendship to connection an am considered
-                                difficulty. Country met pursuit lasting moments
-                                why calling certain the. Middletons boisterous
-                                our way understood law. Among state cease how
-                                and sight since shall. Material did pleasure
-                                breeding our humanity she contempt had. So
-                                ye really mutual no cousin piqued summer result. </p>
-                                <br />
-                                <br />
+                                <p>Enroll to join an evergrowing community of shoppers!<br />
+                                <i>Here's what's in store:</i><br />
+                                Browse Millions of Promoted Products <br />
+                            Earn & Spend a Global Currency (<b><i>LOCO</i></b>)<br /><br />
+                            <h4>And the best of all...</h4><h3>No card needed!</h3>
+                                </p>
+                                <br /><br />
                                 <Link href='/user/signup'>
                                     <Button
                                         size="big"
                                         color='violet'
-                                        onClick={this.triggerEvent} >Sign Up</Button>
+                                        onClick={this.triggerEvent} >Join Us</Button>
                                 </Link>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
-                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
+                                <Image src='/static/Join-Us.jpeg' centered rounded size='large' />
                             </Grid.Column>
                         </Grid>
 
@@ -110,22 +129,20 @@ class SignIn extends Component {
                     <Segment inverted color='violet'>
                         <Grid columns={2} >
                             <Grid.Column>
-                                <Image src='/static/default_product_image.jpg' centered rounded size='large' />
+                                <Image src='/static/Vendor.jpg' centered rounded size='large' />
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
-                                <h3>
-                                    Become a Vendor
-                                </h3>
-                                <p>Too cultivated use solicitude frequently. Dashwood likewise up consider
-                                continue entrance ladyship oh. Wrong guest given purse power is no. Friendship
-                                to connection an am considered difficulty. Country met pursuit lasting moments
-                                why calling certain the. Middletons boisterous our way understood law. Among
-                                state cease how and sight since shall. Material did pleasure breeding our
-                                humanity she contempt had. So ye really mutual no cousin piqued summer result.</p>
-                                <br />
-                                <br />
+                                <h2>
+                                    <Icon name='shop' />Got Items to Promote?
+                                </h2>
+                                <Grid columns={3}>
+                                    <Grid.Column><h4><Icon name='copy outline'/> Hand us a copy of products</h4> </Grid.Column>
+                                    <Grid.Column><h4><Icon name='toggle on' /> Select which are offered</h4> </Grid.Column>
+                                    <Grid.Column><h4><Icon name='chart line' /> Customer Retention & Graphs</h4></Grid.Column>
+                                </Grid>
+                                <br /><br />
                                 <Link href='/vendor/signup'>
-                                    <Button color='green' size="big">Sign Up</Button>
+                                    <Button color='green' size="big">Build Cocoon</Button>
                                 </Link>
                             </Grid.Column>
                         </Grid>

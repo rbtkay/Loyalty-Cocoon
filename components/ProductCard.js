@@ -14,13 +14,14 @@ class ProductCard extends Component {
     };
 
     render() {
-        const { name, description, priceLoco, category, vendor, id } = this.props;
-
+        const { name, description, priceLoco, category, vendor, id, img } = this.props;
+        console.log('ZI IMAGE', img);
+        console.log('ZI ID', id);
         return (
             <div>
                 <Card color="violet">
                     <Card.Content onClick={this.show}>
-                        <Image floated='left' size='tiny' src='/static/default_product_image.jpg' />
+                        <Image floated='left' size='tiny' src={img ? `/static/${img}` : `/static/default_product_image.jpg`} />
                         <Card.Header>{name}</Card.Header>
                         <Card.Meta>{vendor}</Card.Meta>
                         <Card.Meta textAlign='right'><Label tag >{priceLoco}</Label></Card.Meta>
@@ -43,7 +44,7 @@ class ProductCard extends Component {
                         <Grid>
                             <Grid.Row columns={2}>
                                 <Grid.Column>
-                                    <Image wrapped size='big' src='/static/default_product_image.jpg' />
+                                    <Image wrapped size='big' src={img ? `/static/${img}` : `/static/default_product_image.jpg`} />
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Modal.Description>

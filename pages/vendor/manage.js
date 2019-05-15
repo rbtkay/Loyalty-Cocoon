@@ -32,30 +32,30 @@ class Manage extends Component {
 
     render() {
         const options = [{
-            key: 'Clothing',
-            text: 'Clothing',
-            value: 'Clothing'
-        },
-        {
-            key: 'Electronics',
-            text: 'Electronics',
-            value: 'Electronics'
-        },
-        {
-            key: 'Food',
-            text: 'Food',
-            value: 'Food'
-        },
-        {
-            key: 'Groceries',
-            text: 'Groceries',
-            value: 'Groceries'
-        },
-        {
-            key: 'Toys',
-            text: 'Toys',
-            value: 'Toys'
-        }
+                key: 'Clothing',
+                text: 'Clothing',
+                value: 'Clothing'
+            },
+            {
+                key: 'Electronics',
+                text: 'Electronics',
+                value: 'Electronics'
+            },
+            {
+                key: 'Food',
+                text: 'Food',
+                value: 'Food'
+            },
+            {
+                key: 'Groceries',
+                text: 'Groceries',
+                value: 'Groceries'
+            },
+            {
+                key: 'Toys',
+                text: 'Toys',
+                value: 'Toys'
+            }
         ]
 
         if (this.state.isVendorVerified) {
@@ -254,12 +254,7 @@ class Manage extends Component {
                                                         />
                                                     </Form.Field>
                                                     <Message error header='Oops!' content={this.state.verification['msg']} ></Message>
-                                                    <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button>
-                                                    <br />
-                                                    <br />
-                                                    <br />
-                                                    <br />
-                                                    <br />
+                                                    <Button negative floated='right' loading={this.state.isVerifyLoading} onClick={this.verifyVendor}>Verify</Button><br /><br /><br /><br /><br />
                                                 </Form>
                                             </Segment>
                                         </Segment>
@@ -268,13 +263,7 @@ class Manage extends Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
-                        </Container>
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
+                        </Container><br /><br /><br /><br /><br /><br />
                     </Segment>
                 </div>
             );
