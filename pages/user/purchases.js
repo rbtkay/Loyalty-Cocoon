@@ -5,6 +5,7 @@ import Purchase from '../../components/Purchase';
 import { Segment } from 'semantic-ui-react';
 import Router from '../../routes';
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 class Purchases extends Component {
 
@@ -26,6 +27,7 @@ class Purchases extends Component {
                 <Segment>
                     {this.renderPurchases()}
                 </Segment>
+                <Footer />
             </div>
         );
     }

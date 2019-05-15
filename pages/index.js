@@ -8,6 +8,7 @@ import loco from '../ethereum/loco';
 import fetch from 'isomorphic-fetch';
 let cookie = require('../cookie');
 import ReactGA from 'react-ga';
+import Footer from '../components/Footer';
 
 class SignIn extends Component {
     state = {
@@ -31,8 +32,8 @@ class SignIn extends Component {
                         <br /> <br /> <br />
                         <Grid>
                             <Grid.Column width='10' verticalAlign='middle' textAlign='center' >
-                                <Image circular rounded src='../static/Logo.gif' centered size='small' />
-                                <h1><i>Loyalty Cocoon</i></h1>
+                                <Image circular rounded src='../static/Logo.gif' centered size='large' />
+                                <h1 style={{fontSize: '60px', fontFamily: 'Montez'}}><i>Loyalty Cocoon</i></h1>
                             </Grid.Column>
                             <Grid.Column width='4' textAlign='center'>
                                 <br /> <br />
@@ -116,7 +117,10 @@ class SignIn extends Component {
                                     <Button
                                         size="big"
                                         color='violet'
-                                        onClick={this.triggerEvent} >Join Us</Button>
+                                        icon='arrow right'
+                                        content='Get Started'
+                                        labelPosition='right'
+                                        onClick={this.triggerEvent} />
                                 </Link>
                             </Grid.Column>
                             <Grid.Column textAlign='center' verticalAlign='middle'>
@@ -142,12 +146,18 @@ class SignIn extends Component {
                                 </Grid>
                                 <br /><br />
                                 <Link href='/vendor/signup'>
-                                    <Button color='green' size="big">Build Cocoon</Button>
+                                    <Button
+                                        color='green'
+                                        size="big"
+                                        content='Build Cocoon'
+                                        icon='arrow up'
+                                        labelPosition='right' />
                                 </Link>
                             </Grid.Column>
                         </Grid>
-
                     </Segment>
+
+                    <Footer />
             </div>
         );
     }

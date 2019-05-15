@@ -4,6 +4,7 @@ import NavigationBar from '../../components/VendorNavBar';
 import { Segment, Button, Grid, Container, Divider } from 'semantic-ui-react';
 import { Bar, Line, Pie, Radar, Bubble } from 'react-chartjs-2';
 import { getCookie } from '../../cookie';
+import Footer from '../../components/Footer';
 
 const indexToMonths = {
     1: 'Jan',
@@ -58,9 +59,7 @@ class Dashboard extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
+                <br /><br /><br />
                 <Segment>
                     <Segment className='header' color='violet'>
                         Monitor Your Cocoon
@@ -72,6 +71,7 @@ class Dashboard extends Component {
                         </Container>
                     </Segment>
                 </Segment>
+                <Footer />
             </div>
         )
     }

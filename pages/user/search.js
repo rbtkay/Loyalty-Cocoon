@@ -7,6 +7,7 @@ import CategoryCard from '../../components/CategoryCard';
 import { Router } from '../../routes';
 import { SemanticToastContainer, toast } from "react-semantic-toasts";
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 class search extends Component {
 
@@ -38,6 +39,7 @@ class search extends Component {
                         {this.renderProducts()}
                     </Segment>
                 </Segment>
+                <Footer />
             </div>
         )
     }

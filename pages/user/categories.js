@@ -5,6 +5,7 @@ import { Segment, Card } from 'semantic-ui-react';
 import CategoryCard from '../../components/CategoryCard';
 import { Router } from '../../routes';
 import { SemanticToastContainer, toast } from "react-semantic-toasts";
+import Footer from '../../components/Footer';
 let cookie = require('../../cookie');
 
 class Categories extends Component {
@@ -37,6 +38,8 @@ class Categories extends Component {
                     {this.renderProducts()}
 
                 </Segment>
+
+                <Footer />
             </div>
         )
     }

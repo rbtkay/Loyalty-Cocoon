@@ -6,6 +6,7 @@ import VendorNavBar from '../../components/VendorNavBar';
 import ManageTable from '../../components/ManageTable';
 import { sha256 } from 'js-sha256';
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 class Manage extends Component {
     state = {
@@ -203,8 +204,7 @@ class Manage extends Component {
                         </Button>
                         </Modal.Actions>
                     </Modal>
-
-
+                    <Footer />
                 </div>
             );
         } else {
@@ -212,9 +212,7 @@ class Manage extends Component {
                 <div>
                     <Layout />
                     <VendorNavBar />
-                    <br />
-                    <br />
-                    <br />
+                    <br /><br /><br />
                     <Segment inverted color='violet'>
                         <br />
                         <Container>
@@ -263,8 +261,9 @@ class Manage extends Component {
                                     </Grid.Column>
                                 </Grid>
                             </Segment>
-                        </Container><br /><br /><br /><br /><br /><br />
+                        </Container>
                     </Segment>
+                    <Footer />
                 </div>
             );
 

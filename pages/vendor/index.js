@@ -8,6 +8,7 @@ import _ from 'lodash';
 import loco from '../../ethereum/loco';
 import { createCipher } from 'crypto';
 let cookie = require('../../cookie');
+import Footer from '../../components/Footer';
 
 class Transaction extends Component {
 
@@ -32,10 +33,7 @@ class Transaction extends Component {
             <div>
                 <Layout />
                 <NavigationBar />
-                <br />
-                <br />
-                <br />
-
+                <br /><br /><br />
                 <Segment>
                     <Grid>
                         <Grid.Column width={4}>
@@ -121,6 +119,7 @@ class Transaction extends Component {
                 <Segment inverted color='violet'>
                     {this.renderPurchases()}
                 </Segment>
+                <Footer />
             </div>
         )
     }
