@@ -82,6 +82,7 @@ class ProductRow extends Component {
                             vendor={object["user_username"]}
                             priceLoco={object["product_loco"] + " Loco"}
                             category={object["product_category"]}
+                            img={object['product_image']}
                         />
                     </Grid.Column>
                 );
@@ -92,19 +93,22 @@ class ProductRow extends Component {
     renderRecommendation() {
         if (this.state.recommended.length > 0) {
             return (this.state.recommended.map((object) => {
-                return (
-                    <Segment color='violet' inverted key={Object.keys(object)}>
-                        <Grid columns={2}>
-                            <Grid.Column width='2'>
-                                <h3>Because you bought: <i>{Object.keys(object)}</i></h3>
-                            </Grid.Column>
-                            <Grid.Column width='14'>
-                                <Grid columns={5}>
-                                    {this.renderSection(object)}
-                                </Grid>
-                            </Grid.Column>
-                        </Grid>
-                    </Segment>)
+                console.log('testing obejct', Object.values(object));
+                if (Object.values(object).toString() != Array(0)) {
+                    return (
+                        <Segment color='violet' inverted key={Object.keys(object)}>
+                            <Grid columns={2}>
+                                <Grid.Column width='2'>
+                                    <h3>Because you bought: <i>{Object.keys(object)}</i></h3>
+                                </Grid.Column>
+                                <Grid.Column width='14'>
+                                    <Grid columns={5}>
+                                        {this.renderSection(object)}
+                                    </Grid>
+                                </Grid.Column>
+                            </Grid>
+                        </Segment>)
+                }
             }))
         }
     }
@@ -124,6 +128,7 @@ class ProductRow extends Component {
                                 vendor={value["user_username"]}
                                 priceLoco={value["product_loco"] + " Loco"}
                                 category={value["product_category"]}
+                                img={value['product_image']}
                             />
                         </Grid.Column>
                     )
