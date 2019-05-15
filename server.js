@@ -6,6 +6,9 @@ const routes = require('./routes');
 var compression = require('compression');
 const path = require('path');
 require('dotenv').config();
+if (process.env.NODE_ENV) {
+    require('@google-cloud/debug-agent').start();
+}
 
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
 

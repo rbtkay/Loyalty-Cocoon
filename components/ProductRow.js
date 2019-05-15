@@ -153,7 +153,7 @@ class ProductRow extends Component {
             })
         });
 
-        const responseRecommended = await fetch(`http://localhost:8000/api/user/product/recommended?username=${username}`, {
+        const responseRecommended = await fetch(`/api/user/product/recommended?username=${username}`, {
             headers: new Headers({
                 'authorization': cookie.getCookie('authorization')
             })
@@ -178,7 +178,7 @@ class ProductRow extends Component {
 
             Object.keys(recommended).map(async element => {
                 const rec = recommended[element].join(',');
-                const productInfoRes = await fetch(`http://localhost:8000/api/user/product/info?id=${rec}`, {
+                const productInfoRes = await fetch(`/api/user/product/info?id=${rec}`, {
                     headers: new Headers({
                         'authorization': cookie.getCookie('authorization')
                     })

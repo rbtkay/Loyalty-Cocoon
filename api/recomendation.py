@@ -1,18 +1,21 @@
 import sys
 # import seaborn as sns
 import pandas as pd
-import mysql.connector 
+import mysql.connector
 from mysql.connector import Error
 import json
+
 try:
     mySQLconnection = mysql.connector.connect(
-            host='localhost',
+            host='34.65.77.182',
             database='cocoondb',
             user='root',
-            password='')
-    
+            password='',
+            port=3306,
+            unix_socket= '/cloudsql/loyalty-cocoon:europe-west6:loco-db')
+
     query = "select cust_id, product_id, count(cust_id) as count from purchase_t group by product_id, cust_id"
-    
+
     # cursor = mySQLconnection.cursor()
     # cursor.execute(query)
     # print(cursor.fetchall())
@@ -20,7 +23,7 @@ try:
     # sns.set_style('white')
     # print("Total number of rows in python_developers is - ", cursor.rowcount)
     # print ("Printing each row's column values i.e.  developer record")
-    
+
     # for row in records:
     #     print("Id = ", row[0], )
     #     print("CustomerId = ", row[1])
@@ -28,10 +31,10 @@ try:
     #     print("purchaseDate  = ", row[3], "\n")
     # print(df)
     # cursor.close()
-    
+
 except Error as e:
-    print("Error while connecting to Cocoon", e)
-    
+    throw("Error while connecting to Cocoon", e)
+
 finally:
     if(mySQLconnection .is_connected()):
         mySQLconnection.close()
@@ -79,14 +82,14 @@ def rec(id):
     similar_to_var = purchasesmat.corrwith(var_user_purchases)
 
     # print(similar_to_var)
-    # 
+    #
     corr_var = pd.DataFrame(similar_to_var, columns=['Correlation'])
     corr_var.dropna(inplace=True)
 
     corr_var.sort_values('Correlation', ascending=False)
 
     # print(purchases)
-    # 
+    #
     corr_var = corr_var.join(purchases['purchases_numbers'],how='left', lsuffix='_left', rsuffix='_right')
     # print(corr_var)
     # #corr_var is a dataframe, so is purchases so we join them for
@@ -104,7 +107,7 @@ for item in ids:
     # returnArray.append(item)
     # caca = rec(int(item))
     npArray = rec(int(item)).tolist()
-    let = { "id": item, 
+    let = { "id": item,
             "recommended": npArray}
     obj.append(let)
     # li = npArray.tolist()

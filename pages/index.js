@@ -109,9 +109,8 @@ class SignIn extends Component {
                                 <p>Enroll to join an evergrowing community of shoppers!<br />
                                 <i>Here's what's in store:</i><br />
                                 Browse Millions of Promoted Products <br />
-                            Earn & Spend a Global Currency (<b><i>LOCO</i></b>)<br /><br />
-                            <h4>And the best of all...</h4><h3>No card needed!</h3>
-                                </p>
+                                Earn & Spend a Global Currency (<b><i>LOCO</i></b>)<br /><br /></p>
+                                <h4>And the best of all...</h4><h3>No card needed!</h3>
                                 <br /><br />
                                 <Link href='/user/signup'>
                                     <Button

@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "SET NODE_ENV=production & node server.js",
     "deploy": "npm run build && gcloud app deploy",
-    "gcp-build": "npm install && pip install pandas mysql-connector-python && npm run build",
+    "gcp-build": "npm install && npm run build",
     "npip": "npip",
     "nopy": "nopy"
   },
@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/debug-agent": "^3.2.0",
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
     "child_process": "^1.0.2",
@@ -60,7 +61,8 @@
   },
   "python": {
     "dependencies": {
-      "pandas": ">= 0.4.2"
+      "pandas": ">= 0.4.2",
+      "mysql-connector-python": ">=8.0.14"
     }
   },
   "bugs": {
