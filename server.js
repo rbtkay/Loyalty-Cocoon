@@ -6,9 +6,7 @@ const routes = require('./routes');
 var compression = require('compression');
 const path = require('path');
 require('dotenv').config();
-if (process.env.NODE_ENV) {
-    require('@google-cloud/debug-agent').start();
-}
+
 
 const app = next({ dev: process.env.NODE_ENV !== 'production' });
 
@@ -35,5 +33,6 @@ app.prepare().then(() => {
 
     server.listen(port, () => {
         console.log('We are live on ' + port);
+        console.log('el path', process.env.PATH);
     });
 })

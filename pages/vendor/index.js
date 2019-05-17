@@ -66,6 +66,7 @@ class Transaction extends Component {
                                         <Form.Field>
                                             <Input
                                                 fluid
+                                                type='number'
                                                 name="amount"
                                                 value={this.state.amount}
                                                 onChange={event => this.setState({ amount: event.target.value })}
