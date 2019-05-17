@@ -14,7 +14,6 @@ exports.getInfo = (req, res, next) => {
     const { id } = req.query;
     const temp = id.split(',')
 
-    console.log(temp);
     mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.user_id = user_t.user_id and product_t.product_id in (?)', [temp], (err, result) => {
         if (err) throw err;
         res.status(200).send(result);
@@ -232,8 +231,6 @@ async function getRecommendation(index, res, pythonIds, productIds) {
         pythonResult.forEach(item => {
             let product = {};
             const name = productIds.find((obj) => {
-                console.log('zi object in product: ', obj);
-                console.log('zi item in product: ', item);
                 if (obj.id == item.id) {
                     return obj.name;
                 }
