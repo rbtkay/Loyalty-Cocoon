@@ -224,17 +224,16 @@ exports.recommended = async (req, res) => {
 async function getRecommendation(index, res, pythonIds, productIds) {
     var spawn = require("child_process").spawn;
     var dir = process.env.PATH;
-    console.log('alo dir?', dir);
     var child = spawn("python", ["api/recomendation.py", pythonIds]);
     child.stdout.on('data', (data) => {
-        console.log(data.toString());
         const pythonResult = JSON.parse(data.toString());
         let recommendedProduct = {};
 
-        console.log(pythonResult);
         pythonResult.forEach(item => {
             let product = {};
             const name = productIds.find((obj) => {
+                console.log('zi object in product: ', obj);
+                console.log('zi item in product: ', item);
                 if (obj.id == item.id) {
                     return obj.name;
                 }
@@ -247,8 +246,7 @@ async function getRecommendation(index, res, pythonIds, productIds) {
             //     recommendedProduct = Object.assign(item.recommended, recommendedProduct);
             //     return recommendedProduct;
         })
-        console.log(recommendedProduct);
-        res.status(200).send(data.toString());
+        res.status(200).send(recommendedProduct);
     });
 
     child.stderr.on('data', (data) => {

@@ -15,8 +15,6 @@ class ProductCard extends Component {
 
     render() {
         const { name, description, priceLoco, category, vendor, id, img } = this.props;
-        console.log('ZI IMAGE', img);
-        console.log('ZI ID', id);
         return (
             <div>
                 <Card color="violet">
