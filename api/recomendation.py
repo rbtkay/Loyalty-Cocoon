@@ -33,10 +33,10 @@ try:
     # cursor.close()
 
 except Error as e:
-    throw("Error while connecting to Cocoon", e)
+    print("Error while connecting to Cocoon", e)
 
 finally:
-    if(mySQLconnection .is_connected()):
+    if(mySQLconnection.is_connected()):
         mySQLconnection.close()
         # print("MySQL connection is closed")
 

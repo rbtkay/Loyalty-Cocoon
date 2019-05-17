@@ -9,8 +9,7 @@ if (process.env.NODE_ENV) {
         user: "root",
         password: "",
         database: "cocoondb",
-        port: 3306,
-        socketPath: `/cloudsql/loyalty-cocoon:europe-west6:loco-db`
+        port: 3306
     });
 } else {
     connection = mysql.createConnection({

@@ -1,6 +1,7 @@
 const mysqlConnection = require('../../database/connection');
 const spawn = require('child_process').spawn;
 const { PythonShell } = require('python-shell');
+require('dotenv').config();
 
 exports.getAllProducts = (req, res, next) => {
     mysqlConnection.query('select product_t.*, user_t.user_username from product_t, user_t where product_t.user_id = user_t.user_id', (err, result, fields) => {
@@ -175,7 +176,7 @@ exports.recommended = async (req, res) => {
 
                 // let recommendedProducts = [];
                 // productIds.map(id => {
-                //     // var object = 
+                //     // var object =
                 //     let recommendation = {
                 //         name: id.name,
                 //         recommended: getRecommendation(id.id)
@@ -222,14 +223,16 @@ exports.recommended = async (req, res) => {
 
 async function getRecommendation(index, res, pythonIds, productIds) {
     var spawn = require("child_process").spawn;
-    var child = spawn('python', [`./api/recomendation.py`, pythonIds]);
+    var dir = process.env.PATH;
+    console.log('alo dir?', dir);
+    var child = spawn("python", ["api/recomendation.py", pythonIds]);
     child.stdout.on('data', (data) => {
+        console.log(data.toString());
         const pythonResult = JSON.parse(data.toString());
         let recommendedProduct = {};
 
         console.log(pythonResult);
         pythonResult.forEach(item => {
-            // console.log(item)
             let product = {};
             const name = productIds.find((obj) => {
                 if (obj.id == item.id) {
@@ -237,7 +240,6 @@ async function getRecommendation(index, res, pythonIds, productIds) {
                 }
             })
             product[name.name] = item.recommended;
-            // console.log(product)
 
             recommendedProduct = Object.assign(product, recommendedProduct);
 
@@ -246,7 +248,7 @@ async function getRecommendation(index, res, pythonIds, productIds) {
             //     return recommendedProduct;
         })
         console.log(recommendedProduct);
-        res.status(200).send(recommendedProduct);
+        res.status(200).send(data.toString());
     });
 
     child.stderr.on('data', (data) => {
