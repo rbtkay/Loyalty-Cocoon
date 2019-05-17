@@ -11,8 +11,7 @@ try:
             database='cocoondb',
             user='root',
             password='',
-            port=3306,
-            unix_socket= '/cloudsql/loyalty-cocoon:europe-west6:loco-db')
+            port=3306)
 
     query = "select cust_id, product_id, count(cust_id) as count from purchase_t group by product_id, cust_id"
 
