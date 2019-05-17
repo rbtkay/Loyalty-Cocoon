@@ -7,7 +7,7 @@
     "test": "mocha",
     "dev": "node server.js",
     "build": "next build",
-    "start": "SET NODE_ENV=production & node server.js",
+    "start": "NODE_ENV=production node server.js",
     "deploy": "npm run build && gcloud app deploy",
     "gcp-build": "apt-get -y update && apt-get -y install python3-pandas && apt-get -y install python3-mysql.connector && npm install && npm run build",
     "npip": "npip",

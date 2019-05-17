@@ -92,8 +92,9 @@ class ProductRow extends Component {
 
     renderRecommendation() {
         if (this.state.recommended.length > 0) {
+            console.log('shu l wade3?', this.state.recommended);
             return (this.state.recommended.map((object) => {
-                console.log('testing obejct', Object.values(object));
+                console.log('testing obejct', object);
                 if (Object.values(object).toString() != Array(0)) {
                     return (
                         <Segment color='violet' inverted key={Object.keys(object)}>
@@ -173,10 +174,15 @@ class ProductRow extends Component {
             //TODO: Make create the following arrays from api calls.
             const recommended = recommendedJSON;
 
+            console.log('recommendedJSON', recommendedJSON);
+
             let displayRec = [];
             let count = 0;
 
+
+
             Object.keys(recommended).map(async element => {
+                console.log('recommended[element]', recommended);
                 const rec = recommended[element].join(',');
                 const productInfoRes = await fetch(`/api/user/product/info?id=${rec}`, {
                     headers: new Headers({
@@ -187,6 +193,8 @@ class ProductRow extends Component {
 
                 let recList = {};
                 recList[element] = productInfo;
+
+                console.log('productInfo', productInfo);
 
                 displayRec.push(recList);
                 count++;
