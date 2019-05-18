@@ -24,7 +24,7 @@ app.prepare().then(() => {
     server.use(session({secret: 'un truc bizarre', saveUninitialized: true, resave: true}));
     server.use("/api", apiRoutes);
     server.get("*", (req, res)=>{
-        // res.setHeader('Access-Control-Allow-Origin', 'https://loyalty-cocoon.appspot.com');
+        // res.setHeader('Access-Control-Allow-Origin', 'http://loyaltycocoon.eastus.cloudapp.azure.com:8000');
         // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATH, DELETE');
         // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type');
         // console.log('headers: ', res.headers);

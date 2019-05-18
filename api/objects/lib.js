@@ -20,7 +20,7 @@ exports.sendEmail = async (username, email, res, type) => {
             username: username
         }, 'emailKey');
 
-        const head = `${process.env.NODE_ENV ? 'https://loyalty-cocoon.appspot.com' : 'http://localhost:8000'}`
+        const head = `${process.env.NODE_ENV ? 'http://loyaltycocoon.eastus.cloudapp.azure.com:8000' : 'http://localhost:8000'}`
 
         const querySring = `/auth/${emailToken}`;
 
@@ -70,7 +70,7 @@ exports.sendEmail = async (username, email, res, type) => {
             }
         } else if (type === 'refer') {
             const token = jwt.sign({ email: email }, 'emailKey');
-            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
+            const boostUrl = process.env.NODE_ENV ? `http://loyaltycocoon.eastus.cloudapp.azure.com:8000/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
             content = {
                 to: email,
                 subject: `Loyalty Cocoon Referral`,
@@ -89,7 +89,7 @@ exports.sendEmail = async (username, email, res, type) => {
             }
         } else if (type === 'delete') {
             const token = jwt.sign({ email: email }, 'emailKey');
-            const boostUrl = process.env.NODE_ENV ? `https://loyalty-cocoon.appspot.com/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
+            const boostUrl = process.env.NODE_ENV ? `http://loyaltycocoon.eastus.cloudapp.azure.com:8000/user/signup/${token}` : `http://localhost:8000/user/signup/${token}`;
             content = {
                 to: email,
                 subject: `Account Deletion`,
@@ -224,5 +224,3 @@ exports.sendReceiptEmail = async (req, res) => {
         }
     })
 }
-
-
